@@ -1,0 +1,29 @@
+{
+  "name": "Simulador GCS",
+  "short_name": "SimGCS",
+  "description": "Entrenamiento de la Escala de Coma de Glasgow mediante casos narrativos generados por IA y contenido didactico.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c111d",
+  "theme_color": "#0c111d",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./background.jpg",
+      "type": "image/jpg",
+      "sizes": "900x600",
+      "purpose": "any"
+    }
+  ]
+}
