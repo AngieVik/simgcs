@@ -118,7 +118,7 @@ export async function handler(event, context) {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-flash",
       contents: "Genera una nueva escena para el simulador de Observación Detectivesca.",
       config: {
         systemInstruction: SYSTEM_PROMPT,
@@ -131,9 +131,25 @@ export async function handler(event, context) {
     const text = result.text.trim();
     const data = JSON.parse(text);
 
+    // Transformar los datos al formato que espera el frontend (Case)
+    const formattedJustification = `
+Ocular(${data.gcs.ocular === 0 ? 'NV' : data.gcs.ocular}): ${data.gcsJustification.ocular}
+Verbal(${data.gcs.verbal === 0 ? 'NV' : data.gcs.verbal}): ${data.gcsJustification.verbal}
+Motora(${data.gcs.motor === 0 ? 'NV' : data.gcs.motor}): ${data.gcsJustification.motor}
+    `.trim();
+
+    const responseData = {
+      title: data.title,
+      category: data.category,
+      narrative: data.narrative,
+      correctGCS: data.gcs, // Renombrar 'gcs' a 'correctGCS'
+      conclusion: data.conclusion,
+      gcsJustification: formattedJustification, // Enviar como string
+    };
+
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(responseData),
     };
   } catch (error) {
     console.error("Error al generar el caso:", error);
