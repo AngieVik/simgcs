@@ -47,7 +47,7 @@ const LEVEL_COLORS = ['#fde047', '#facc15', '#eab308', '#f59e0b', '#d97706']; //
 const INITIAL_TIME = 20.0;
 const INITIAL_SUPPORTS = 3;
 const INITIAL_SPEED = 4.5;
-const BACKGROUND_GIFS = ['./wallpapercodigo3.gif', './wallpapercodigo3-2.gif', './wallpapercodigo3-3.gif'];
+const BACKGROUND_GIFS = ['/wallpapercodigo3.gif', '/wallpapercodigo3-2.gif', '/wallpapercodigo3-3.gif'];
 
 const shuffleArray = (array: any[]) => [...array].sort(() => Math.random() - 0.5);
 

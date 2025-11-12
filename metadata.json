@@ -1,5 +1,5 @@
 {
-  "name": "Simulador de Casos Glasgow (Local)",
-  "description": "Una aplicación de didactica para practicar a través de casos narrativos generados por IA, inspirada en el método deductivo de Sherlock Holmes. Contenido didactico y un minijuego para memorizar.",
+  "name": "simgcs",
+  "description": "Una aplicación de entrenamiento para practicar a través de casos narrativos generados por IA, inspirada en el método deductivo de Sherlock Holmes.",
   "requestFramePermissions": []
 }
