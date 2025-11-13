@@ -3,17 +3,28 @@ export async function generateNewCase() {
     const response = await fetch("/.netlify/functions/generateNewCase");
 
     if (!response.ok) {
-      // Intenta obtener más detalles del error si es posible
-      let errorDetails = `Error al generar el caso: ${response.status}`;
+      // Intenta obtener más detalles del error si es posible, manejando cuerpos no-JSON.
+      let errorDetails = `Error al generar el caso: ${response.status} ${response.statusText}`;
       try {
-        const errorData = await response.json();
-        if (errorData.details) {
-          errorDetails = `Detalles: ${errorData.details}`;
-        } else if (errorData.error) {
-          errorDetails = errorData.error;
+        const errorBody = await response.text();
+        if (errorBody) {
+            try {
+                // Intenta parsear como JSON, pero ten un respaldo.
+                const errorData = JSON.parse(errorBody);
+                if (errorData.details) {
+                    errorDetails = `Detalles: ${errorData.details}`;
+                } else if (errorData.error) {
+                    errorDetails = errorData.error;
+                } else {
+                    errorDetails = errorBody; // El cuerpo era JSON pero sin el formato esperado.
+                }
+            } catch (jsonError) {
+                // El cuerpo del error no era JSON, usar el texto plano.
+                errorDetails = errorBody;
+            }
         }
       } catch (e) {
-        // No se pudo parsear el JSON, usar el error de estado
+        // No se pudo leer el cuerpo del error, usar el error de estado.
       }
       throw new Error(errorDetails);
     }

@@ -114,7 +114,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
                 aria-modal="true"
                 aria-labelledby="modal-title"
                 className={`
-                            relative w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg animate-in fade-in-0 zoom-in-95 duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
+                            relative w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg fade-in
                             bg-stone-100 dark:bg-stone-800 
                             border border-stone-300 dark:border-stone-600/50 
                             shadow-xl shadow-black/15

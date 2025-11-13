@@ -5,7 +5,7 @@
   cuando sea posible. Si no está en la caché, va a la red.
 */
 
-const CACHE_NAME = 'gcs-simulator-cache-v3'; // Incremented version
+const CACHE_NAME = 'gcs-simulator-cache-v4'; // Incremented version
 const urlsToCache = [
   '/',
   '/index.html',

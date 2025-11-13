@@ -1,5 +1,5 @@
 // netlify/functions/generateNewCase.js
-import { GoogleGenAI, Type } from "@google/genai";
+const { GoogleGenAI, Type } = require("@google/genai");
 
 // -------------------------
 // ⚙️ PROMPT Y ESQUEMA
@@ -107,22 +107,36 @@ const RESPONSE_SCHEMA = {
 // -------------------------
 // 🚀 FUNCIÓN SERVERLESS
 // -------------------------
-export async function handler(event, context) {
+exports.handler = async function (event, context) {
+  // Válvula de seguridad: Comprobar si la API_KEY está configurada
+  if (!process.env.API_KEY) {
+    console.error("Error: API_KEY no configurada.");
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: "API_KEY no configurada en el entorno de Netlify.",
+      }),
+    };
+  }
+
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-pro",
       contents: "Genera una nueva escena para el simulador de Observación Detectivesca.",
       config: {
         systemInstruction: SYSTEM_PROMPT,
         responseMimeType: "application/json",
         responseSchema: RESPONSE_SCHEMA,
-        temperature: 0.9,
+        temperature: 0.8,
       },
     });
 
-    const text = result.text.trim();
+    let text = result.text.trim();
+    // Limpiar posibles bloques de código markdown
+    text = text.replace(/^```json\s*/, "").replace(/\s*```$/, "");
+    
     const data = JSON.parse(text);
 
     // Transformar los datos al formato que espera el frontend (Case)
@@ -132,7 +146,7 @@ export async function handler(event, context) {
       narrative: data.narrative,
       correctGCS: data.gcs,
       conclusion: data.conclusion,
-      gcsJustification: data.gcsJustification, // Usar la cadena de texto directamente
+      gcsJustification: data.gcsJustification,
     };
 
     return {
@@ -140,13 +154,19 @@ export async function handler(event, context) {
       body: JSON.stringify(responseData),
     };
   } catch (error) {
-    console.error("Error al generar el caso:", error);
+    // Log del error más detallado para depuración en Netlify
+    console.error("Error detallado en la función generateNewCase:", JSON.stringify(error, null, 2));
+    
+    // Extraer un mensaje más útil si es un error de la API de Google
+    const errorMessage = error.message || "Error desconocido.";
+    const errorDetails = error.stack || (error.response ? JSON.stringify(error.response.data) : "No hay detalles adicionales.");
+
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: "Error interno al generar el caso.",
-        details: error.message,
+        error: `Error interno al contactar con el servicio de IA: ${errorMessage}`,
+        details: errorDetails,
       }),
     };
   }
-}
+};

@@ -9,8 +9,8 @@ interface GCSSelectorProps {
 
 const GCSSelector: React.FC<GCSSelectorProps> = ({ label, options, value, onChange }) => {
   return (
-    <div>
-      <label className="flex flex-col items-start text-stone-600 dark:text-stone-300">{label}</label>
+    <fieldset className="mb-4">
+      <legend className="mb-2 text-stone-600 dark:text-stone-300">{label}</legend>
       <div className="flex flex-wrap gap-1 items-start">
         {options.map((option) => (
           <button
@@ -28,7 +28,7 @@ const GCSSelector: React.FC<GCSSelectorProps> = ({ label, options, value, onChan
           </button>
         ))}
       </div>
-    </div>
+    </fieldset>
   );
 };
 
