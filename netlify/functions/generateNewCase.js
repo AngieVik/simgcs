@@ -97,14 +97,8 @@ const RESPONSE_SCHEMA = {
       description: "La resolución clínica del misterio médico y la actuación sanitaria realizada al paciente. (2-3 frases).",
     },
     gcsJustification: {
-      type: Type.OBJECT,
-      description: "Explicación clínica y deductiva de cada puntuación.",
-      properties: {
-        ocular: { type: Type.STRING },
-        verbal: { type: Type.STRING },
-        motor: { type: Type.STRING },
-      },
-      required: ["ocular", "verbal", "motor"],
+      type: Type.STRING,
+      description: "Una única cadena de texto formateada con saltos de línea que explica cada puntuación. Formato estricto: 'Ocular(X): Justificación.\\nVerbal(Y): Justificación.\\nMotora(Z): Justificación.'. Usa 'NV' en lugar de 0 para la puntuación.",
     },
   },
   required: ["title", "narrative", "gcs", "conclusion", "gcsJustification", "category"],
@@ -124,7 +118,7 @@ export async function handler(event, context) {
         systemInstruction: SYSTEM_PROMPT,
         responseMimeType: "application/json",
         responseSchema: RESPONSE_SCHEMA,
-        temperature: 1.0,
+        temperature: 0.9,
       },
     });
 
@@ -132,19 +126,13 @@ export async function handler(event, context) {
     const data = JSON.parse(text);
 
     // Transformar los datos al formato que espera el frontend (Case)
-    const formattedJustification = `
-Ocular(${data.gcs.ocular === 0 ? 'NV' : data.gcs.ocular}): ${data.gcsJustification.ocular}
-Verbal(${data.gcs.verbal === 0 ? 'NV' : data.gcs.verbal}): ${data.gcsJustification.verbal}
-Motora(${data.gcs.motor === 0 ? 'NV' : data.gcs.motor}): ${data.gcsJustification.motor}
-    `.trim();
-
     const responseData = {
       title: data.title,
       category: data.category,
       narrative: data.narrative,
-      correctGCS: data.gcs, // Renombrar 'gcs' a 'correctGCS'
+      correctGCS: data.gcs,
       conclusion: data.conclusion,
-      gcsJustification: formattedJustification, // Enviar como string
+      gcsJustification: data.gcsJustification, // Usar la cadena de texto directamente
     };
 
     return {
