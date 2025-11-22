@@ -1,14 +1,17 @@
+
 import React from "react";
 import EKGLine from "../components/EKGLine";
-import { AmbulanceIcon, ChartBarSquareIcon, Codigo3Icon, RegistryIcon } from "../components/Icons";
+import { AmbulanceIcon, ChartBarSquareIcon, Codigo3Icon, RegistryIcon, GlobeIcon, EnvelopeIcon } from "../components/Icons";
 import { infoSections, referencesSection } from "../constants/infoContent";
 import ApuntesCarousel from "../components/ApuntesCarousel";
 
 interface HomeScreenProps {
   onNewCase: () => void;
   onStartOfflineCase: () => void;
+  onStartGlobalCases: () => void;
   onStartGame: () => void;
   onShowStats: () => void;
+  onShowLetter: () => void;
   onShowInfo: (info: { title: string; content: React.ReactNode; icon?: React.ReactNode }) => void;
   isMuted: boolean;
 }
@@ -31,18 +34,18 @@ hover:border-black-400/70 dark:hover:border-stone-700/70
 hover:scale-[0.98]
 active:scale-[0.95] active:shadow-inner
 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 dark:focus-visible:ring-amber-400/70
+disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale disabled:shadow-none disabled:hover:scale-100 disabled:active:scale-100
 transition-all duration-150
 `;
 
-
-
-  
 const HomeScreen: React.FC<HomeScreenProps> = ({
   onNewCase,
   onStartOfflineCase,
+  onStartGlobalCases,
   onShowInfo,
   onStartGame,
   onShowStats,
+  onShowLetter,
   isMuted
 }) => {
   return (
@@ -56,26 +59,35 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       </header>
 
       {/* Acciones principales */}
-<section className="w-full max-w-xl px-5">
-  <div className="grid grid-cols-2 gap-4 justify-items-center mx-auto">
-    <button onClick={onNewCase} className={indexButton}>
-      <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none"/>
-      <span>Activarnos</span>
-    </button>
-    <button onClick={onStartOfflineCase} className={indexButton}>
-      <RegistryIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-      <span>Registro</span>
-    </button>
-    <button onClick={onStartGame} className={indexButton}>
-      <Codigo3Icon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-      <span>Código3</span>
-    </button>
-    <button onClick={onShowStats} className={indexButton}>
-      <ChartBarSquareIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-      <span>Expediente</span>
-    </button>
-  </div>
-</section>
+      <section className="w-full max-w-xl px-5">
+        <div className="grid grid-cols-2 gap-4 justify-items-center mx-auto">
+          <button onClick={onNewCase} className={indexButton}>
+            <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none"/>
+            <span>Activarnos</span>
+          </button>
+          <button onClick={onStartOfflineCase} className={indexButton}>
+            <RegistryIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Registro</span>
+          </button>
+          <button onClick={onStartGame} className={indexButton}>
+            <Codigo3Icon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Código3</span>
+          </button>
+          <button onClick={onShowStats} className={indexButton}>
+            <ChartBarSquareIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Expediente</span>
+          </button>
+          <button onClick={onStartGlobalCases} className={indexButton}>
+            <GlobeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Casos Globales</span>
+          </button>
+          <button onClick={onShowLetter} className={indexButton}>
+            <EnvelopeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>La Carta</span>
+          </button>
+        </div>
+      </section>
+      
       {/* Línea EKG */}
       <div className="w-full max-w-3xl px-5 mt-2">
         <EKGLine />
@@ -91,8 +103,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       </section>
 
       {/* Footer */}
-      <footer className="w-full max-w-4xl px-5 mt-auto pt-10 mb-4 text-center text-[11px] sm:text-xs text-stone-600 dark:text-stone-400">
-        <div className="flex flex-nowrap items-center justify-center gap-x-3 sm:gap-x-4">
+      <footer className="w-full max-w-4xl mt-auto pt-6 mb-2 text-center text-[8px] sm:text-xs text-stone-600 dark:text-stone-400">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4">
           <a
             href="https://www.glasgowcomascale.org/"
             target="_blank"

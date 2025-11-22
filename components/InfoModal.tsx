@@ -5,9 +5,10 @@ interface InfoModalProps {
     title: string;
     content: React.ReactNode;
     onClose: () => void;
+    headerAction?: React.ReactNode;
 }
 
-const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
+const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose, headerAction }) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -27,11 +28,12 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
         const handleFocusTrap = (event: KeyboardEvent) => {
             if (event.key !== 'Tab' || !modalRef.current) return;
 
+            // FIX: Explicitly type `el` as HTMLElement to resolve type inference issues.
             const focusableElements = Array.from(
                 modalRef.current.querySelectorAll<HTMLElement>(
                     'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
                 )
-            ).filter(el => el.offsetParent !== null);
+            ).filter((el: HTMLElement) => el.offsetParent !== null);
 
             if (focusableElements.length === 0) return;
 
@@ -105,7 +107,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
 
         
         <div 
-            className="fixed inset-0 bg-black/60 dark:bg-black/70 flex items-center justify-center z-50 p-2 sm:p-4"
+            className="fixed inset-0 bg-black/60 dark:bg-black/70 flex items-center justify-center z-9 p-2 sm:p-4"
             onClick={onClose}
         >
             <div 
@@ -114,7 +116,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
                 aria-modal="true"
                 aria-labelledby="modal-title"
                 className={`
-                            relative w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg fade-in
+                            relative w-[90%] sm:w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg mt-5 fade-in
                             bg-stone-100 dark:bg-stone-800 
                             border border-stone-300 dark:border-stone-600/50 
                             shadow-xl shadow-black/15
@@ -132,17 +134,22 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose }) => {
                         
                 </div>
                 
-                <div className="flex-1 flex flex-col min-h-0 pl-8 pr-4 py-4">
-                  <header className="relative flex items-start justify-between pb-3 border-b-2 border-stone-300/60 dark:border-stone-500/30 shrink-0">
+                <div className="flex-1 flex flex-col min-h-0 pl-8 pr-4 pt-2 pb-4">
+                  <header className="relative flex items-center justify-between pb-3 border-b-2 border-stone-300/60 dark:border-stone-500/30 shrink-0 min-h-[3rem]">
                       <h3 
                           id="modal-title" 
-                          className="font-typewriter text-lg sm:text-xl font-bold text-stone-800 bg-amber-200/90 px-3 py-1 rounded-sm shadow-md -rotate-2 -ml-2 mt-1 z-10"
+                          className="font-typewriter text-lg sm:text-xl font-bold text-stone-800 bg-amber-200/90 px-3 py-1 rounded-sm shadow-md -rotate-2 -ml-2 z-10"
                       >
                           {title}
                       </h3>
+                      
+                      <div className="flex-grow flex justify-end items-center pr-8 z-10">
+                        {headerAction}
+                      </div>
+
                       <button 
                           onClick={onClose} 
-                          className="absolute -top-2 -right-2 z-20 p-0 rounded-full bg-gradient-to-b from-stone-200 to-stone-100 text-stone-500 border border-stone-300/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_6px_rgba(0,0,0,0.1)] hover:from-stone-100 hover:to-stone-50 hover:!text-rose-500 dark:from-stone-800 dark:to-stone-900 dark:text-stone-400 dark:border-black/50 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:!text-rose-400 transition-all duration-150 active:scale-95 fancy-hover-effect"
+                          className="absolute -top-1 -right-2 z-20 p-0 rounded-full bg-gradient-to-b from-stone-200 to-stone-100 text-stone-500 border border-stone-300/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_6px_rgba(0,0,0,0.1)] hover:from-stone-100 hover:to-stone-50 hover:!text-rose-500 dark:from-stone-800 dark:to-stone-900 dark:text-stone-400 dark:border-black/50 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:!text-rose-400 transition-all duration-150 active:scale-95 fancy-hover-effect"
                           aria-label="Cerrar"
                       >
                           <XMarkIcon className="w-6 h-6" />

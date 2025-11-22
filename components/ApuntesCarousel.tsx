@@ -22,7 +22,7 @@ const ArrowBtn: React.FC<{
                 h-20 w-20 rounded-full shadow-lg focus-visible:outline-none
                 focus-visible:ring-1 focus-visible:ring-amber-400 transition-all duration-200
                 flex items-center justify-center
-                ${side === "left" ? "-left-11 pl-9" : "-right-11 pr-9"}
+                ${side === "left" ? "-left-11 pl-9 overflow-hidden" : "-right-11 pr-9 overflow-hidden"}
                 ${disabled
                   ? "bg-stone-300/20 text-stone-500 dark:bg-black/10 dark:text-stone-700 cursor-not-allowed"
                   : "bg-white/30 text-stone-600 hover:bg-white/60 dark:bg-stone-900/30 dark:text-stone-300 dark:hover:bg-stone-800/60 dark:hover:text-white"
@@ -254,9 +254,10 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted, infinit
       {/* Pista */}
       <div
         ref={trackRef}
-        className={`flex gap-2 overflow-x-auto overflow-y-visible scroll-smooth ${dragging ? "snap-none" : "snap-x snap-mandatory"}
-                   px-5 py-5 hide-scrollbar
-                   cursor-grab active:cursor-grabbing select-none [touch-action:pan-x]`}
+        className={`flex gap-2 overflow-x-auto overflow-y-visible overscroll-x-contain
+  ${dragging ? "scroll-auto snap-none" : "scroll-smooth snap-x snap-mandatory"}
+  px-5 py-5 hide-scrollbar
+  cursor-grab active:cursor-grabbing select-none [touch-action:pan-x]`}
         aria-label="Carrusel de apuntes"
         tabIndex={0}
         onWheel={onWheel}

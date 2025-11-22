@@ -1,3 +1,4 @@
+
 /*
   Esta es una estrategia de service worker "Cache First".
 
@@ -5,7 +6,7 @@
   cuando sea posible. Si no está en la caché, va a la red.
 */
 
-const CACHE_NAME = 'gcs-simulator-cache-v4'; // Incremented version
+const CACHE_NAME = 'gcs-simulator-cache-v2.0.0'; // Versión mayor actualizada para forzar recarga
 const urlsToCache = [
   '/',
   '/index.html',
@@ -60,7 +61,17 @@ const urlsToCache = [
   '/constants/cases/laboral.ts',
   '/constants/cases/playa.ts',
   '/constants/cases/trafico.ts',
-  '/constants/cases/urbano.ts'
+  '/constants/cases/urbano.ts',
+  '/constants/cases/casosglobales.ts',
+  // New files for PWA shortcuts/screenshots
+  '/icons/ambulance-shortcut.png',
+  '/icons/codigo3-shortcut.png',
+  '/screenshots/screenshot1.png',
+  '/screenshots/screenshot2.png',
+  '/screenshots/screenshot3.png',
+  '/screenshots/screenshot4.png'
+  // NOTA IMPORTANTE: NO añadir archivos de música pesados aquí.
+  // Se cachearán automáticamente la primera vez que el usuario los reproduzca.
 ];
 
 self.addEventListener('install', event => {

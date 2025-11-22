@@ -9,20 +9,21 @@ interface GCSSelectorProps {
 
 const GCSSelector: React.FC<GCSSelectorProps> = ({ label, options, value, onChange }) => {
   return (
-    <fieldset className="mb-4">
-      <legend className="mb-2 text-stone-600 dark:text-stone-300">{label}</legend>
-      <div className="flex flex-wrap gap-1 items-start">
+    <fieldset className="mb-3">
+      <legend className="text-stone-600 dark:text-stone-300 text-sm font-bold mb-1 ml-1">{label}</legend>
+      <div className="flex flex-wrap gap-2 items-center">
         {options.map((option) => (
           <button
             key={option}
             onClick={() => {
               onChange(option);
             }}
-            className={`w-11 h-11 rounded-md items-start font-abril-fatface text-[24px] transition-all duration-200 ease-in-out transform hover:scale-110 dark:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-stone-800
+            className={`w-10 h-12 sm:w-12 sm:h-14 rounded-lg flex items-center justify-center font-abril-fatface text-[18px] transition-all duration-200 ease-in-out transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-stone-800
               ${value === option 
-                ? 'bg-amber-500/70 text-slate-900 shadow-lg ring-2 ring-stone-500/70' 
-                : 'bg-stone-200 text-stone-700 shadow-inner shadow-black/10 hover:bg-stone-300 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 dark:shadow-black/30 focus:ring-amber-400'
+                ? 'bg-amber-500/90 text-slate-900 shadow-lg ring-2 ring-stone-500/50 scale-105' 
+                : 'bg-stone-200/80 text-stone-700 shadow-md shadow-black/5 hover:bg-stone-300 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 dark:shadow-black/20 focus:ring-amber-400'
               }`}
+            aria-label={`Puntuación ${option === 0 ? 'No Valorable' : option}`}
           >
             {option === 0 ? 'NV' : option}
           </button>

@@ -2,10 +2,12 @@
   "name": "Simulador de Casos Glasgow",
   "short_name": "SimuladorGCS",
   "description": "Una aplicación de entrenamiento para practicar la Escala de Coma de Glasgow a través de casos narrativos generados por IA.",
+  "id": "/?source=pwa",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0c111d",
   "theme_color": "#0c111d",
+  "categories": ["education", "medical", "games"],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -30,6 +32,52 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nuevo Caso Online",
+      "short_name": "Nuevo Caso",
+      "description": "Comienza un nuevo caso generado por IA.",
+      "url": "/index.html?action=new-case",
+      "icons": [{ "src": "/icons/ambulance-shortcut.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Jugar a Código3",
+      "short_name": "Código3",
+      "description": "Inicia el minijuego de agilidad mental.",
+      "url": "/index.html?action=start-game",
+      "icons": [{ "src": "/icons/codigo3-shortcut.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Pantalla de Inicio"
+    },
+    {
+      "src": "/screenshots/screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Resolución de un Caso"
+    },
+    {
+      "src": "/screenshots/screenshot3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Minijuego Código3"
+    },
+    {
+      "src": "/screenshots/screenshot4.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Pantalla de Inicio en Escritorio"
     }
   ]
 }

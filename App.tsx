@@ -1,15 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Screen, Case, GCSScore } from './types';
-import { generateNewCase } from './services/geminiService';
-import { useAppState, useAppDispatch } from './context/AppContext';
-import { gcsScoreToString, calculateTotalGCS } from './utils/gcs';
-import { allOfflineCases } from './constants/offlineCases';
-import { playClickSound } from './utils/soundUtils';
 
-// Import new components
+import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+
+// Types
+import { Screen, Case, GCSScore, AppMusic } from './types';
+
+// Context & Services
+import { useAppState, useAppDispatch } from './context/AppContext';
+import { generateNewCase } from './services/geminiService';
+
+// Utils & Constants
+import { gcsScoreToString, calculateTotalGCS } from './utils/gcs';
+import { playClickSound } from './utils/soundUtils';
+import { allOfflineCases, casosGlobalesCases } from './constants/offlineCases';
+
+// Components
 import Header from './components/Header';
 import LoadingSpinner from './components/LoadingSpinner';
 import InfoModal from './components/InfoModal';
+import { TrophyIcon } from './components/Icons';
+
+// Screens
 import HomeScreen from './screens/HomeScreen';
 import CaseScreen from './screens/CaseScreen';
 import ResultScreen from './screens/ResultScreen';
@@ -17,13 +27,47 @@ import ArchiveScreen from './screens/ArchiveScreen';
 import RegistryScreen from './screens/RegistryScreen';
 import GameScreen from './screens/GameScreen';
 import StatsScreen from './screens/StatsScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import LetterScreen from './screens/LetterScreen';
+
+const TrophyDisplay: React.FC<{ archive: Case[] }> = ({ archive }) => {
+    const uniqueCorrectCount = useMemo(() => {
+        const standardCaseIds = new Set(allOfflineCases.map(c => c.id));
+        const correctSolvedIds = new Set(
+            archive
+                .filter(c => c.isCorrect && standardCaseIds.has(c.id))
+                .map(c => c.id)
+        );
+        return correctSolvedIds.size;
+    }, [archive]);
+
+    return (
+        <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-100/30 dark:bg-amber-800/20 rounded-full border border-amber-300/30 dark:border-amber-700/20 shadow-sm">
+            <TrophyIcon className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span className="font-game text-sm text-amber-700 dark:text-amber-300 tracking-wide -mb-0.5">
+                {uniqueCorrectCount}/{allOfflineCases.length}
+            </span>
+        </div>
+    );
+};
+
+// --- Mapeo de pistas de música ---
+// IMPORTANTE: Asegúrate de colocar tus archivos mp3 en la carpeta public/music/
+const MUSIC_TRACKS: Record<AppMusic, string> = {
+    'none': '',
+    'track1': '/music/track1.mp3', // Nombre de tu primera canción
+    'track2': '/music/track2.mp3', // Nombre de tu segunda canción (opcional)
+};
 
 // --- Main App Component ---
 const App: React.FC = () => {
-    const { screen, currentCase, isLoading, error, archive, infoContent, codigo3HighScore, isMuted, theme } = useAppState();
+    const { screen, currentCase, isLoading, error, archive, infoContent, codigo3HighScore, isMuted, theme, appBackground, appMusic } = useAppState();
     const dispatch = useAppDispatch();
     const [isConfirmingClear, setIsConfirmingClear] = useState(false);
     
+    // Referencia para el elemento de audio
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
     // Effect for scrolling to top on certain screen changes
     useEffect(() => {
         if (screen === Screen.Home) { // Scroll to top only on Home. Modal handles its own scroll.
@@ -33,12 +77,20 @@ const App: React.FC = () => {
 
     // Effect for applying a background class to the body
     useEffect(() => {
+        // Limpiar clases anteriores
+        document.body.classList.remove('home-background', 'bg-basic', 'bg-ems');
+
         if (screen !== Screen.Game) {
-            document.body.classList.add('home-background');
-        } else {
-            document.body.classList.remove('home-background');
+            document.body.classList.add('home-background'); // Estilo base
+            
+            // Aplicar fondo seleccionado
+            if (appBackground === 'ems') {
+                document.body.classList.add('bg-ems');
+            } else {
+                document.body.classList.add('bg-basic');
+            }
         }
-    }, [screen]);
+    }, [screen, appBackground]);
 
     // Effect for UI click sounds
     useEffect(() => {
@@ -55,6 +107,47 @@ const App: React.FC = () => {
         };
     }, [isMuted]);
 
+    // --- Lógica del Reproductor de Música ---
+    useEffect(() => {
+        if (!audioRef.current) {
+            audioRef.current = new Audio();
+            audioRef.current.loop = true;
+            audioRef.current.volume = 0.4; // Volumen moderado para fondo
+        }
+
+        const audio = audioRef.current;
+
+        // Si está muteado o la música es 'none', pausar
+        if (isMuted || appMusic === 'none') {
+            audio.pause();
+            return;
+        }
+
+        // Si estamos en el minijuego (Código3), pausar la música ambiental
+        // porque el juego tiene sus propios efectos y quizás quieras poner música tensa de juego luego
+        if (screen === Screen.Game) {
+             audio.pause();
+             return;
+        }
+
+        const trackUrl = MUSIC_TRACKS[appMusic];
+        
+        // Si la fuente ha cambiado, actualizar y reproducir
+        // Usamos getAttribute('src') para comparar la ruta relativa/absoluta correctamente
+        if (trackUrl && !audio.src.endsWith(trackUrl)) {
+            audio.src = trackUrl;
+            audio.play().catch(e => {
+                // Los navegadores bloquean autoplay si no hay interacción previa.
+                // Esto es normal, se reproducirá tras el primer clic del usuario.
+                console.log("Reproducción automática bloqueada hasta interacción:", e);
+            });
+        } else if (trackUrl && audio.paused) {
+            // Si es la misma pista pero estaba pausada (ej. al volver del juego o desmutear)
+            audio.play().catch(() => {});
+        }
+
+    }, [appMusic, isMuted, screen]);
+
 
     const handleNewCase = useCallback(async () => {
         dispatch({ type: 'START_NEW_CASE' });
@@ -66,15 +159,65 @@ const App: React.FC = () => {
             dispatch({ type: 'API_ERROR', payload: message });
         }
     }, [dispatch]);
+    
+    const handleStartGame = useCallback(() => {
+        dispatch({ type: 'START_GAME' });
+    }, [dispatch]);
+
+    // Effect for PWA shortcuts
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get('action');
+
+        if (action) {
+            if (action === 'new-case') {
+                handleNewCase();
+            } else if (action === 'start-game') {
+                handleStartGame();
+            }
+            
+            // Clean up URL to avoid re-triggering on hot-reload or refresh
+            if (window.history.replaceState) {
+                const cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+    }, [handleNewCase, handleStartGame]);
 
     const handleStartOfflineCase = () => {
         if (allOfflineCases.length === 0) {
             alert("No hay casos offline disponibles en el registro.");
             return;
         }
-        const randomCase = allOfflineCases[Math.floor(Math.random() * allOfflineCases.length)];
+        
+        // Filtrar casos que ya están resueltos correctamente en el archivo
+        const solvedIds = new Set(archive.filter(c => c.isCorrect).map(c => c.id));
+        const availableCases = allOfflineCases.filter(c => !solvedIds.has(c.id));
+        
+        // Si quedan casos por resolver, elegir de esos. Si no, elegir de todos (modo repaso).
+        const pool = availableCases.length > 0 ? availableCases : allOfflineCases;
+        
+        const randomCase = pool[Math.floor(Math.random() * pool.length)];
+        
         dispatch({ type: 'REPLAY_CASE', payload: randomCase });
     };
+
+    const handleStartGlobalCase = () => {
+        if (!casosGlobalesCases || casosGlobalesCases.length === 0) {
+             alert("No hay casos globales disponibles por el momento.");
+             return;
+        }
+
+        // Filtrar casos globales que ya están resueltos correctamente
+        const solvedIds = new Set(archive.filter(c => c.isCorrect).map(c => c.id));
+        const availableCases = casosGlobalesCases.filter(c => !solvedIds.has(c.id));
+
+        // Si quedan casos por resolver, elegir de esos. Si no, elegir de todos.
+        const pool = availableCases.length > 0 ? availableCases : casosGlobalesCases;
+
+        const randomCase = pool[Math.floor(Math.random() * pool.length)];
+        dispatch({ type: 'REPLAY_CASE', payload: randomCase });
+    }
     
     const handleAssess = (userGCS: GCSScore) => {
         dispatch({ type: 'ASSESS_CASE', payload: userGCS });
@@ -96,14 +239,18 @@ const App: React.FC = () => {
         dispatch({ type: 'SHOW_STATS' });
     };
 
+    const handleShowSettings = () => {
+        dispatch({ type: 'SHOW_SETTINGS' });
+    }
+
+    const handleShowLetter = () => {
+        dispatch({ type: 'SHOW_LETTER' });
+    }
+
     const handleGoHome = () => {
         dispatch({ type: 'GO_HOME' });
     };
     
-    const handleStartGame = () => {
-        dispatch({ type: 'START_GAME' });
-    };
-
     const handleSetCodigo3HighScore = (score: number) => {
         dispatch({ type: 'SET_CODIGO3_HIGH_SCORE', payload: score });
     };
@@ -124,54 +271,6 @@ const App: React.FC = () => {
         dispatch({ type: 'TOGGLE_THEME' });
     };
 
-    const handleSaveArchive = () => {
-        if (archive.length === 0) return;
-
-        const formatCaseForExport = (c: Case) => {
-            const userGCS = c.userGCS || { ocular: null, verbal: null, motor: null };
-            const correctGCS = c.correctGCS;
-            const userTotal = calculateTotalGCS(userGCS);
-            const correctTotal = calculateTotalGCS(correctGCS);
-
-            return `
-========================================
-CASO: ${c.title}
-FECHA: ${new Date(c.id).toLocaleString()}
-RESULTADO: ${c.isCorrect ? 'CORRECTO' : 'INCORRECTO'}
-========================================
-
-NARRATIVA:
-${c.narrative}
-
-----------------------------------------
-
-TU VALORACIÓN: GCS ${userTotal > 0 ? userTotal : 'No Totalizable'} (${gcsScoreToString(userGCS)})
-RESOLUCIÓN: GCS ${correctTotal > 0 ? correctTotal : 'No Totalizable'} (${gcsScoreToString(correctGCS as GCSScore)})
-
-----------------------------------------
-
-CONCLUSIÓN DEL CASO:
-"${c.conclusion}"
-
-----------------------------------------
-
-JUSTIFICACIÓN GCS:
-${c.gcsJustification}
-`;
-        };
-
-        const textContent = archive.slice().reverse().map(formatCaseForExport).join('\n\n');
-        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `informes-casos-gcs-${new Date().toISOString().slice(0, 10)}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
-
     const handleClearArchive = () => {
         if (archive.length > 0) {
             setIsConfirmingClear(true);
@@ -186,20 +285,20 @@ ${c.gcsJustification}
     const cancelClear = () => {
         setIsConfirmingClear(false);
     };
-
+    
     const mainContainerClasses = screen === Screen.Game 
         ? "h-screen w-screen" 
         : "min-h-screen text-stone-800 dark:text-stone-200 flex flex-col";
 
-    const isModalScreen = [Screen.Case, Screen.Result, Screen.Archive, Screen.Registry, Screen.Stats].includes(screen);
+    const isModalScreen = [Screen.Case, Screen.Result, Screen.Archive, Screen.Registry, Screen.Stats, Screen.Settings, Screen.Letter].includes(screen);
 
     return (
         <div className={mainContainerClasses}>
-            {screen !== Screen.Game && <Header onShowArchive={handleShowArchive} onShowRegistry={handleShowRegistry} onGoHome={handleGoHome} isMuted={isMuted} onToggleMute={handleToggleMute} theme={theme} onToggleTheme={handleToggleTheme} />}
+            {screen !== Screen.Game && <Header onShowArchive={handleShowArchive} onShowRegistry={handleShowRegistry} onGoHome={handleGoHome} onShowSettings={handleShowSettings} showCloseButton={screen !== Screen.Home} />}
             
             <main className={screen === Screen.Game ? "h-full" : "w-full flex-grow flex flex-col py-4 pt-20"}>
-                {screen === Screen.Home && <HomeScreen onNewCase={handleNewCase} onStartOfflineCase={handleStartOfflineCase} onShowInfo={handleShowInfo} onStartGame={handleStartGame} onShowStats={handleShowStats} isMuted={isMuted} />}
-                {screen === Screen.Game && <GameScreen onExit={handleGoHome} highScore={codigo3HighScore} onSetHighScore={handleSetCodigo3HighScore} />}
+                {screen === Screen.Home && <HomeScreen onNewCase={handleNewCase} onStartOfflineCase={handleStartOfflineCase} onStartGlobalCases={handleStartGlobalCase} onShowInfo={handleShowInfo} onStartGame={handleStartGame} onShowStats={handleShowStats} onShowLetter={handleShowLetter} isMuted={isMuted} />}
+                {screen === Screen.Game && <GameScreen onExit={handleGoHome} highScore={codigo3HighScore} onSetHighScore={handleSetCodigo3HighScore} isMuted={isMuted} onToggleMute={handleToggleMute} />}
             </main>
 
             {isLoading && (
@@ -216,17 +315,24 @@ ${c.gcsJustification}
                         screen === Screen.Result ? `Resolución: ${currentCase?.title}` ?? 'Resolución' :
                         screen === Screen.Archive ? 'Informes de Casos' :
                         screen === Screen.Registry ? 'Registro de Casos' : 
-                        screen === Screen.Stats ? 'Expediente del Jugador' : ''
+                        screen === Screen.Stats ? 'Expediente del Jugador' : 
+                        screen === Screen.Settings ? 'Configuración' : 
+                        screen === Screen.Letter ? 'La Carta' : ''
                     }
                     content={
                         infoContent ? infoContent.content :
                         screen === Screen.Case ? (currentCase && <CaseScreen currentCase={currentCase} onAssess={handleAssess} />) :
-                        screen === Screen.Result ? (currentCase && <ResultScreen lastCase={currentCase} onNewCase={handleNewCase} onEndService={handleGoHome} onStartOfflineCase={handleStartOfflineCase} />) :
-                        screen === Screen.Archive ? (<ArchiveScreen archive={archive} onSave={handleSaveArchive} onClear={handleClearArchive} onReplay={handleReplayCase} />) :
+                        screen === Screen.Result ? (currentCase && <ResultScreen lastCase={currentCase} onNewCase={handleNewCase} onEndService={handleGoHome} onStartOfflineCase={handleStartOfflineCase} onStartGlobalCase={handleStartGlobalCase} />) :
+                        screen === Screen.Archive ? (<ArchiveScreen archive={archive} onReplay={handleReplayCase} />) :
                         screen === Screen.Registry ? (<RegistryScreen archive={archive} onPlay={handleReplayCase} />) :
-                        screen === Screen.Stats ? (<StatsScreen archive={archive} />) : null
+                        screen === Screen.Stats ? (<StatsScreen archive={archive} />) : 
+                        screen === Screen.Settings ? (<SettingsScreen />) :
+                        screen === Screen.Letter ? (<LetterScreen />) : null
                     }
                     onClose={infoContent ? handleCloseInfo : handleGoHome}
+                    headerAction={
+                        screen === Screen.Registry ? <TrophyDisplay archive={archive} /> : undefined
+                    }
                 />
             )}
             

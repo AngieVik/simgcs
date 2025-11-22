@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { gameQuestions } from '../constants/gameData';
 
+// --- TIPOS ---
 type GameState = 'start' | 'playing' | 'paused' | 'bonus' | 'gameOver';
 type BallType = 'answer' | 'good' | 'bad' | 'emoji' | 'death' | 'bonus';
 type Effect = 'none' | 'addTime' | 'removeTime' | 'addSupport' | 'removeSupport' | 'freeze' | 'scramble' | 'winTime' | 'loseGame';
@@ -20,6 +21,7 @@ interface Ball {
   radius: number;
   isActive: boolean;
   color: string;
+  textColor: string;
   mass: number;
   originalText?: string;
 }
@@ -43,23 +45,67 @@ interface DecoIconData {
   delay: number;
 }
 
-const LEVEL_COLORS = ['#fde047', '#facc15', '#eab308', '#f59e0b', '#d97706']; // yellow-300 to amber-600
+// --- CONSTANTES Y CONFIGURACIÓN ---
 const INITIAL_TIME = 20.0;
 const INITIAL_SUPPORTS = 3;
-const INITIAL_SPEED = 4.5;
-const BACKGROUND_GIFS = ['/wallpapercodigo3.gif', '/wallpapercodigo3-2.gif', '/wallpapercodigo3-3.gif'];
+const INITIAL_SPEED = 2.5;
+const MAX_SPEED_BASE = 12;
 
 const shuffleArray = (array: any[]) => [...array].sort(() => Math.random() - 0.5);
 
+// Fondo dinámico degradado (Cyberpunk style)
+const generateBackground = (level: number) => {
+    const hue = ((level - 1) * 45) % 360;
+    // Más oscuro y saturado para contraste con letras neon
+    return `linear-gradient(180deg, hsl(${hue}, 80%, 5%) 0%, hsl(${hue + 30}, 60%, 10%) 100%)`;
+};
+
+// --- COMPONENTES VISUALES ---
+
+// 1. Efecto Matrix (Lluvia de código sutil)
+const MatrixRain: React.FC = () => {
+    const drops = useMemo(() => {
+        return Array.from({ length: 20 }).map((_, i) => ({
+            id: i,
+            left: Math.random() * 100,
+            delay: Math.random() * 5,
+            duration: Math.random() * 3 + 3,
+            chars: Math.random() > 0.5 ? '101010' : 'AF09BC'
+        }));
+    }, []);
+
+    return (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+            {drops.map((drop) => (
+                <div
+                    key={drop.id}
+                    className="absolute top-[-20%] text-green-500 text-xs md:text-sm font-mono writing-vertical"
+                    style={{
+                        left: `${drop.left}%`,
+                        animation: `matrixFall ${drop.duration}s linear infinite`,
+                        animationDelay: `-${drop.delay}s`,
+                        textShadow: '0 0 5px rgba(0, 255, 0, 0.8)'
+                    }}
+                >
+                    {drop.chars.split('').map((c, k) => (
+                        <div key={k} className="my-1 opacity-70">{c}</div>
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
+};
+
+// Iconos decorativos para menús
 const DecoIcon: React.FC<{ icon: DecoIconData }> = ({ icon }) => (
   <div
-    className="absolute text-yellow-400 select-none pointer-events-none fade-in"
+    className="absolute text-white select-none pointer-events-none fade-in font-mono"
     style={{
       left: `${icon.x}%`,
       top: `${icon.y}%`,
       fontSize: `${icon.size}px`,
       opacity: icon.opacity,
-      textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+      textShadow: '0 0 8px rgba(255,255,255,0.4)',
       animationDelay: `${icon.delay}s`
     }}
   >
@@ -68,29 +114,33 @@ const DecoIcon: React.FC<{ icon: DecoIconData }> = ({ icon }) => (
 );
 
 const GuideComponent: React.FC<{ onBack: () => void }> = ({ onBack }) => (
-    <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-sm flex flex-col items-center justify-center z-30 text-white p-4 font-game">
-        <div className="w-full max-w-md text-left">
-            <h2 className="text-3xl text-yellow-300 game-text-shadow mb-6 text-center">GUÍA DEL JUEGO</h2>
-            <div className="space-y-3 text-lg">
-                <p className="font-bold text-green-400">Bolas Verdes (Buenas):</p>
-                <ul className="list-disc list-inside ml-4">
-                    <li><span className="inline-block w-6 text-center">➕</span>: +1 Soporte</li>
-                    <li><span className="inline-block w-6 text-center">⏰</span>: +1 Segundo</li>
-                    <li><span className="inline-block w-6 text-center">❄️</span>: Congela el tiempo y las bolas por 3s</li>
-                </ul>
-                <p className="font-bold text-red-400">Bolas Rojas (Malas):</p>
-                <ul className="list-disc list-inside ml-4">
-                    <li><span className="inline-block w-6 text-center">💔</span>: -1 Soporte</li>
-                    <li><span className="inline-block w-6 text-center">⏳</span>: -1 Segundo</li>
-                    <li><span className="inline-block w-6 text-center">❔</span>: Letras ilegibles por 3s</li>
-                </ul>
-                <p className="font-bold text-white">Bolas Especiales:</p>
-                 <ul className="list-disc list-inside ml-4">
-                    <li><span className="inline-block w-6 text-center">💀</span>: ¡Game Over!</li>
-                    <li><span className="inline-block w-6 text-center">⭐</span>: +10 Segundos</li>
-                </ul>
+    <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center z-50 text-white p-6 font-['Share_Tech_Mono']">
+        <div className="w-full max-w-md text-left border border-green-500/30 p-6 rounded-lg shadow-[0_0_20px_rgba(34,197,94,0.2)] bg-black">
+            <h2 className="text-5xl text-green-400 mb-8 text-center uppercase tracking-widest glitch-text">SYSTEM_GUIDE</h2>
+            <div className="space-y-6 text-xl tracking-wide">
+                <div className="flex items-center gap-4 border-b border-gray-800 pb-2">
+                    <span className="text-3xl filter drop-shadow-[0_0_5px_#4ade80]">🟢</span>
+                    <span className="text-green-400">BENEFICIOS: HP++, TIME++, FREEZE</span>
+                </div>
+                <div className="flex items-center gap-4 border-b border-gray-800 pb-2">
+                    <span className="text-3xl filter drop-shadow-[0_0_5px_#f87171]">🔴</span>
+                    <span className="text-red-400">CORRUPCIÓN: DMG, STEAL, HIDE</span>
+                </div>
+                <div className="flex items-center gap-4 border-b border-gray-800 pb-2">
+                    <span className="text-3xl">💀</span>
+                    <span className="text-gray-500">FATAL_ERROR: GAME_OVER</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className="text-3xl filter drop-shadow-[0_0_8px_#fef08a]">⭐</span>
+                    <span className="text-yellow-200">ROOT_ACCESS: SUPER_TIME</span>
+                </div>
             </div>
-            <p onClick={onBack} className="cursor-pointer mt-8 w-full px-6 py-3 text-center text-yellow-400 hover:text-yellow-300 text-2xl transition-colors">Volver</p>
+            <button 
+                onClick={onBack} 
+                className="mt-10 w-full py-4 text-3xl bg-green-900/30 border border-green-500 text-green-400 hover:bg-green-500 hover:text-black transition-all uppercase tracking-[0.2em]"
+            >
+                [ RETURN ]
+            </button>
         </div>
     </div>
 );
@@ -99,14 +149,16 @@ interface GameScreenProps {
     onExit: () => void;
     highScore: number;
     onSetHighScore: (score: number) => void;
+    isMuted: boolean;
+    onToggleMute: () => void;
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighScore }) => {
+const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighScore, isMuted, onToggleMute }) => {
   const [gameState, setGameState] = useState<GameState>('start');
   const [level, setLevel] = useState(1);
   const [supports, setSupports] = useState(INITIAL_SUPPORTS);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
-  const [balls, setBalls] = useState<Ball[]>([]); // Only for rendering active balls
+  const [balls, setBalls] = useState<Ball[]>([]);
   const [currentPhrase, setCurrentPhrase] = useState('');
   const [originalPhrase, setOriginalPhrase] = useState('');
   const [levelTime, setLevelTime] = useState(INITIAL_TIME);
@@ -115,7 +167,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   const [isFrozen, setIsFrozen] = useState(false);
   const [isGuideVisible, setIsGuideVisible] = useState(false);
   const [visualEffects, setVisualEffects] = useState<VisualEffect[]>([]);
-  const [isMuted, setIsMuted] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [isPhrasePulsing, setIsPhrasePulsing] = useState(false);
 
@@ -126,65 +177,61 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   const specialBallSpawnTimerRef = useRef<number>(0);
   const audioCtx = useRef<AudioContext | null>(null);
   const ballPoolRef = useRef<Ball[]>([]);
+  const scaleRef = useRef<number>(1);
 
+  // --- AUDIO Y RESIZE ---
   useEffect(() => {
-    if (gameState === 'gameOver') {
-      onSetHighScore(level);
-    }
-  }, [gameState, level, onSetHighScore]);
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    audioCtx.current = new AudioContextClass();
+    
+    const handleResize = () => {
+        if (gameAreaRef.current) {
+            const width = gameAreaRef.current.clientWidth;
+            const height = gameAreaRef.current.clientHeight;
+            scaleRef.current = Math.min(width, height) / 600;
+        }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
 
-  const getBallFromPool = (): Ball => {
-    const inactiveBall = ballPoolRef.current.find(b => !b.isActive);
-    if (inactiveBall) {
-        return inactiveBall;
-    }
-    const newBall: Ball = { id: 0, x:0, y:0, vx:0, vy:0, radius:0, mass:0, color:'', text:'', isActive:false, type:'answer', effect:'none' };
-    ballPoolRef.current.push(newBall);
-    return newBall;
-  };
-
-  useEffect(() => {
-    audioCtx.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const playSound = (type: SoundType) => {
     if (isMuted) return;
-    if (!audioCtx.current || audioCtx.current.state === 'suspended') {
-      audioCtx.current?.resume();
-    }
     const ctx = audioCtx.current;
     if (!ctx) return;
-    
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {}); 
+
     const now = ctx.currentTime;
     const gainNode = ctx.createGain();
     gainNode.connect(ctx.destination);
 
     if (type === 'hit') {
       const oscillator = ctx.createOscillator();
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(880, now);
-      oscillator.frequency.exponentialRampToValueAtTime(220, now + 0.2);
-      gainNode.gain.setValueAtTime(0.5, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+      oscillator.type = 'square'; // Más 8-bit
+      oscillator.frequency.setValueAtTime(150, now);
+      oscillator.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+      gainNode.gain.setValueAtTime(0.2, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
       oscillator.connect(gainNode);
       oscillator.start(now);
-      oscillator.stop(now + 0.2);
+      oscillator.stop(now + 0.1);
     } else if (type === 'gameOver') {
       const oscillator = ctx.createOscillator();
-      oscillator.type = 'square';
-      gainNode.gain.setValueAtTime(0.4, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-      oscillator.frequency.setValueAtTime(440, now);
-      oscillator.frequency.exponentialRampToValueAtTime(220, now + 0.4);
-      oscillator.frequency.exponentialRampToValueAtTime(110, now + 0.8);
+      oscillator.type = 'sawtooth';
+      gainNode.gain.setValueAtTime(0.3, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+      oscillator.frequency.setValueAtTime(100, now);
+      oscillator.frequency.linearRampToValueAtTime(20, now + 1.5);
       oscillator.connect(gainNode);
       oscillator.start(now);
-      oscillator.stop(now + 0.8);
+      oscillator.stop(now + 1.5);
     } else if (type === 'push') {
         const oscillator = ctx.createOscillator();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(200, now);
-        oscillator.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+        oscillator.type = 'triangle';
+        oscillator.frequency.setValueAtTime(300, now);
+        oscillator.frequency.exponentialRampToValueAtTime(600, now + 0.1);
         gainNode.gain.setValueAtTime(0.2, now);
         gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
         oscillator.connect(gainNode);
@@ -192,16 +239,31 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
         oscillator.stop(now + 0.1);
     } else if (type === 'correct') {
         const osc = ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.linearRampToValueAtTime(659.25, now + 0.1); // E5
-        osc.frequency.linearRampToValueAtTime(783.99, now + 0.2); // G5
-        gainNode.gain.setValueAtTime(0.3, now);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, now); 
+        osc.frequency.setValueAtTime(1760, now + 0.1); 
+        gainNode.gain.setValueAtTime(0.1, now);
         gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
         osc.connect(gainNode);
         osc.start(now);
         osc.stop(now + 0.3);
     }
+  };
+
+  const handleStartGame = () => {
+    if (audioCtx.current && audioCtx.current.state === 'suspended') {
+        audioCtx.current.resume();
+    }
+    restartGame();
+  };
+
+  // --- LÓGICA DEL JUEGO ---
+  const getBallFromPool = (): Ball => {
+    const inactiveBall = ballPoolRef.current.find(b => !b.isActive);
+    if (inactiveBall) return inactiveBall;
+    const newBall: Ball = { id: 0, x:0, y:0, vx:0, vy:0, radius:0, mass:0, color:'', textColor:'black', text:'', isActive:false, type:'answer', effect:'none' };
+    ballPoolRef.current.push(newBall);
+    return newBall;
   };
 
   const triggerScreenShake = () => {
@@ -216,9 +278,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   
   useEffect(() => {
       if(visualEffects.length > 0) {
-          const timeout = setTimeout(() => {
-              setVisualEffects(prev => prev.slice(1));
-          }, 800);
+          const timeout = setTimeout(() => setVisualEffects(prev => prev.slice(1)), 800);
           return () => clearTimeout(timeout);
       }
   }, [visualEffects]);
@@ -226,50 +286,43 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   const scrambleText = (text: string) => {
     if (text.length < 3) return text;
     const chars = text.split('');
-    const indicesToScramble = chars
-      .map((char, i) => (char !== ' ' ? i : -1))
-      .filter(i => i !== -1);
-    
+    const indicesToScramble = chars.map((char, i) => (char !== ' ' ? i : -1)).filter(i => i !== -1);
     const numToScramble = Math.max(1, Math.floor(indicesToScramble.length / 3));
-
     for (let i = 0; i < numToScramble; i++) {
         const randomIndex = Math.floor(Math.random() * indicesToScramble.length);
         const charIndex = indicesToScramble[randomIndex];
-        chars[charIndex] = '_';
+        chars[charIndex] = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random letter code style
         indicesToScramble.splice(randomIndex, 1);
     }
     return chars.join('');
   };
 
-
   const handleScrambleEffect = () => {
     setCurrentPhrase(scrambleText(originalPhrase));
     ballPoolRef.current.forEach(b => {
-        if (b.isActive && b.type === 'answer') {
-            b.text = scrambleText(b.originalText || b.text);
-        }
+        if (b.isActive && b.type === 'answer') b.text = scrambleText(b.originalText || b.text);
     });
     setTimeout(() => {
         setCurrentPhrase(originalPhrase);
         ballPoolRef.current.forEach(b => {
-            if (b.type === 'answer') {
-                b.text = b.originalText || b.text;
-            }
+            if (b.type === 'answer') b.text = b.originalText || b.text;
         });
     }, 3000);
   };
   
-  const spawnSpecialBall = (gameWidth: number, gameHeight: number) => {
+  const spawnSpecialBall = (gameWidth: number) => {
+    const scale = scaleRef.current;
+    const baseRadius = 32 * scale;
     const specialTypes = [
-        { type: 'good', effect: 'addSupport', text: '➕', color: '#4ade80', radius: 25 },
-        { type: 'good', effect: 'addTime', text: '⏰', color: '#4ade80', radius: 25 },
-        { type: 'good', effect: 'freeze', text: '❄️', color: '#4ade80', radius: 25 },
-        { type: 'bad', effect: 'removeSupport', text: '💔', color: '#f87171', radius: 25 },
-        { type: 'bad', effect: 'removeTime', text: '⏳', color: '#f87171', radius: 25 },
-        { type: 'bad', effect: 'scramble', text: '❔', color: '#f87171', radius: 25 },
-        { type: 'death', effect: 'loseGame', text: '💀', color: '#000000', radius: 15 },
-        { type: 'bonus', effect: 'winTime', text: '⭐', color: '#ffffff', radius: 15 },
-        ...Array(5).fill({ type: 'emoji', effect: 'none', text: ['😂', '😍', '🥳', '🤯'][Math.floor(Math.random()*4)], color: '#fde047', radius: Math.random() * 20 + 15 }),
+        { type: 'good', effect: 'addSupport', text: 'DATA+', color: '#22c55e', textColor:'black', radius: baseRadius },
+        { type: 'good', effect: 'addTime', text: 'TIME+', color: '#22c55e', textColor:'black', radius: baseRadius },
+        { type: 'good', effect: 'freeze', text: 'STOP', color: '#38bdf8', textColor:'black', radius: baseRadius },
+        { type: 'bad', effect: 'removeSupport', text: 'CORRUPT', color: '#ef4444', textColor:'black', radius: baseRadius },
+        { type: 'bad', effect: 'removeTime', text: 'LAG', color: '#ef4444', textColor:'black', radius: baseRadius },
+        { type: 'bad', effect: 'scramble', text: 'BUG', color: '#f97316', textColor:'black', radius: baseRadius },
+        { type: 'death', effect: 'loseGame', text: 'X', color: '#000000', textColor:'red', radius: 24 * scale },
+        { type: 'bonus', effect: 'winTime', text: 'ROOT', color: '#ffffff', textColor:'#eab308', radius: 24 * scale },
+        ...Array(3).fill({ type: 'emoji', effect: 'none', text: ['01', 'AF', 'OK', 'FF'][Math.floor(Math.random()*4)], color: '#fbbf24', textColor:'black', radius: (Math.random() * 15 + 20) * scale }),
     ];
     const spec = specialTypes[Math.floor(Math.random() * specialTypes.length)];
     const ball = getBallFromPool();
@@ -280,11 +333,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
         text: spec.text,
         x: Math.random() * (gameWidth - spec.radius * 2) + spec.radius,
         y: -spec.radius,
-        vx: (Math.random() - 0.5) * ballSpeed,
-        vy: (Math.random() * 0.5 + 0.5) * ballSpeed,
+        vx: (Math.random() - 0.5) * ballSpeed * scale,
+        vy: (Math.random() * 0.5 + 0.5) * ballSpeed * scale,
         radius: spec.radius,
         isActive: true,
         color: spec.color,
+        textColor: spec.textColor,
         mass: Math.pow(spec.radius, 2),
         isCorrect: undefined,
         originalText: undefined
@@ -294,16 +348,16 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   useEffect(() => {
     if (gameState === 'start' || gameState === 'gameOver' || gameState === 'bonus') {
       const icons: DecoIconData[] = [];
-      const iconChars = ['★', '●', '◆', '○', '+', '✕'];
+      const iconChars = ['{ }', '< >', '//', '01', '&&', '||'];
       for (let i = 0; i < 20; i++) {
         icons.push({
           id: i,
           char: iconChars[Math.floor(Math.random() * iconChars.length)],
           x: Math.random() * 100,
           y: Math.random() * 100,
-          size: Math.random() * 40 + 20,
-          opacity: Math.random() * 0.4 + 0.1,
-          delay: Math.random() * 0.5
+          size: Math.random() * 30 + 15,
+          opacity: Math.random() * 0.2 + 0.05,
+          delay: Math.random() * 2
         });
       }
       setDecoIcons(icons);
@@ -314,21 +368,20 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
     const question = gameQuestions[Math.floor(Math.random() * gameQuestions.length)];
     setCurrentPhrase(question.frase);
     setOriginalPhrase(question.frase);
-
     const options = shuffleArray([
       { text: question.correcta, isCorrect: true },
       { text: question.incorrecta1, isCorrect: false },
       { text: question.incorrecta2, isCorrect: false },
     ]);
-    
     ballPoolRef.current.forEach(b => {
-        if (b.type === 'answer') b.isActive = false;
-        if (isRestart) b.isActive = false;
+        if (b.type === 'answer' || isRestart) b.isActive = false;
     });
+    const gameWidth = gameAreaRef.current?.clientWidth || window.innerWidth;
+    const scale = scaleRef.current;
+    const answerRadius = 45 * scale;
+    const answerColors = ['#facc15', '#eab308', '#d97706']; 
 
-    const gameWidth = gameAreaRef.current?.clientWidth || 500;
-    
-    options.forEach((opt) => {
+    options.forEach((opt, index) => {
         const ball = getBallFromPool();
         Object.assign(ball, {
             id: Date.now() + Math.random(),
@@ -337,17 +390,17 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
             text: opt.text,
             originalText: opt.text,
             isCorrect: opt.isCorrect,
-            x: Math.random() * (gameWidth - 60) + 30,
-            y: Math.random() * 100 + 30,
-            vx: (Math.random() - 0.5) * speed,
-            vy: Math.random() * speed,
-            radius: 30,
+            x: Math.random() * (gameWidth - answerRadius * 2) + answerRadius,
+            y: Math.random() * 100 + answerRadius,
+            vx: (Math.random() - 0.5) * speed * scale,
+            vy: (Math.random() * 0.5 + 0.2) * speed * scale,
+            radius: answerRadius,
             isActive: true,
-            color: LEVEL_COLORS[lvl % LEVEL_COLORS.length],
-            mass: 900,
+            color: answerColors[index % answerColors.length],
+            textColor: 'black',
+            mass: Math.pow(answerRadius, 2) * 1.5,
         });
     });
-
     setTimeLeft(time);
     setLevel(lvl);
     setGameState('playing');
@@ -358,38 +411,27 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
     playSound('correct');
     setIsPhrasePulsing(true);
     setTimeout(() => setIsPhrasePulsing(false), 400);
-
     const newLevel = level + 1;
-    const newTime = levelTime * 0.98;
-    const newSpeed = ballSpeed * 1.03;
-    
-    setLevelTime(Math.max(5, newTime));
+    const newTime = Math.max(5, levelTime * 0.98);
+    const newSpeed = ballSpeed * 1.04;
+    setLevelTime(newTime);
     setBallSpeed(newSpeed);
-
-    if (newLevel % 5 === 0) {
-      setGameState('bonus');
-    } else {
-      setupLevel(newLevel, newTime, newSpeed);
-    }
+    if (newLevel % 5 === 0) setGameState('bonus');
+    else setupLevel(newLevel, newTime, newSpeed);
   };
 
   const handleBallClick = (clickedBall: Ball) => {
     if (gameState !== 'playing') return;
-
     const ballInPool = ballPoolRef.current.find(b => b.id === clickedBall.id);
     if (!ballInPool || !ballInPool.isActive) return;
-
     ballInPool.isActive = false;
-    
     addVisualEffect('explosion', clickedBall.x, clickedBall.y, clickedBall.radius, clickedBall.color);
-
     if (clickedBall.type === 'answer') {
-        if (clickedBall.isCorrect) {
-            nextLevel();
-        } else {
+        if (clickedBall.isCorrect) nextLevel();
+        else {
             playSound('hit');
             triggerScreenShake();
-            setTimeLeft(t => Math.max(0, t - 2)); // Penalty for wrong answer
+            setTimeLeft(t => Math.max(0, t - 3));
         }
     } else {
         playSound('hit');
@@ -398,17 +440,10 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
             case 'removeTime': setTimeLeft(t => Math.max(0, t - 1)); break;
             case 'addSupport': setSupports(s => s + 1); break;
             case 'removeSupport': setSupports(s => Math.max(0, s - 1)); break;
-            case 'freeze': 
-                setIsFrozen(true);
-                setTimeout(() => setIsFrozen(false), 3000);
-                break;
+            case 'freeze': setIsFrozen(true); setTimeout(() => setIsFrozen(false), 3000); break;
             case 'scramble': handleScrambleEffect(); break;
             case 'winTime': setTimeLeft(t => t + 10); break;
-            case 'loseGame': 
-                setGameState('gameOver'); 
-                playSound('gameOver');
-                triggerScreenShake();
-                break;
+            case 'loseGame': setGameState('gameOver'); playSound('gameOver'); triggerScreenShake(); break;
         }
     }
   };
@@ -421,19 +456,26 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
         ballToRemove.isActive = false;
         addVisualEffect('explosion', ballToRemove.x, ballToRemove.y, ballToRemove.radius, ballToRemove.color);
         setSupports(s => s - 1);
+        playSound('push');
       }
     }
   };
   
   const handleGameAreaClick = (e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target !== gameAreaRef.current) return;
-      playSound('push');
+      // Check if clicking on Support Button manually (though button handles itself)
+      // This is mainly for background pushes
       const rect = gameAreaRef.current.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
-      const pushRadius = 100;
-      const pushForce = 5;
+      
+      // Logic to prevent push if clicking on UI (bottom area)
+      if (clickY > rect.height - 100) return;
 
+      const scale = scaleRef.current;
+      const pushRadius = 180 * scale; // Radio de empuje más grande
+      const pushForce = 10 * scale;
+      playSound('push');
       ballPoolRef.current.forEach(ball => {
           if (!ball.isActive) return;
           const dx = ball.x - clickX;
@@ -450,19 +492,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
 
   const handleBonus = (type: 'support' | 'time') => {
     let newBaseTime = levelTime;
-    if (type === 'support') {
-      setSupports(s => s + 1);
-    } else {
-      newBaseTime = levelTime + 2;
-    }
-
+    if (type === 'support') setSupports(s => s + 1);
+    else newBaseTime = levelTime + 3;
     const newLevel = level + 1;
-    const nextLevelTimeForSetup = newBaseTime * 0.98;
     const newSpeed = ballSpeed * 1.03;
-
-    setLevelTime(Math.max(5, nextLevelTimeForSetup));
+    setLevelTime(Math.max(5, newBaseTime));
     setBallSpeed(newSpeed);
-    setupLevel(newLevel, nextLevelTimeForSetup, newSpeed);
+    setupLevel(newLevel, newBaseTime, newSpeed);
   };
   
   const restartGame = () => {
@@ -471,6 +507,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
     setSupports(INITIAL_SUPPORTS);
     setLevelTime(INITIAL_TIME);
     setBallSpeed(INITIAL_SPEED);
+    onSetHighScore(level > highScore ? level : highScore);
     setupLevel(1, INITIAL_TIME, INITIAL_SPEED, true);
   };
 
@@ -494,33 +531,44 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
 
         const gameWidth = gameAreaRef.current?.clientWidth || 500;
         const gameHeight = gameAreaRef.current?.clientHeight || 500;
-        const bottomUiHeight = bottomUiRef.current?.clientHeight || 100;
+        const bottomUiHeight = 120; // Altura reservada para UI
         const bottomBoundary = gameHeight - bottomUiHeight;
         
-        if (specialBallSpawnTimerRef.current > 4) {
+        if (specialBallSpawnTimerRef.current > 3.5) {
             specialBallSpawnTimerRef.current = 0;
-            spawnSpecialBall(gameWidth, gameHeight);
+            spawnSpecialBall(gameWidth);
         }
 
         const activeBalls = ballPoolRef.current.filter(b => b.isActive);
+        const scale = scaleRef.current;
+        const maxVelocity = MAX_SPEED_BASE * scale;
         
         if (!isFrozen) {
             activeBalls.forEach(ball => {
                 ball.x += ball.vx;
                 ball.y += ball.vy;
+                ball.vy += 0.05 * scale;
 
-                if (ball.x - ball.radius < 0 || ball.x + ball.radius > gameWidth) {
-                    ball.vx = -ball.vx;
-                    ball.x = Math.max(ball.radius, Math.min(gameWidth - ball.radius, ball.x));
-                }
-                if (ball.y - ball.radius < 0 || (ball.type !== 'emoji' && ball.y + ball.radius > bottomBoundary)) {
-                    ball.vy = -ball.vy;
-                    ball.y = Math.max(ball.radius, Math.min(bottomBoundary - ball.radius, ball.y));
+                if (ball.x - ball.radius < 0) {
+                    ball.x = ball.radius;
+                    ball.vx = Math.abs(ball.vx) * 0.9;
+                } else if (ball.x + ball.radius > gameWidth) {
+                    ball.x = gameWidth - ball.radius;
+                    ball.vx = -Math.abs(ball.vx) * 0.9;
                 }
 
-                if (ball.y > gameHeight + 100) {
-                    ball.isActive = false;
+                if (ball.y - ball.radius < 0) {
+                    ball.y = ball.radius;
+                    ball.vy = Math.abs(ball.vy) * 0.9;
+                } else if (ball.y + ball.radius > bottomBoundary && ball.type !== 'emoji') {
+                    ball.y = bottomBoundary - ball.radius;
+                    ball.vy = -Math.abs(ball.vy) * 0.85; 
+                    ball.vx *= 0.98; 
                 }
+                if (ball.y > gameHeight + 100) ball.isActive = false;
+
+                ball.vx = Math.max(-maxVelocity, Math.min(ball.vx, maxVelocity));
+                ball.vy = Math.max(-maxVelocity, Math.min(ball.vy, maxVelocity));
             });
         }
 
@@ -530,9 +578,11 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
                 const b2 = activeBalls[j];
                 const dx = b2.x - b1.x;
                 const dy = b2.y - b1.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const distanceSq = dx * dx + dy * dy;
+                const minDist = b1.radius + b2.radius;
 
-                if (distance < b1.radius + b2.radius) {
+                if (distanceSq < minDist * minDist) {
+                    const distance = Math.sqrt(distanceSq);
                     const angle = Math.atan2(dy, dx);
                     const sin = Math.sin(angle);
                     const cos = Math.cos(angle);
@@ -551,109 +601,109 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
                     b2.vx = v2.x * cos - v2.y * sin;
                     b2.vy = v2.y * cos + v2.x * sin;
 
-                    const overlap = (b1.radius + b2.radius) - distance + 1;
-                    b1.x -= (overlap / 2) * cos;
-                    b1.y -= (overlap / 2) * sin;
-                    b2.x += (overlap / 2) * cos;
-                    b2.y += (overlap / 2) * sin;
+                    const overlap = minDist - distance;
+                    const separationFactor = 0.5; 
+                    b1.x -= overlap * cos * separationFactor;
+                    b1.y -= overlap * sin * separationFactor;
+                    b2.x += overlap * cos * separationFactor;
+                    b2.y += overlap * sin * separationFactor;
                 }
             }
         }
     }
-
     setBalls(ballPoolRef.current.filter(b => b.isActive));
-
     lastTimeRef.current = timestamp;
     animationFrameRef.current = requestAnimationFrame(gameLoop);
   }, [gameState, isFrozen, ballSpeed, setupLevel]);
 
   useEffect(() => {
-    if (gameState === 'playing') {
-      animationFrameRef.current = requestAnimationFrame(gameLoop);
-    }
-    return () => {
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      lastTimeRef.current = null;
-    };
+    if (gameState === 'playing') animationFrameRef.current = requestAnimationFrame(gameLoop);
+    return () => { if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current); lastTimeRef.current = null; };
   }, [gameState, gameLoop]);
   
-  const currentBg = BACKGROUND_GIFS[Math.floor((level - 1) / 5) % BACKGROUND_GIFS.length];
+  // ESTILOS REUTILIZABLES
+  const fontMain = "font-['Share_Tech_Mono']"; // Fuente código
+  const textMenuItem = `${fontMain} uppercase tracking-[0.15em] hover:text-yellow-400 hover:scale-110 transition-all cursor-pointer select-none text-shadow-glow`;
 
+  // --- RENDERIZADO ---
   const renderContent = () => {
     switch(gameState) {
       case 'start':
         return (
-          <div className="absolute inset-0 bg-black/0 flex flex-col items-center justify-center h-full p-4">
+          <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center h-full p-4 fade-in z-20">
             {decoIcons.map(icon => <DecoIcon key={icon.id} icon={icon} />)}
-            <div className="z-10 flex flex-col items-center gap-4">
-                <button onClick={restartGame} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center" aria-label="Empezar juego">
-                  JUGAR
-                </button>
-                <button onClick={() => setIsGuideVisible(true)} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center">
-                  GUÍA
-                </button>
-                <button onClick={() => setIsMuted(prev => !prev)} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center">
-                  SONIDO: {isMuted ? 'OFF' : 'ON'}
-                </button>
-                <button onClick={onExit} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center" aria-label="Salir del juego">
-                  SALIR
-                </button>
+            <div className="z-10 flex flex-col items-center gap-16">
+                <div className="relative">
+                    <h1 className={`${fontMain} text-8xl text-transparent bg-clip-text bg-gradient-to-b from-green-300 to-green-600 drop-shadow-[0_0_15px_rgba(74,222,128,0.5)] tracking-widest animate-pulse`}>
+                        CÓDIGO3
+                    </h1>
+                    <p className={`${fontMain} absolute -bottom-6 right-0 text-green-500/60 text-xl tracking-[0.5em]`}>SYSTEM_READY</p>
+                </div>
+                
+                <div className="flex flex-col items-center gap-8 text-4xl text-white/90">
+                    <span onClick={handleStartGame} className={`${textMenuItem} text-6xl text-green-400 font-bold`}>
+                        [ INICIAR ]
+                    </span>
+                    <span onClick={() => setIsGuideVisible(true)} className={textMenuItem}>
+                        MANUAL
+                    </span>
+                    <span onClick={onToggleMute} className={textMenuItem}>
+                        AUDIO: {isMuted ? 'OFF' : 'ON'}
+                    </span>
+                    <span onClick={onExit} className={`${textMenuItem} text-gray-400 hover:text-white`}>
+                        SALIR
+                    </span>
+                </div>
             </div>
           </div>
         );
       case 'gameOver':
         return (
-            <div className="absolute inset-0 bg-black/0 flex flex-col items-center justify-center z-20 text-white p-4">
+            <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-30 text-white p-4">
                 {decoIcons.map(icon => <DecoIcon key={icon.id} icon={icon} />)}
-                <h2 className="text-8xl text-black mb-4 font-game fade-in" style={{ textShadow: '4px 4px 0 #facc15, -4px -4px 0 #facc15, 4px -4px 0 #facc15, -4px 4px 0 #facc15' }}>
-                    Game Over
+                <h2 className={`${fontMain} text-9xl text-red-600 mb-4 tracking-widest drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] uppercase`}>
+                    FATAL ERROR
                 </h2>
-                <p className="text-6xl text-yellow-400 mb-2 font-game fade-in game-text-shadow" style={{ animationDelay: '0.2s' }}>
-                    Nivel {level}
-                </p>
-                <p className="text-3xl text-white mb-12 font-game fade-in game-text-shadow" style={{ animationDelay: '0.4s' }}>
-                    Récord: {highScore}
-                </p>
-                <div className="flex flex-col items-center gap-6 mt-8">
-                    <button onClick={restartGame} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center" aria-label="Reiniciar">
-                        Reintentar
-                    </button>
-                    <button onClick={onExit} className="text-yellow-400 text-5xl hover:text-yellow-300 transition-colors game-text-shadow transform hover:scale-110 font-game px-8 py-2 w-72 text-center" aria-label="Salir">
-                        Salir
-                    </button>
+                <div className="flex flex-col items-center gap-2 mb-16 border border-red-900/50 p-8 rounded bg-red-950/20">
+                    <p className={`${fontMain} text-4xl text-yellow-400`}>NIVEL ALCANZADO: {level}</p>
+                    <p className={`${fontMain} text-2xl text-gray-400`}>MEJOR REGISTRO: {Math.max(level, highScore)}</p>
+                </div>
+                <div className="flex flex-col items-center gap-8 text-4xl">
+                    <span onClick={handleStartGame} className={`${textMenuItem} text-green-400 text-5xl`}>
+                        REBOOT SYSTEM
+                    </span>
+                    <span onClick={onExit} className={textMenuItem}>
+                        SHUT DOWN
+                    </span>
                 </div>
             </div>
         );      
       case 'bonus':
          return (
-            <div className="absolute inset-0 bg-black/0 flex flex-col items-center justify-center z-20 text-white p-4">
+            <div className="absolute inset-0 bg-blue-950/95 flex flex-col items-center justify-center z-30 text-white p-4">
                 {decoIcons.map(icon => <DecoIcon key={icon.id} icon={icon} />)}
-                <h2 className="text-6xl font-game text-yellow-300 game-text-shadow mb-6 fade-in">¡BONUS!</h2>
-                <p className="text-4xl mb-8 font-game text-white game-text-shadow fade-in" style={{animationDelay: '0.2s'}}>Nivel {level} Superado</p>
-                <p className="text-2xl mb-8 font-game text-white game-text-shadow fade-in" style={{animationDelay: '0.4s'}}>Elige tu recompensa:</p>
-                <div className="flex flex-col items-center gap-6 mt-4 font-game text-4xl text-yellow-400 game-text-shadow">
-                    <p onClick={() => handleBonus('support')} className="cursor-pointer hover:text-yellow-300 transition-colors transform hover:scale-110 fade-in" style={{animationDelay: '0.6s'}}>
-                        +1 Soporte
-                    </p>
-                    <p onClick={() => handleBonus('time')} className="cursor-pointer hover:text-yellow-300 transition-colors transform hover:scale-110 fade-in" style={{animationDelay: '0.8s'}}>
-                        +5 Segundos de Base
-                    </p>
+                <h2 className={`${fontMain} text-7xl text-yellow-300 mb-16 animate-bounce tracking-widest drop-shadow-lg`}>¡BONUS LEVEL!</h2>
+                <div className="flex flex-col gap-12 w-full max-w-md text-center">
+                    <div onClick={() => handleBonus('support')} className={`${textMenuItem} text-green-300 text-5xl border-b-2 border-transparent hover:border-green-400 pb-4`}>
+                        +1 SHIELD UNIT
+                    </div>
+                    <div onClick={() => handleBonus('time')} className={`${textMenuItem} text-blue-300 text-5xl border-b-2 border-transparent hover:border-blue-400 pb-4`}>
+                        +3 TIME UNITS
+                    </div>
                 </div>
             </div>
         );
       case 'paused':
         return (
-          <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-sm flex flex-col items-center justify-center z-20 text-white p-4 font-game">
-            <h2 className="text-5xl mb-8 game-text-shadow text-yellow-300">Pausa</h2>
-            <div className="flex flex-col gap-4 w-full max-w-xs text-center text-3xl">
-                <p onClick={() => setGameState('playing')} className="cursor-pointer text-white hover:text-yellow-300 transition-colors">Reanudar</p>
-                <p onClick={() => setIsGuideVisible(true)} className="cursor-pointer text-white hover:text-yellow-300 transition-colors">Guía</p>
-                <p onClick={() => setIsMuted(prev => !prev)} className="cursor-pointer text-white hover:text-yellow-300 transition-colors">
-                    Sonido: {isMuted ? 'OFF' : 'ON'}
-                </p>
-                <p onClick={restartGame} className="cursor-pointer text-white hover:text-yellow-300 transition-colors">Reiniciar</p>
-                <p onClick={onExit} className="cursor-pointer text-white hover:text-yellow-300 transition-colors">Salir</p>
-            </div>
+          <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center z-30 text-white p-4">
+             <h2 className={`${fontMain} text-8xl text-white/10 mb-16 tracking-[1.5rem] uppercase`}>PAUSED</h2>
+             <div className="flex flex-col items-center gap-10 text-4xl font-bold tracking-wider">
+                <span onClick={() => setGameState('playing')} className={`${textMenuItem} text-white text-6xl`}>RESUME</span>
+                <span onClick={() => setIsGuideVisible(true)} className={textMenuItem}>GUIDE</span>
+                <span onClick={onToggleMute} className={textMenuItem}>SOUND: {isMuted ? 'OFF' : 'ON'}</span>
+                <span onClick={restartGame} className={textMenuItem}>RESTART</span>
+                <span onClick={onExit} className={`${textMenuItem} text-red-500 hover:text-red-400 mt-8`}>EXIT</span>
+             </div>
           </div>
         );
       default: return null;
@@ -663,26 +713,38 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
   return (
     <div 
         ref={gameAreaRef} 
-        className={`relative w-full h-full bg-yellow-400 overflow-hidden game-background ${isShaking ? 'screen-shake' : ''}`}
-        style={{ backgroundImage: `url(${currentBg})` }}
+        className={`relative w-full h-full overflow-hidden select-none ${fontMain} ${isShaking ? 'translate-x-2 translate-y-2' : ''}`}
+        style={{ background: generateBackground(level), transition: 'background 2s ease' }}
         onClick={handleGameAreaClick}
     >
-      <div className={`siren-flash ${isFrozen ? 'opacity-50 bg-sky-300' : ''}`}></div>
+        {/* Fuente Importada */}
+        <style>
+            {`@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+              .writing-vertical { writing-mode: vertical-rl; text-orientation: upright; }
+              .text-shadow-glow { text-shadow: 0 0 10px currentColor; }
+              @keyframes matrixFall { 0% { transform: translateY(-100%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }`}
+        </style>
+
+      {/* Efecto Matrix de Fondo */}
+      <MatrixRain />
+
+      <div className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFrozen ? 'bg-cyan-500/20 opacity-100' : 'opacity-0'} z-0`}></div>
       
       {visualEffects.map(effect => {
           if (effect.type === 'explosion') {
               return (
-                  <div key={effect.id} className="explosion" style={{ left: effect.x, top: effect.y }}>
-                      {[...Array(10)].map((_, i) => (
+                  <div key={effect.id} className="absolute pointer-events-none z-10" style={{ left: effect.x, top: effect.y }}>
+                      {[...Array(6)].map((_, i) => (
                           <span
                               key={i}
-                              className="particle"
+                              className="absolute border border-white"
                               style={{
-                                  backgroundColor: effect.color,
-                                  boxShadow: `0 0 8px ${effect.color}`,
-                                  // @ts-ignore
-                                  '--transform-end': `translate(${(Math.random() - 0.5) * effect.radius * 3}px, ${(Math.random() - 0.5) * effect.radius * 3}px) scale(0)`,
-                                  animationDelay: `${Math.random() * 0.1}s`
+                                  borderColor: effect.color,
+                                  width: effect.radius / 2,
+                                  height: effect.radius / 2,
+                                  transform: `rotate(${Math.random()*360}deg) translate(${Math.random()*50}px)`,
+                                  opacity: 0,
+                                  animation: `ping 0.4s cubic-bezier(0, 0, 0.2, 1) forwards`
                               }}
                           />
                       ))}
@@ -694,54 +756,88 @@ const GameScreen: React.FC<GameScreenProps> = ({ onExit, highScore, onSetHighSco
 
       { (gameState === 'playing' || gameState === 'paused') && (
         <>
-            <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10 font-game">
-                <div className="text-4xl text-white game-text-shadow">Nivel: {level}</div>
-                <div className="flex-1 mx-4 bg-black/50 rounded-full h-6 overflow-hidden border-2 border-white/50">
-                    <div className="bg-yellow-400 h-full transition-all duration-100" style={{ width: `${(timeLeft / levelTime) * 100}%` }}></div>
+            {/* HEADER */}
+            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-start z-10 text-white tracking-wider pointer-events-none">
+                <div className="flex flex-col">
+                    <span className="text-green-500 text-xs">LEVEL_ID</span>
+                    <span className="text-5xl leading-none drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{String(level).padStart(2, '0')}</span>
                 </div>
-                <button onClick={() => setGameState('paused')} className="w-12 h-12 bg-white/80 rounded-full font-bold text-black text-2xl shadow-lg flex items-center justify-center">||</button>
+                
+                <div className="flex-1 mx-8 mt-3">
+                   <div className="w-full bg-gray-800 h-4 border border-gray-600 relative overflow-hidden skew-x-[-10deg]">
+                        <div 
+                            className={`h-full transition-all duration-200 ${timeLeft < 5 ? 'bg-red-500 animate-pulse' : 'bg-green-400'}`} 
+                            style={{ width: `${Math.min(100, (timeLeft / levelTime) * 100)}%` }}
+                        ></div>
+                        {/* Grid lines on bar */}
+                        <div className="absolute inset-0 bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjYzQwMDAwojOAAkzEKAAGAAU2EwJ4jZ8/AAAAAElFTkSuQmCC')] opacity-20"></div>
+                    </div>
+                </div>
+                
+                <div onClick={() => setGameState('paused')} className="pointer-events-auto cursor-pointer text-green-400 hover:text-white text-2xl border border-green-500/50 px-3 py-1 bg-black/50 backdrop-blur hover:bg-green-900/50 transition-colors">
+                    [ PAUSE ]
+                </div>
             </div>
 
+            {/* BOLAS */}
             {balls.map(ball => (
                 <div 
                     key={ball.id}
-                    className="game-ball absolute select-none"
+                    className="absolute flex items-center justify-center rounded-full cursor-pointer active:scale-95 transition-transform z-10"
                     style={{
                         width: ball.radius * 2,
                         height: ball.radius * 2,
                         left: ball.x - ball.radius,
                         top: ball.y - ball.radius,
                         backgroundColor: ball.color,
-                        fontSize: `${ball.radius * 0.7}px`,
-                        lineHeight: 1,
-                        color: ball.type === 'death' || ball.type === 'bonus' ? 'white' : 'black',
-                        textShadow: ball.type === 'death' || ball.type === 'bonus' ? `0 0 5px ${ball.type === 'death' ? 'red' : 'cyan'}` : 'none'
+                        fontSize: `${ball.radius * 0.55}px`,
+                        color: ball.textColor,
+                        boxShadow: `inset -2px -2px 6px rgba(0,0,0,0.5), 0 0 15px ${ball.color}`,
+                        border: '2px solid rgba(255,255,255,0.2)'
                     }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleBallClick(ball);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); handleBallClick(ball); }}
                 >
                     {ball.text}
                 </div>
             ))}
             
-            <div ref={bottomUiRef} className="absolute bottom-0 left-0 right-0 p-4 pb-6 flex items-end justify-between gap-4 z-10">
-                <p className={`font-game text-xl md:text-2xl text-center p-3 rounded-lg bg-black/70 text-yellow-300 flex-1 ${isPhrasePulsing ? 'phrase-pulse' : ''}`}>
-                  {currentPhrase}
-                </p>
-                <button onClick={handleSupport} className="support-button flex flex-col items-center justify-center shrink-0" aria-label={`Soportes restantes: ${supports}`}>
-                    <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span className="text-3xl font-game -mt-1">{supports}</span>
+            {/* UI INFERIOR */}
+            <div ref={bottomUiRef} className="absolute bottom-0 left-0 right-0 h-[140px] flex items-center justify-between px-6 z-20 pointer-events-none">
+                
+                {/* FRASE - Integrada en panel */}
+                <div className="flex-1 mr-4 pointer-events-auto">
+                    <div className={`bg-black/60 backdrop-blur-md border-l-4 ${isPhrasePulsing ? 'border-green-400 bg-green-900/30' : 'border-gray-500'} p-4 transition-all`}>
+                         <p className="text-xs text-gray-400 mb-1 tracking-[0.3em]">DECRYPT_SEQUENCE:</p>
+                         <p className={`text-2xl md:text-4xl leading-none ${isPhrasePulsing ? 'text-green-300 text-shadow-glow' : 'text-white'}`}>
+                           {currentPhrase}
+                         </p>
+                    </div>
+                </div>
+                
+                {/* BOTÓN ESCUDO GRANDE */}
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation(); // Evita el "push" del fondo al hacer click
+                        handleSupport();
+                    }} 
+                    className="pointer-events-auto relative group w-28 h-28 rounded-full bg-indigo-600 border-4 border-indigo-400 hover:bg-indigo-500 hover:border-white active:scale-95 transition-all shadow-[0_0_30px_rgba(79,70,229,0.6)] flex flex-col items-center justify-center shrink-0 overflow-hidden"
+                >
+                    <span className="text-4xl mb-1 filter drop-shadow-md">🛡️</span>
+                    <span className="text-3xl font-bold text-white">{supports}</span>
+                    
+                    {/* PUSH LABEL ANIMADA */}
+                    <div className="absolute bottom-2 w-full text-center">
+                        <span className="text-[10px] font-bold text-indigo-200 animate-pulse tracking-widest bg-indigo-900/50 px-2 rounded">PUSH!!</span>
+                    </div>
+                    
+                    {/* Brillo efecto cristal */}
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-full pointer-events-none"></div>
                 </button>
             </div>
         </>
       )}
 
       {renderContent()}
-      
       {isGuideVisible && <GuideComponent onBack={() => setIsGuideVisible(false)} />}
 
     </div>

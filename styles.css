@@ -1,3 +1,4 @@
+
 /* styles.css */
 
 /* ============================================================================= */
@@ -9,6 +10,12 @@ html {
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE and Edge */
+  /* Soporte para zonas seguras en móviles (Notch, Home Indicator) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  height: 100%; /* Asegura altura completa */
 }
 html::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
@@ -27,6 +34,9 @@ body {
   font-family: 'IM Fell English', serif;
   position: relative;
   transition: background-color 0.3s ease;
+  min-height: 100%;
+  /* Prevenir rebote de scroll en iOS en el body principal */
+  overscroll-behavior-y: none;
 }
 
 .font-league-gothic {
@@ -69,9 +79,11 @@ body {
 }
 
 /* ============================================================================= */
-/* FONDO PRINCIPAL DE LA APLICACIÓN
+/* FONDOS DE LA APLICACIÓN
 /* ============================================================================= */
-body.home-background {
+
+/* --- BACKGROUND: BASIC (Por defecto) --- */
+body.bg-basic {
   /* Base más clara tipo "papel" */
   background-color: #e8e6e3; /* Tailwind stone-100 real */
   background-image: 
@@ -83,7 +95,7 @@ body.home-background {
   background-size: 100% 100%, 2px 2px, 2px 2px;
 }
 
-.dark body.home-background {
+.dark body.bg-basic {
   background-color: #121212; /* Más mate que el negro puro */
   background-image: 
     /* Viñeta para oscurecer bordes, pero más suave */
@@ -96,6 +108,23 @@ body.home-background {
   background-attachment: fixed;
 }
 
+/* --- BACKGROUND: EMS (Personalizado) --- */
+body.bg-ems {
+  background-color: #1c1917; /* stone-900 fallback */
+  background-image: url('/background.jpg'); 
+  /* Ajuste específico para pantallas pequeñas: centro arriba y abre hacia afuera */
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dark body.bg-ems {
+    /* En modo oscuro, añadimos una capa oscura sutil para mejorar legibilidad del texto */
+    background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url('/background.jpg');
+}
 
 
 /* ============================================================================= */
@@ -157,6 +186,33 @@ body.home-background {
 
 .animate-pulse-red {
   animation: pulse-red 2.5s infinite;
+}
+
+/* --- TICKER ANIMATION (MARQUEE) --- */
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0); /* Movemos solo el 50% porque duplicamos el contenido */
+  }
+}
+
+.ticker-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  /* Máscara suave para los bordes */
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.ticker-move {
+  display: inline-block;
+  white-space: nowrap;
+  animation-timing-function: linear;
+  animation-name: ticker;
+  animation-iteration-count: infinite;
 }
 
 /* ============================================================================= */
@@ -342,6 +398,8 @@ details[open] > summary::before {
   box-shadow: inset -4px -4px 8px rgba(0,0,0,0.4), inset 4px 4px 8px rgba(255,255,255,0.6), 0 4px 8px rgba(0,0,0,0.3);
   transition: transform 0.1s ease-out;
   user-select: none;
+  /* Mejora táctil para el juego */
+  touch-action: none;
 }
 
 .game-ball:active {

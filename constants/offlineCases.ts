@@ -9,6 +9,7 @@ import { laboralCases } from './cases/laboral';
 import { urbanoCases } from './cases/urbano';
 import { conciertosCases } from './cases/conciertos';
 import { incendiosCases } from './cases/incendios';
+import { casosGlobalesCases } from './cases/casosglobales';
 
 export const allOfflineCases: Case[] = [
   ...hogarCases,
@@ -35,3 +36,5 @@ export const caseCategories: Record<string, Case[]> = {
   'Conciertos': conciertosCases,
   'Incendios': incendiosCases,
 };
+
+export { casosGlobalesCases };

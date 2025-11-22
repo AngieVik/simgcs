@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Case } from '../types';
 import { getGcsTotalDisplay } from '../utils/gcs';
-import { AmbulanceIcon, PowerIcon, CheckCircleIcon, XCircleIcon, RegistryIcon } from '../components/Icons';
+import { AmbulanceIcon, PowerIcon, CheckCircleIcon, XCircleIcon, RegistryIcon, GlobeIcon } from '../components/Icons';
 import { SUCCESS_QUOTES, FAILURE_QUOTES } from '../constants/quotes';
 
 const getRandomQuote = (quotes: string[]) => quotes[Math.floor(Math.random() * quotes.length)];
@@ -71,13 +71,14 @@ interface ResultScreenProps {
     onNewCase: () => void;
     onEndService: () => void;
     onStartOfflineCase: () => void;
+    onStartGlobalCase: () => void;
 }
 
 const actionButtonBase = "flex items-center justify-center gap-2 px-2 py-2 rounded-lg text-xl font-league-gothic tracking-wider transition-all duration-200 transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400";
 const primaryButton = `${actionButtonBase} flex-1 bg-gradient-to-b from-amber-500 to-amber-700 text-white border border-amber-900/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),inset_0_0_0_1px_rgba(251,191,36,0.8),0_8px_15px_rgba(0,0,0,0.4)] hover:from-amber-400 hover:to-amber-600 fancy-hover-effect`;
 const secondaryButton = `${actionButtonBase} flex-1 bg-gradient-to-b from-stone-100 to-stone-200 text-stone-800 border border-stone-300/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_6px_rgba(0,0,0,0.1),0_10px_20px_rgba(0,0,0,0.08)] hover:from-stone-50 hover:to-stone-100 hover:text-amber-600 dark:from-stone-800 dark:to-stone-900 dark:text-stone-200 dark:border-black/50 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_0_0_1px_rgba(92,88,85,0.7),0_8px_20px_rgba(0,0,0,0.5)] dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:text-amber-300 dark:hover:border-stone-700/50 fancy-hover-effect`;
 
-const ResultScreen: React.FC<ResultScreenProps> = ({ lastCase, onNewCase, onEndService, onStartOfflineCase }) => {
+const ResultScreen: React.FC<ResultScreenProps> = ({ lastCase, onNewCase, onEndService, onStartOfflineCase, onStartGlobalCase }) => {
     const [quote, setQuote] = useState('');
     const [isStamped, setIsStamped] = useState(false);
     
@@ -97,7 +98,10 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ lastCase, onNewCase, onEndS
     const userTotal = getGcsTotalDisplay(lastCase.userGCS);
     const correctTotal = getGcsTotalDisplay(lastCase.correctGCS);
     
-    const isOfflineCase = lastCase.id.startsWith('offline-');
+    // Detectar tipos de casos (Globales empiezan por 'global-', Estándar por 'offline-')
+    const isGlobalCase = lastCase.id.startsWith('global-');
+    // Consideramos "Offline" (para el botón de continuar) a ambos tipos: registro estándar y globales
+    const isOfflineMode = lastCase.id.startsWith('offline-') || lastCase.id.startsWith('global-');
 
     return (
         <div>
@@ -134,24 +138,24 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ lastCase, onNewCase, onEndS
             </div>
 
             <p className="text-lg text-center mt-8 mb-4 text-stone-700 dark:text-stone-300">
-                {isOfflineCase ? '¿Continuamos la simulación?' : '¿Listo para tu próximo aviso?'}
+                {isOfflineMode ? '¿Continuamos la simulación?' : '¿Listo para tu próximo aviso?'}
             </p>
             <div className="flex gap-3 w-full mt-2">
-                 {isOfflineCase ? (
+                 {isOfflineMode ? (
                     <>
                         <button
-                            onClick={onStartOfflineCase}
+                            onClick={isGlobalCase ? onStartGlobalCase : onStartOfflineCase}
                             className={primaryButton}
                         >
-                            <RegistryIcon className="w-7 h-7" />
-                            Seguir buscando
+                            {isGlobalCase ? <GlobeIcon className="w-7 h-7" /> : <RegistryIcon className="w-7 h-7" />}
+                            Buscar...
                         </button>
                         <button
                             onClick={onEndService}
                             className={secondaryButton}
                         >
                             <PowerIcon className="w-7 h-7" />
-                            Volver a la base
+                            Volver
                         </button>
                     </>
                 ) : (

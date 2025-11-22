@@ -1,6 +1,8 @@
+
 import React, { useMemo } from 'react';
 import { Case } from '../types';
-import { CheckCircleIcon, XCircleIcon, ChartBarSquareIcon } from '../components/Icons';
+import { CheckCircleIcon, XCircleIcon, ChartBarSquareIcon, TrophyIcon } from '../components/Icons';
+import { allOfflineCases } from '../constants/offlineCases';
 
 const StatCard: React.FC<{ title: string; value: string | number; subvalue?: string }> = ({ title, value, subvalue }) => (
     <div className="p-4 rounded-lg border border-stone-300 dark:border-stone-700/50 flex flex-col items-center justify-center text-center h-full
@@ -36,7 +38,8 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
                 ocularCorrect: 0,
                 verbalCorrect: 0,
                 motorCorrect: 0,
-                categoryStats: {}
+                sortedCategories: [],
+                uniqueTrophies: 0
             };
         }
 
@@ -48,7 +51,7 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
         const verbalCorrect = archive.filter(c => c.userGCS && c.userGCS.verbal === c.correctGCS.verbal).length;
         const motorCorrect = archive.filter(c => c.userGCS && c.userGCS.motor === c.correctGCS.motor).length;
 
-        const categoryStats = archive.reduce((acc, c) => {
+        const categoryStats = archive.reduce<Record<string, { correct: number; total: number }>>((acc, c) => {
             if (!c.category) return acc;
             if (!acc[c.category]) {
                 acc[c.category] = { correct: 0, total: 0 };
@@ -58,10 +61,24 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
                 acc[c.category].correct++;
             }
             return acc;
-        }, {} as Record<string, { correct: number; total: number }>);
+        }, {});
 
+        const sortedCategories = Object.entries(categoryStats).sort(([, a], [, b]) => b.total - a.total);
 
-        return { total, correct, incorrect, successRate, ocularCorrect, verbalCorrect, motorCorrect, categoryStats };
+        // Calculate unique trophies (standard registry cases solved)
+        const standardCaseIds = new Set(allOfflineCases.map(c => c.id));
+        const uniqueSolved = new Set(
+            archive
+                .filter(c => c.isCorrect && standardCaseIds.has(c.id))
+                .map(c => c.id)
+        );
+
+        return { 
+            total, correct, incorrect, successRate, 
+            ocularCorrect, verbalCorrect, motorCorrect, 
+            sortedCategories,
+            uniqueTrophies: uniqueSolved.size
+        };
 
     }, [archive]);
 
@@ -77,6 +94,20 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
 
     return (
         <div className="space-y-6">
+            {/* Trophy Card */}
+            <div className="relative p-4 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40 border border-amber-300/50 dark:border-amber-600/30 shadow-md flex items-center justify-between overflow-hidden">
+                <div className="z-10">
+                    <h4 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-1">Colección de Trofeos</h4>
+                    <p className="text-3xl font-game text-amber-600 dark:text-amber-400">
+                        {stats.uniqueTrophies} <span className="text-lg text-stone-500 dark:text-stone-400">/ {allOfflineCases.length}</span>
+                    </p>
+                </div>
+                <div className="z-10 p-3 bg-white/50 dark:bg-black/20 rounded-full backdrop-blur-sm shadow-sm">
+                    <TrophyIcon className="w-10 h-10 text-amber-500 dark:text-amber-400" />
+                </div>
+                <div className="absolute right-0 top-0 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <StatCard title="Casos Resueltos" value={stats.total} />
                 <StatCard title="Tasa de Acierto" value={`${stats.successRate.toFixed(0)}%`} subvalue={`${stats.correct} de ${stats.total}`} />
@@ -128,7 +159,7 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
                 <h3 className="font-lora font-bold text-lg text-stone-800 dark:text-stone-200 mb-3">Rendimiento por Categoría</h3>
                 <div className="p-4 rounded-lg border border-stone-300 dark:border-stone-700/50 space-y-3 max-h-48 overflow-y-auto hide-scrollbar
                                bg-stone-100 dark:bg-stone-900/50 shadow-lg shadow-black/10 dark:shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
-                    {Object.entries(stats.categoryStats).length > 0 ? Object.entries(stats.categoryStats).sort(([, a], [, b]) => b.total - a.total).map(([category, data]) => (
+                    {stats.sortedCategories.length > 0 ? stats.sortedCategories.map(([category, data]) => (
                          <div key={category}>
                             <div className="flex justify-between text-sm">
                                 <span className="font-semibold text-stone-800 dark:text-stone-300 truncate pr-2">{category}</span>

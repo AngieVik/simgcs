@@ -7,7 +7,13 @@ export enum Screen {
   Registry = 'REGISTRY',
   Game = 'GAME',
   Stats = 'STATS',
+  Settings = 'SETTINGS',
+  Letter = 'LETTER',
 }
+
+export type AppBackground = 'basic' | 'ems';
+// Ampliamos los tipos de música disponibles
+export type AppMusic = 'none' | 'track1' | 'track2';
 
 export interface GCSScore {
   ocular: number | null;

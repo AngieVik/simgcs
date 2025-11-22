@@ -1,5 +1,6 @@
+
 import React, { createContext, useReducer, useContext, useEffect } from 'react';
-import { Screen, Case, GCSScore } from '../types';
+import { Screen, Case, GCSScore, AppBackground, AppMusic } from '../types';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 // 1. Definir la forma del estado
@@ -13,6 +14,11 @@ interface AppState {
   codigo3HighScore: number;
   isMuted: boolean;
   theme: 'light' | 'dark';
+  isTypewriterEnabled: boolean;
+  appBackground: AppBackground;
+  appMusic: AppMusic;
+  casesPlayed: number;
+  unlockedRewards: string[];
 }
 
 // 2. Definir los tipos de acciones
@@ -26,6 +32,8 @@ type Action =
   | { type: 'SHOW_ARCHIVE' }
   | { type: 'SHOW_REGISTRY' }
   | { type: 'SHOW_STATS' }
+  | { type: 'SHOW_SETTINGS' }
+  | { type: 'SHOW_LETTER' }
   | { type: 'START_GAME' }
   | { type: 'SHOW_INFO'; payload: { title: string; content: React.ReactNode } }
   | { type: 'CLOSE_INFO' }
@@ -33,10 +41,13 @@ type Action =
   | { type: 'CLEAR_ARCHIVE' }
   | { type: 'SET_CODIGO3_HIGH_SCORE', payload: number }
   | { type: 'TOGGLE_MUTE' }
-  | { type: 'TOGGLE_THEME' };
+  | { type: 'TOGGLE_THEME' }
+  | { type: 'TOGGLE_TYPEWRITER' }
+  | { type: 'SET_BACKGROUND'; payload: AppBackground }
+  | { type: 'SET_MUSIC'; payload: AppMusic }
+  | { type: 'CLAIM_REWARD'; payload: string };
 
 // Contextos separados para el estado y para el despachador de acciones (dispatch)
-// Esto es una optimización: los componentes que solo necesitan 'dispatch' no se volverán a renderizar cuando cambie el estado.
 const AppStateContext = createContext<AppState | null>(null);
 const AppDispatchContext = createContext<React.Dispatch<Action> | null>(null);
 
@@ -44,7 +55,7 @@ const AppDispatchContext = createContext<React.Dispatch<Action> | null>(null);
 const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
     case 'START_NEW_CASE':
-      return { ...state, isLoading: true, error: null };
+      return { ...state, isLoading: true, error: null, casesPlayed: state.casesPlayed + 1 };
     case 'CASE_LOADED':
       return {
         ...state,
@@ -62,6 +73,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
             isLoading: false,
             currentCase: caseToReplay,
             screen: Screen.Case,
+            casesPlayed: state.casesPlayed + 1
         };
     case 'API_ERROR':
   return { ...state, isLoading: false, error: action.payload };
@@ -94,6 +106,10 @@ const appReducer = (state: AppState, action: Action): AppState => {
         return { ...state, screen: Screen.Registry };
     case 'SHOW_STATS':
         return { ...state, screen: Screen.Stats };
+    case 'SHOW_SETTINGS':
+        return { ...state, screen: Screen.Settings };
+    case 'SHOW_LETTER':
+        return { ...state, screen: Screen.Letter };
     case 'START_GAME':
         return { ...state, screen: Screen.Game };
     case 'SHOW_INFO':
@@ -113,6 +129,15 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return { ...state, isMuted: !state.isMuted };
     case 'TOGGLE_THEME':
       return { ...state, theme: state.theme === 'dark' ? 'light' : 'dark' };
+    case 'TOGGLE_TYPEWRITER':
+      return { ...state, isTypewriterEnabled: !state.isTypewriterEnabled };
+    case 'SET_BACKGROUND':
+      return { ...state, appBackground: action.payload };
+    case 'SET_MUSIC':
+      return { ...state, appMusic: action.payload };
+    case 'CLAIM_REWARD':
+      if (state.unlockedRewards.includes(action.payload)) return state;
+      return { ...state, unlockedRewards: [...state.unlockedRewards, action.payload] };
     default:
       return state;
   }
@@ -124,6 +149,18 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [persistedHighScore, setPersistedHighScore] = useLocalStorage<number>('codigo3-high-score', 0);
   const [persistedIsMuted, setPersistedIsMuted] = useLocalStorage<boolean>('gcs-sound-muted', false);
   const [persistedTheme, setPersistedTheme] = useLocalStorage<'light' | 'dark'>('gcs-theme', 'dark');
+  const [persistedTypewriter, setPersistedTypewriter] = useLocalStorage<boolean>('gcs-typewriter-enabled', true);
+  // Migración de 'noir' antiguo si existe, sino default 'basic'
+  const [persistedBackground, setPersistedBackground] = useLocalStorage<string>('gcs-background', 'basic');
+  const [persistedMusic, setPersistedMusic] = useLocalStorage<AppMusic>('gcs-music', 'none');
+  const [persistedCasesPlayed, setPersistedCasesPlayed] = useLocalStorage<number>('gcs-cases-played-count', 0);
+  const [persistedUnlockedRewards, setPersistedUnlockedRewards] = useLocalStorage<string[]>('gcs-unlocked-rewards', []);
+
+  // Validación segura del background type
+  let validatedBackground: AppBackground = 'basic';
+  if (persistedBackground === 'ems') validatedBackground = 'ems';
+  // Si había un 'noir' guardado de la versión anterior, volver a basic para no romper nada
+  if (persistedBackground === 'noir') validatedBackground = 'basic'; 
 
   const initialState: AppState = {
     screen: Screen.Home,
@@ -135,6 +172,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     codigo3HighScore: persistedHighScore,
     isMuted: persistedIsMuted,
     theme: persistedTheme,
+    isTypewriterEnabled: persistedTypewriter,
+    appBackground: validatedBackground,
+    appMusic: persistedMusic,
+    casesPlayed: persistedCasesPlayed,
+    unlockedRewards: persistedUnlockedRewards,
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -163,6 +205,30 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       document.documentElement.classList.remove('dark');
     }
   }, [state.theme, setPersistedTheme]);
+
+  // Sincronizar configuración de typewriter
+  useEffect(() => {
+    setPersistedTypewriter(state.isTypewriterEnabled);
+  }, [state.isTypewriterEnabled, setPersistedTypewriter]);
+
+  // Sincronizar configuración de fondo
+  useEffect(() => {
+    setPersistedBackground(state.appBackground);
+  }, [state.appBackground, setPersistedBackground]);
+
+  // Sincronizar configuración de música
+  useEffect(() => {
+    setPersistedMusic(state.appMusic);
+  }, [state.appMusic, setPersistedMusic]);
+
+  // Sincronizar progreso de juego
+  useEffect(() => {
+    setPersistedCasesPlayed(state.casesPlayed);
+  }, [state.casesPlayed, setPersistedCasesPlayed]);
+
+  useEffect(() => {
+    setPersistedUnlockedRewards(state.unlockedRewards);
+  }, [state.unlockedRewards, setPersistedUnlockedRewards]);
 
   return (
     <AppStateContext.Provider value={state}>
