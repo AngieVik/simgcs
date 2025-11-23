@@ -1,0 +1,434 @@
+/* styles.css */
+
+/* ============================================================================= */
+/* ESTILOS GLOBALES Y FUENTES
+/* ============================================================================= */
+
+/* Habilita el scroll en toda la página y lo oculta */
+html {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Clase de utilidad para ocultar barras de scroll en elementos específicos */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+body {
+  font-family: 'IM Fell English', serif;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.font-league-gothic {
+  font-family: "League Gothic", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.font-fugaz-one-regular {
+  font-family: "Fugaz One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-abril-fatface {
+  font-family: "Abril Fatface", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-typewriter {
+  font-family: 'Special Elite', monospace;
+}
+
+.font-game {
+  font-family: 'Luckiest Guy', cursive;
+}
+
+.game-text-shadow {
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 4px 4px 5px rgba(0,0,0,0.5);
+  transition: all 0.2s ease-in-out;
+}
+
+.game-text-shadow:hover {
+  color: #fef08a; /* yellow-200 */
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 6px 6px 10px rgba(0,0,0,0.7);
+}
+
+/* ============================================================================= */
+/* FONDO PRINCIPAL DE LA APLICACIÓN
+/* ============================================================================= */
+body.home-background {
+  /* Base más clara tipo "papel" */
+  background-color: #e8e6e3; /* Tailwind stone-100 real */
+  background-image: 
+    /* Viñeta sutil clara, muy amplia */
+    radial-gradient(ellipse at center, rgba(109, 109, 109, 0.478) 20%, rgba(14, 14, 14, 0.528) 100%),
+    /* Textura de ruido sutil */
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 2px 2px, 2px 2px;
+}
+
+.dark body.home-background {
+  background-color: #121212; /* Más mate que el negro puro */
+  background-image: 
+    /* Viñeta para oscurecer bordes, pero más suave */
+    radial-gradient(ellipse at center, rgba(40,40,40,0.38) 50%, rgba(0,0,0,0.75) 100%),
+    /* Oscurecimiento general */
+    linear-gradient(rgba(25, 28, 39, 0.4), rgba(25, 28, 39, 0.4));
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+
+/* ============================================================================= */
+/* ANIMACIONES GENÉRICAS
+/* ============================================================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.98); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+@keyframes line-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.narrative-line {
+  opacity: 0;
+  animation: line-fade-in 0.1s ease-out forwards;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 10px rgba(245, 158, 11, 0);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 10px rgba(239, 68, 68, 0);
+  }
+}
+
+.animate-pulse-red {
+  animation: pulse-red 2.5s infinite;
+}
+
+/* ============================================================================= */
+/* COMPONENTES DE UI ESPECÍFICOS
+/* ============================================================================= */
+
+/* --- EFECTO MÁQUINA DE ESCRIBIR (TYPEWRITER) --- */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #f59e0b; } /* amber-500 */
+}
+.typewriter-cursor::after {
+  content: '▋';
+  animation: blink-caret .75s step-end infinite;
+  color: #f59e0b; /* amber-500 */
+  margin-left: 0.25rem;
+}
+
+/* --- SELLO DE VEREDICTO (RESULTADO) --- */
+@keyframes stamp-in {
+    0% {
+        transform: rotate(-40deg) scale(3);
+        opacity: 0;
+    }
+    60% {
+        transform: rotate(-15deg) scale(0.9);
+        opacity: 1;
+    }
+    80% {
+        transform: rotate(-22deg) scale(1.1);
+    }
+    100% {
+        transform: rotate(-20deg) scale(1);
+        opacity: 1;
+    }
+}
+
+.verdict-stamp {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  transform: rotate(-20deg);
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+  border: 3px double;
+  padding: 0.3rem 0.3rem;
+  border-radius: 0.5rem;
+  opacity: 0; /* Start hidden for animation */
+  pointer-events: none;
+}
+
+.verdict-stamp.stamped {
+    animation: stamp-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* --- ESTILO DE PESTAÑAS DE ARCHIVO (DETAILS/SUMMARY) --- */
+details > summary {
+  list-style: none; /* Oculta el marcador por defecto */
+  cursor: pointer;
+  position: relative;
+  padding-left: 1.5rem; /* Espacio para el marcador personalizado */
+}
+details > summary::-webkit-details-marker {
+  display: none; /* Oculta el marcador en Chrome/Safari */
+}
+details > summary::before {
+  content: '+';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: #d97706; /* amber-600 */
+  transition: transform 0.2s;
+}
+.dark details > summary::before {
+  color: #f59e0b; /* amber-500 */
+}
+
+details[open] > summary::before {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* --- LÍNEA DE EKG (HOME) --- */
+@keyframes draw-ekg-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ekg-line-path-base {
+  stroke: #d6d3d1; /* stone-300 */
+}
+.dark .ekg-line-path-base {
+  stroke: #44403c; /* stone-700 */
+}
+
+.ekg-line-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: draw-ekg-line 2.5s linear infinite;
+}
+
+/* --- SPINNER DE CARGA (SIRENA) --- */
+@keyframes siren-pulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.siren-light {
+  animation: siren-pulse 1s infinite ease-in-out;
+  mix-blend-mode: screen;
+}
+
+.animate-siren-red {
+  background-color: rgba(239, 68, 68, 0.5); /* red-500 */
+  box-shadow: 0 0 100px rgba(226, 215, 215, 0.5), 0 0 40px rgba(239, 68, 68, 0.5), 0 0 60px rgba(239, 68, 68, 0.5);
+}
+
+.animate-siren-blue {
+  background-color: rgba(59, 130, 246, 0.5); /* blue-500 */
+  box-shadow: 0 0 100px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.5);
+}
+
+/* --- ESTILO UNIFICADO DE BOTONES (HOVER) --- */
+.fancy-hover-effect:hover,
+.fancy-hover-effect:hover span {
+     text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.fancy-hover-effect:hover svg {
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.4));
+}
+
+
+/* ============================================================================= */
+/* MINIJUEGO CÓDIGO3
+/* ============================================================================= */
+
+/* --- GENERALES Y FONDO --- */
+.game-background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+}
+
+@keyframes siren-flash-effect {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.3; }
+}
+
+.siren-flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #facc15; /* yellow-400 */
+  pointer-events: none;
+  animation: siren-flash-effect 0.8s infinite;
+}
+
+/* --- ELEMENTOS DE JUEGO (BOLAS, BOTONES) --- */
+.game-ball {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-family: 'Luckiest Guy', cursive;
+  color: black;
+  cursor: pointer;
+  box-shadow: inset -4px -4px 8px rgba(0,0,0,0.4), inset 4px 4px 8px rgba(255,255,255,0.6), 0 4px 8px rgba(0,0,0,0.3);
+  transition: transform 0.1s ease-out;
+  user-select: none;
+}
+
+.game-ball:active {
+  transform: scale(0.9);
+}
+
+.support-button {
+  background-color: #38bdf8; /* sky-400 */
+  color: white;
+  font-family: 'Luckiest Guy', cursive;
+  padding: 0.25rem 0.5rem; /* Slimmer padding */
+  border-radius: 12px;
+  border: 3px solid white;
+  text-shadow: 2px 2px 0 #000, -2px 2px 0 #000;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+  cursor: pointer;
+}
+
+.support-button:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.support-button svg {
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+}
+
+/* --- EFECTOS VISUALES DEL JUEGO --- */
+@keyframes particle-effect {
+  from {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: var(--transform-end);
+    opacity: 0;
+  }
+}
+
+.explosion {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.explosion .particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: particle-effect 0.6s ease-out forwards;
+}
+
+@keyframes screen-shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-2px, -3px) rotate(-1deg); }
+  20% { transform: translate(2px, 0px) rotate(1deg); }
+  30% { transform: translate(-3px, 3px) rotate(0deg); }
+  40% { transform: translate(3px, -2px) rotate(1deg); }
+  50% { transform: translate(-2px, 2px) rotate(-1deg); }
+  60% { transform: translate(2px, 3px) rotate(0deg); }
+  70% { transform: translate(-3px, 2px) rotate(-1deg); }
+  80% { transform: translate(2px, -2px) rotate(1deg); }
+  90% { transform: translate(-2px, 3px) rotate(0deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.screen-shake {
+  animation: screen-shake 0.4s;
+}
+
+@keyframes phrase-pulse-effect {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.5) drop-shadow(0 0 8px currentColor);
+  }
+}
+
+.phrase-pulse {
+  animation: phrase-pulse-effect 0.4s ease-in-out;
+}

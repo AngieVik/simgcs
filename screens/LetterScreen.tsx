@@ -1,7 +1,7 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useAppState, useAppDispatch } from '../context/AppContext';
-import { PhotoIcon, MusicNoteIcon } from '../components/Icons';
+import { PhotoIcon, MusicNoteIcon, EyeIcon, DownloadIcon, PlayCircleIcon, StopCircleIcon } from '../components/Icons';
 
 const RewardCard: React.FC<{
     id: string;
@@ -13,9 +13,64 @@ const RewardCard: React.FC<{
     isUnlocked: boolean;
     onClaim: () => void;
     icon: React.ReactNode;
-}> = ({ id, title, description, requirementText, currentProgress, target, isUnlocked, onClaim, icon }) => {
+    assetUrl: string;
+    assetType: 'image' | 'audio';
+}> = ({ id, title, description, requirementText, currentProgress, target, isUnlocked, onClaim, icon, assetUrl, assetType }) => {
     const progressPercent = Math.min(100, (currentProgress / target) * 100);
     const isCompletable = currentProgress >= target;
+    
+    // --- AUDIO PREVIEW LOGIC ---
+    const [isPlaying, setIsPlaying] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, []);
+
+    const handleToggleAudio = () => {
+        if (!audioRef.current) {
+            audioRef.current = new Audio(assetUrl);
+            audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+        }
+
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play().catch(e => console.error("Error al reproducir:", e));
+        }
+        setIsPlaying(!isPlaying);
+    };
+
+    // --- ACTION BUTTONS UI ---
+    const ActionButton = ({ onClick, icon: Icon, label, href, download }: { onClick?: () => void, icon: React.ElementType, label: string, href?: string, download?: string }) => {
+        const content = (
+            <>
+                <Icon className="w-3 h-3" />
+                {label}
+            </>
+        );
+
+        const classes = "flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors text-xs font-bold uppercase tracking-wider select-none";
+
+        if (href) {
+            return (
+                <a href={href} target="_blank" rel="noopener noreferrer" download={download} className={classes}>
+                    {content}
+                </a>
+            );
+        }
+
+        return (
+            <button onClick={onClick} className={classes}>
+                {content}
+            </button>
+        );
+    };
 
     return (
         <div className="relative p-6 bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-[1.01]">
@@ -60,6 +115,32 @@ const RewardCard: React.FC<{
             >
                 {isUnlocked ? 'RECOMPENSA ADQUIRIDA' : isCompletable ? 'ADQUIRIR RECOMPENSA' : 'BLOQUEADO'}
             </button>
+
+            {/* BOTONES DE ACCIÓN MINIMALISTAS (Solo si desbloqueado) */}
+            {isUnlocked && (
+                <div className="flex gap-2 mt-3 justify-center sm:justify-start animate-fade-in">
+                    {assetType === 'image' && (
+                        <ActionButton 
+                            icon={EyeIcon} 
+                            label="Ver" 
+                            href={assetUrl}
+                        />
+                    )}
+                    {assetType === 'audio' && (
+                        <ActionButton 
+                            onClick={handleToggleAudio}
+                            icon={isPlaying ? StopCircleIcon : PlayCircleIcon}
+                            label={isPlaying ? "Detener" : "Escuchar"} 
+                        />
+                    )}
+                    <ActionButton 
+                        icon={DownloadIcon} 
+                        label="Descargar" 
+                        href={assetUrl}
+                        download={assetUrl.split('/').pop()}
+                    />
+                </div>
+            )}
         </div>
     );
 };
@@ -86,9 +167,9 @@ const LetterScreen: React.FC = () => {
     return (
         <div className="space-y-8">
             <div className="text-center space-y-2 mb-8">
-                <h2 className="font-typewriter text-2xl font-bold text-stone-800 dark:text-stone-200">TABLÓN DE MISIONES</h2>
+                <h2 className="font-typewriter text-2xl font-bold text-stone-800 dark:text-stone-200">TABLÓN DE CARTAS</h2>
                 <p className="font-serif text-stone-600 dark:text-stone-400 text-sm italic max-w-md mx-auto">
-                    "Aquí encontrarás desafíos especiales. Completa los objetivos operativos para desbloquear recursos adicionales y personalización."
+                    "Completa los objetivos operativos para desbloquear recursos adicionales y personalización."
                 </p>
             </div>
 
@@ -102,18 +183,22 @@ const LetterScreen: React.FC = () => {
                 isUnlocked={unlockedRewards.includes('bg_ems')}
                 onClaim={handleClaimEms}
                 icon={<PhotoIcon className="w-8 h-8" />}
+                assetUrl="/background.jpg"
+                assetType="image"
             />
 
             <RewardCard
                 id="music_pack_1"
-                title="BSO Original"
-                description="Desbloquea la banda sonora original. Música ambiental para acompañar tus guardias."
+                title="BSO track1"
+                description="Desbloquea el primer track de la banda sonora original. Música ambiental para acompañar tus guardias."
                 requirementText="5 Casos Acertados (Total)"
                 currentProgress={totalCorrectCases}
                 target={5}
                 isUnlocked={unlockedRewards.includes('music_pack_1')}
                 onClaim={handleClaimMusic}
                 icon={<MusicNoteIcon className="w-8 h-8" />}
+                assetUrl="/music/track1.mp3"
+                assetType="audio"
             />
 
             {/* Placeholder para futuras cartas */}
