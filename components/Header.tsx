@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FolderIcon, OpenFolderIcon, XMarkIcon, Cog6ToothIcon } from './Icons';
 import { useAppState } from '../context/AppContext';
 
@@ -12,10 +12,22 @@ interface HeaderProps {
 }
 
 const Ticker = () => {
-    const { casesPlayed } = useAppState();
-    const text = casesPlayed < 3 
-        ? `OBJETIVO: JUGAR 3 CASOS (${casesPlayed}/3) • RECOMPENSA: FONDO OPERATIVO EMS`
-        : `OBJETIVO COMPLETADO • ACCEDE A 'LA CARTA' PARA RECLAMAR RECOMPENSA`;
+    const { casesPlayed, unlockedRewards, archive } = useAppState();
+    
+    // Calcular aciertos para el objetivo de música
+    const totalCorrectCases = useMemo(() => {
+        return archive.filter(c => c.isCorrect).length;
+    }, [archive]);
+
+    let text = "";
+
+    if (!unlockedRewards.includes('bg_ems')) {
+        text = `OBJETIVO: JUGAR 3 CASOS (${casesPlayed}/3) • RECOMPENSA: FONDO OPERATIVO EMS`;
+    } else if (!unlockedRewards.includes('music_pack_1')) {
+        text = `OBJETIVO: 5 CASOS ACERTADOS (${totalCorrectCases}/5) • RECOMPENSA: BSO ORIGINAL`;
+    } else {
+        text = `SERVICIO OPERATIVO • TODAS LAS RECOMPENSAS DESBLOQUEADAS`;
+    }
 
     return (
         <div className="flex-1 mx-3 overflow-hidden relative h-7 bg-black/10 dark:bg-black/30 rounded flex items-center border border-stone-300/30 dark:border-stone-600/30 shadow-inner">

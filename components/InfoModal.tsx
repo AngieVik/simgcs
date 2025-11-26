@@ -33,7 +33,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose, headerAc
                 modalRef.current.querySelectorAll<HTMLElement>(
                     'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
                 )
-            ).filter((el: HTMLElement) => el.offsetParent !== null);
+            ).filter((el) => el.offsetParent !== null) as HTMLElement[];
 
             if (focusableElements.length === 0) return;
 

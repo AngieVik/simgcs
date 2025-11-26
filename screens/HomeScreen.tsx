@@ -49,7 +49,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
   isMuted
 }) => {
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-full flex-grow flex flex-col items-center">
       {/* Cabecera */}
       <header className="w-full max-w-xl px-5 pb-8 pt-0 text-center">
         <p className="text-3xl sm:text-4xl font-lora text-stone-800 dark:text-stone-200">Estás de guardia…</p>

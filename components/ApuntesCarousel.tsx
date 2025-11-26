@@ -42,7 +42,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
   }, []);
 
   // --------------------------------------------------------
-  // LÓGICA DE ARRASTRE GLOBAL
+  // LÓGICA DE ARRASTRE GLOBAL (SOLO RATÓN)
   // --------------------------------------------------------
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!sliderRef.current) return;
@@ -86,12 +86,21 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
   }, [isDown, startX, initialScrollLeft]);
 
   // --------------------------------------------------------
-  // LÓGICA SCRUBBER
+  // LÓGICA SCRUBBER (MOUSE + TOUCH)
   // --------------------------------------------------------
+  const handleScrubberStart = (clientX: number) => {
+      setIsScrubberDragging(true);
+      moveScrubber(clientX);
+  };
+
   const handleScrubberMouseDown = (e: React.MouseEvent) => {
       e.stopPropagation();
-      setIsScrubberDragging(true);
-      moveScrubber(e.clientX);
+      handleScrubberStart(e.clientX);
+  };
+
+  const handleScrubberTouchStart = (e: React.TouchEvent) => {
+      e.stopPropagation();
+      handleScrubberStart(e.touches[0].clientX);
   };
 
   const moveScrubber = (clientX: number) => {
@@ -104,19 +113,32 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
   };
 
   useEffect(() => {
+      // Mouse Handlers
       const handleWindowScrubberMove = (e: MouseEvent) => {
           if (!isScrubberDragging) return;
           e.preventDefault();
           moveScrubber(e.clientX);
       };
-
       const handleWindowScrubberUp = () => {
+          setIsScrubberDragging(false);
+      };
+
+      // Touch Handlers
+      const handleWindowScrubberTouchMove = (e: TouchEvent) => {
+          if (!isScrubberDragging) return;
+          if (e.cancelable) e.preventDefault();
+          moveScrubber(e.touches[0].clientX);
+      };
+      const handleWindowScrubberTouchEnd = () => {
           setIsScrubberDragging(false);
       };
 
       if (isScrubberDragging) {
           window.addEventListener('mousemove', handleWindowScrubberMove);
           window.addEventListener('mouseup', handleWindowScrubberUp);
+          window.addEventListener('touchmove', handleWindowScrubberTouchMove, { passive: false });
+          window.addEventListener('touchend', handleWindowScrubberTouchEnd);
+          
           document.body.style.userSelect = 'none';
           document.body.style.cursor = 'grabbing';
       }
@@ -124,6 +146,9 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
       return () => {
           window.removeEventListener('mousemove', handleWindowScrubberMove);
           window.removeEventListener('mouseup', handleWindowScrubberUp);
+          window.removeEventListener('touchmove', handleWindowScrubberTouchMove);
+          window.removeEventListener('touchend', handleWindowScrubberTouchEnd);
+          
           document.body.style.userSelect = '';
           if (!isDown) document.body.style.cursor = '';
       };
@@ -142,7 +167,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
         ref={sliderRef}
         className={`
             flex gap-1 overflow-x-auto px-2 pb-2 pt-2 
-            hide-scrollbar select-none touch-pan-y
+            hide-scrollbar select-none 
             ${isDown ? 'cursor-grabbing' : 'cursor-grab'}
         `}
         onMouseDown={handleMouseDown}
@@ -153,22 +178,21 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
             key={`${s.title}-${i}`}
             onMouseUp={() => handleCardClick(s)}
             className={
-                // TU CLASE ORIGINAL RECUPERADA EXACTAMENTE
-                "snap-center shrink-0 select-none w-[clamp(30px,19vw,100px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-2 text-center " +
+                "group snap-center shrink-0 select-none w-[clamp(30px,19vw,100px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-2 text-center " +
                 "text-stone-600 dark:text-stone-400 " +
                 "bg-gradient-to-b from-stone-100 to-stone-200 dark:from-stone-800 dark:to-stone-900 " +
                 "border border-stone-300/50 hover:border-b-4 hover:border-r-4 dark:border-stone-300/50 " +
                 "shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_4px_8px_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.12)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_0_0_1px_rgba(92,88,85,0.5),0_4px_8px_rgba(0,0,0,0.5)] " +
                 "hover:from-stone-50 hover:to-stone-100 hover:text-amber-600/90 hover:border-stone-300/50 " +
-                "dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:text-amber-600/90 dark:hover:border-stone-700/50 " + // Ajustado stone-650 a 800
+                "dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:text-amber-600/90 dark:hover:border-stone-700/50 " + 
                 "active:scale-[0.98] fancy-hover-effect " +
                 (isDown ? 'scale-[0.98]' : '')
             }
             title={s.title}
             tabIndex={0}
           >
-             <div className="text-stone-500 dark:text-stone-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300 pointer-events-none mt-2">
-                {React.cloneElement(s.Icon as React.ReactElement<{ className?: string }>, { className: "w-10 h-10 sm:w-12 sm:h-12" })}
+             <div className="pointer-events-none mt-1 transition-colors duration-300">
+                {React.cloneElement(s.Icon as React.ReactElement<{ className?: string }>, { className: "w-16 h-16 sm:w-18 sm:h-18" })}
              </div>
             <span className="text-sm sm:text-lg font-league-gothic tracking-wide leading-tight pointer-events-none mb-1">
               {s.title}
@@ -183,7 +207,8 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
           <div 
             ref={progressBarRef}
             onMouseDown={handleScrubberMouseDown}
-            className="relative w-full h-2 flex items-center cursor-pointer group touch-none"
+            onTouchStart={handleScrubberTouchStart}
+            className="relative w-full h-4 flex items-center cursor-pointer group touch-none"
             title="Deslizar"
           >
               <div className="absolute w-full h-[2px] bg-stone-300 dark:bg-stone-700 rounded-full overflow-hidden"></div>

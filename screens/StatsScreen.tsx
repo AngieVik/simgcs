@@ -51,7 +51,7 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
         const verbalCorrect = archive.filter(c => c.userGCS && c.userGCS.verbal === c.correctGCS.verbal).length;
         const motorCorrect = archive.filter(c => c.userGCS && c.userGCS.motor === c.correctGCS.motor).length;
 
-        const categoryStats = archive.reduce<Record<string, { correct: number; total: number }>>((acc, c) => {
+        const categoryStats = archive.reduce((acc, c) => {
             if (!c.category) return acc;
             if (!acc[c.category]) {
                 acc[c.category] = { correct: 0, total: 0 };
@@ -61,7 +61,7 @@ const StatsScreen: React.FC<{ archive: Case[] }> = ({ archive }) => {
                 acc[c.category].correct++;
             }
             return acc;
-        }, {});
+        }, {} as Record<string, { correct: number; total: number }>);
 
         const sortedCategories = Object.entries(categoryStats).sort(([, a], [, b]) => b.total - a.total);
 

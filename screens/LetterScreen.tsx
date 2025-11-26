@@ -102,23 +102,24 @@ const RewardCard: React.FC<{
                 </div>
             </div>
 
-            <button
-                onClick={onClaim}
-                disabled={!isCompletable || isUnlocked}
-                className={`w-full py-3 px-4 rounded-lg font-league-gothic text-xl tracking-wider transition-all duration-200 shadow-md
-                    ${isUnlocked 
-                        ? 'bg-green-600 text-white cursor-default opacity-90 border border-green-700' 
-                        : isCompletable 
-                            ? 'bg-gradient-to-b from-amber-500 to-amber-700 text-white hover:from-amber-400 hover:to-amber-600 border border-amber-800 active:scale-95 cursor-pointer animate-pulse-slow' 
-                            : 'bg-stone-300 dark:bg-stone-700 text-stone-500 dark:text-stone-500 cursor-not-allowed border border-stone-400 dark:border-stone-600'
-                    }`}
-            >
-                {isUnlocked ? 'RECOMPENSA ADQUIRIDA' : isCompletable ? 'ADQUIRIR RECOMPENSA' : 'BLOQUEADO'}
-            </button>
+            {/* Botón principal: Solo visible si NO está desbloqueado */}
+            {!isUnlocked && (
+                <button
+                    onClick={onClaim}
+                    disabled={!isCompletable}
+                    className={`w-full py-3 px-4 rounded-lg font-league-gothic text-xl tracking-wider transition-all duration-200 shadow-md
+                        ${isCompletable 
+                                ? 'bg-gradient-to-b from-amber-500 to-amber-700 text-white hover:from-amber-400 hover:to-amber-600 border border-amber-800 active:scale-95 cursor-pointer animate-pulse-slow' 
+                                : 'bg-stone-300 dark:bg-stone-700 text-stone-500 dark:text-stone-500 cursor-not-allowed border border-stone-400 dark:border-stone-600'
+                        }`}
+                >
+                    {isCompletable ? 'ADQUIRIR RECOMPENSA' : 'BLOQUEADO'}
+                </button>
+            )}
 
             {/* BOTONES DE ACCIÓN MINIMALISTAS (Solo si desbloqueado) */}
             {isUnlocked && (
-                <div className="flex gap-2 mt-3 justify-center sm:justify-start animate-fade-in">
+                <div className="flex gap-2 mt-1 justify-center sm:justify-start animate-fade-in">
                     {assetType === 'image' && (
                         <ActionButton 
                             icon={EyeIcon} 
