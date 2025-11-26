@@ -59,15 +59,19 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       </header>
 
       {/* Acciones principales */}
-      <section className="w-full max-w-xl px-5">
-        <div className="grid grid-cols-2 gap-4 justify-items-center mx-auto">
-          <button onClick={onNewCase} className={indexButton}>
-            <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none"/>
-            <span>Activarnos</span>
-          </button>
+      <section className="w-[90%] max-w-xl py-2 px-2">
+        <div className="grid grid-cols-2 gap-2 justify-items-center mx-auto">
+          <button onClick={onStartGlobalCases} className={indexButton}>
+            <GlobeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Casos Globales</span>
+          </button>        
           <button onClick={onStartOfflineCase} className={indexButton}>
             <RegistryIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Registro</span>
+          </button>
+          <button onClick={onNewCase} className={indexButton}>
+            <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none"/>
+            <span>Activarnos</span>
           </button>
           <button onClick={onStartGame} className={indexButton}>
             <Codigo3Icon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
@@ -76,11 +80,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
           <button onClick={onShowStats} className={indexButton}>
             <ChartBarSquareIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Expediente</span>
-          </button>
-          <button onClick={onStartGlobalCases} className={indexButton}>
-            <GlobeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>Casos Globales</span>
-          </button>
+          </button>         
           <button onClick={onShowLetter} className={indexButton}>
             <EnvelopeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>La Carta</span>
@@ -89,7 +89,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       </section>
       
       {/* Línea EKG */}
-      <div className="w-full max-w-3xl px-5 mt-2">
+      <div className="w-full max-w-3xl px-0 mt-2">
         <EKGLine />
       </div>
 

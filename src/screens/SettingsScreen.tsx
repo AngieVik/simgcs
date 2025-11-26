@@ -82,7 +82,6 @@ const MusicSelectCard: React.FC<{
             >
                 <option value="none">Silencio</option>
                 {isMusicUnlocked && <option value="track1">BSO Original #1</option>}
-                {isMusicUnlocked && <option value="track2">BSO Original #2</option>}
             </select>
         </div>
     );
