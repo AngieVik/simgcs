@@ -1,7 +1,7 @@
-
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { playClickSound } from '../utils/soundUtils';
+// Eliminamos la importación de playClickSound porque ya no la usamos aquí
+// import { playClickSound } from '../utils/soundUtils'; 
 
 type Section = { title: string; content: React.ReactNode; Icon: React.ReactNode };
 
@@ -156,7 +156,8 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
 
   const handleCardClick = (section: Section) => {
     if (isDragging) return; 
-    if (!isMuted) playClickSound();
+    // ELIMINADO: if (!isMuted) playClickSound(); <-- ¡Esta era la línea culpable!
+    // El listener global en App.tsx ya detectará el clic en el <button> y sonará.
     onSelect(section);
   };
 
@@ -166,7 +167,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
       <div
         ref={sliderRef}
         className={`
-            flex gap-1 overflow-x-auto px-2 pb-2 pt-2 
+            flex gap-3 overflow-x-auto px-4 py-6
             hide-scrollbar select-none 
             ${isDown ? 'cursor-grabbing' : 'cursor-grab'}
         `}
@@ -178,7 +179,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
             key={`${s.title}-${i}`}
             onMouseUp={() => handleCardClick(s)}
             className={
-                "group snap-center shrink-0 select-none w-[clamp(30px,19vw,100px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-1 text-center " +
+                "group snap-center shrink-0 select-none w-[clamp(30px,28vw,80px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-1 text-center " +
                 "text-stone-800 dark:text-stone-200 " +
                 "bg-gradient-to-b from-stone-100 to-stone-200 dark:from-stone-800 dark:to-stone-900 " +
                 "border border-stone-300/50 hover:border-b-4 hover:border-r-4 dark:border-stone-300/50 " +
@@ -194,7 +195,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
              <div className="pointer-events-none mt-1 transition-colors duration-300">
                 {React.cloneElement(s.Icon as React.ReactElement<{ className?: string }>, { className: "w-16 h-16 sm:w-18 sm:h-18" })}
              </div>
-            <span className="text-lg font-league-gothic tracking-wide leading-tight pointer-events-none mb-1">
+            <span className="text-[14px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[18px] font-league-gothic tracking-wide leading-tight pointer-events-none mb-1 p-1">
               {s.title}
             </span>
           </button>
@@ -211,7 +212,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
             className="relative w-full h-4 flex items-center cursor-pointer group touch-none"
             title="Deslizar"
           >
-              <div className="absolute w-full h-[2px] bg-stone-700 dark:bg-stone-700 rounded-full overflow-hidden"></div>
+              <div className="absolute w-full h-[2px] bg-stone-300 dark:bg-stone-700 rounded-full overflow-hidden"></div>
               <div 
                   className={`
                       absolute h-3 w-3 bg-amber-600 dark:bg-amber-600 rounded-full shadow-sm 
@@ -222,7 +223,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
                   `}
                   style={{ left: `${scrollProgress}%` }} 
               >
-                  <div className={`absolute inset-0 rounded-full bg-amber-400/30 dark:bg-amber-400/30 ${isScrubberDragging ? 'animate-pulse scale-150' : 'scale-0 group-hover:scale-150'} transition-transform duration-600`}></div>
+                  <div className={`absolute inset-0 rounded-full bg-amber-600/30 dark:bg-amber-400/30 ${isScrubberDragging ? 'animate-pulse scale-150' : 'scale-0 group-hover:scale-150'} transition-transform duration-600`}></div>
               </div>
           </div>
       </div>

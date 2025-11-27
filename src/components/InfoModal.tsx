@@ -107,7 +107,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose, headerAc
 
         
         <div 
-            className="fixed inset-0 bg-black/60 dark:bg-black/70 flex items-center justify-center z-9 p-2 sm:p-4"
+            className="fixed inset-0 bg-black/60 dark:bg-black/70 flex items-start sm:items-center justify-center z-50 pt-12 sm:pt-4 p-2 sm:p-4"
             onClick={onClose}
         >
             <div 
@@ -116,7 +116,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, content, onClose, headerAc
                 aria-modal="true"
                 aria-labelledby="modal-title"
                 className={`
-                            relative w-[90%] sm:w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg mt-5 fade-in
+                            relative w-[90%] sm:w-full max-w-4xl max-h-[90vh] sm:max-h-[85vh] flex flex-col rounded-lg fade-in
                             bg-stone-100 dark:bg-stone-800 
                             border border-stone-300 dark:border-stone-600/50 
                             shadow-xl shadow-black/15
