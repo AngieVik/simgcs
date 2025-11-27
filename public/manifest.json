@@ -10,25 +10,25 @@
   "categories": ["education", "medical", "games"],
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/icons/icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/icon-192.png",
+      "src": "/icons/icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icons/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icons/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
@@ -36,10 +36,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Nuevo Caso Online",
-      "short_name": "Nuevo Caso",
-      "description": "Comienza un nuevo caso generado por IA.",
-      "url": "/index.html?action=new-case",
+      "name": "Caso Global",
+      "short_name": "Global",
+      "description": "Juega un caso de la base de datos global.",
+      "url": "/index.html?action=global-case",  
       "icons": [{ "src": "/icons/ambulance-shortcut.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
@@ -63,21 +63,21 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Resolución de un Caso"
+      "label": "Pantalla de Caso"
     },
     {
       "src": "/screenshots/screenshot3.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Minijuego Código3"
+      "label": "Pantalla de Resolución"
     },
     {
       "src": "/screenshots/screenshot4.png",
-      "sizes": "1920x1080",
+      "sizes": "1080x1920",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "Pantalla de Inicio en Escritorio"
+      "form_factor": "narrow",
+      "label": "Ventana Modal de Carrusel"
     }
   ]
 }

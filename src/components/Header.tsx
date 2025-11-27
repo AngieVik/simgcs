@@ -42,7 +42,7 @@ const Ticker = () => {
 
 const FolderButton =
   "group relative flex items-center justify-start gap-1 " +
-  "w-[clamp(10ch,22vw,13ch)] h-[clamp(2rem,3vw,3rem)] px-1 rounded-lg " +
+  "w-[clamp(10ch,22vw,13ch)] h-[clamp(2rem,3vw,2rem)] px-1 rounded-lg " +
   "bg-gradient-to-b from-stone-200 to-stone-100 text-stone-700 " + 
   "dark:from-stone-800 dark:to-stone-900 dark:text-stone-100 " + 
   "border border-stone-400/50 dark:border-black/50 " +
@@ -91,13 +91,13 @@ const Header: React.FC<HeaderProps> = ({ onShowArchive, onShowRegistry, onShowSe
             {/* DERECHA: Carpetas */}
             <div className="flex items-center gap-1 z-50 shrink-0">
                 <button onClick={onShowRegistry} className={FolderButton}>
-                    <FolderIcon className="shrink-0 block group-hover:hidden w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2.6vw,1.75rem)]" />
-                    <OpenFolderIcon className="shrink-0 hidden group-hover:block w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2.6vw,1.75rem)]" />
+                    <FolderIcon className="shrink-0 block group-hover:hidden w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2vw,1.25rem)]" />
+                    <OpenFolderIcon className="shrink-0 hidden group-hover:block w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2vw,1.25rem)]" />
                     Registro
                 </button>
                 <button onClick={onShowArchive} className={FolderButton}>
-                    <FolderIcon className="shrink-0 block group-hover:hidden w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2.6vw,1.75rem)]" />
-                    <OpenFolderIcon className="shrink-0 hidden group-hover:block w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2.6vw,1.75rem)]" />
+                    <FolderIcon className="shrink-0 block group-hover:hidden w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2vw,1.25rem)]" />
+                    <OpenFolderIcon className="shrink-0 hidden group-hover:block w-[clamp(1.25rem,2.6vw,1.75rem)] h-[clamp(1.25rem,2vw,1.25rem)]" />
                     Informes
                 </button>
             </div>

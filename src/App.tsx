@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 
 // Types
@@ -52,11 +51,10 @@ const TrophyDisplay: React.FC<{ archive: Case[] }> = ({ archive }) => {
 };
 
 // --- Mapeo de pistas de música ---
-// IMPORTANTE: Asegúrate de colocar tus archivos mp3 en la carpeta public/music/
 const MUSIC_TRACKS: Record<AppMusic, string> = {
     'none': '',
-    'track1': '/music/track1.mp3', // Nombre de tu primera canción
-    'track2': '/music/track2.mp3', // Nombre de tu segunda canción (opcional)
+    'track1': '/music/track1.mp3', 
+    'track2': '/music/track2.mp3', 
 };
 
 // --- Main App Component ---
@@ -70,24 +68,24 @@ const App: React.FC = () => {
 
     // Effect for scrolling to top on certain screen changes
     useEffect(() => {
-        if (screen === Screen.Home) { // Scroll to top only on Home. Modal handles its own scroll.
+        if (screen === Screen.Home) { 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [screen]);
 
     // Effect for applying a background class to the body
     useEffect(() => {
-        // Limpiar clases anteriores
-        document.body.classList.remove('home-background', 'bg-basic', 'bg-ems');
+        // 1. Limpiar clases anteriores
+        document.body.classList.remove('home-background', 'bg-basic', 'bg-background1');
 
         if (screen !== Screen.Game) {
-            document.body.classList.add('home-background'); // Estilo base
+            document.body.classList.add('home-background'); 
             
-            // Aplicar fondo seleccionado
-            if (appBackground === 'ems') {
-                document.body.classList.add('bg-ems');
+            // 2. Lógica de selección
+            if (appBackground === 'background1') {
+                document.body.classList.add('bg-background1'); // Pone la FOTO
             } else {
-                document.body.classList.add('bg-basic');
+                document.body.classList.add('bg-basic'); // Pone la TEXTURA (Por defecto)
             }
         }
     }, [screen, appBackground]);
@@ -100,7 +98,7 @@ const App: React.FC = () => {
             }
         };
 
-        document.body.addEventListener('click', handleClick, true); // Use capture phase
+        document.body.addEventListener('click', handleClick, true);
 
         return () => {
             document.body.removeEventListener('click', handleClick, true);
@@ -112,19 +110,16 @@ const App: React.FC = () => {
         if (!audioRef.current) {
             audioRef.current = new Audio();
             audioRef.current.loop = true;
-            audioRef.current.volume = 0.4; // Volumen moderado para fondo
+            audioRef.current.volume = 0.4; 
         }
 
         const audio = audioRef.current;
 
-        // Si está muteado o la música es 'none', pausar
         if (isMuted || appMusic === 'none') {
             audio.pause();
             return;
         }
 
-        // Si estamos en el minijuego (Código3), pausar la música ambiental
-        // porque el juego tiene sus propios efectos y quizás quieras poner música tensa de juego luego
         if (screen === Screen.Game) {
              audio.pause();
              return;
@@ -132,17 +127,12 @@ const App: React.FC = () => {
 
         const trackUrl = MUSIC_TRACKS[appMusic];
         
-        // Si la fuente ha cambiado, actualizar y reproducir
-        // Usamos getAttribute('src') para comparar la ruta relativa/absoluta correctamente
         if (trackUrl && !audio.src.endsWith(trackUrl)) {
             audio.src = trackUrl;
             audio.play().catch(e => {
-                // Los navegadores bloquean autoplay si no hay interacción previa.
-                // Esto es normal, se reproducirá tras el primer clic del usuario.
                 console.log("Reproducción automática bloqueada hasta interacción:", e);
             });
         } else if (trackUrl && audio.paused) {
-            // Si es la misma pista pero estaba pausada (ej. al volver del juego o desmutear)
             audio.play().catch(() => {});
         }
 
@@ -172,11 +162,12 @@ const App: React.FC = () => {
         if (action) {
             if (action === 'new-case') {
                 handleNewCase();
+            } else if (action === 'global-case') {
+                handleStartGlobalCase();           
             } else if (action === 'start-game') {
                 handleStartGame();
             }
             
-            // Clean up URL to avoid re-triggering on hot-reload or refresh
             if (window.history.replaceState) {
                 const cleanUrl = window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
@@ -190,11 +181,9 @@ const App: React.FC = () => {
             return;
         }
         
-        // Filtrar casos que ya están resueltos correctamente en el archivo
         const solvedIds = new Set(archive.filter(c => c.isCorrect).map(c => c.id));
         const availableCases = allOfflineCases.filter(c => !solvedIds.has(c.id));
         
-        // Si quedan casos por resolver, elegir de esos. Si no, elegir de todos (modo repaso).
         const pool = availableCases.length > 0 ? availableCases : allOfflineCases;
         
         const randomCase = pool[Math.floor(Math.random() * pool.length)];
@@ -208,11 +197,9 @@ const App: React.FC = () => {
              return;
         }
 
-        // Filtrar casos globales que ya están resueltos correctamente
         const solvedIds = new Set(archive.filter(c => c.isCorrect).map(c => c.id));
         const availableCases = casosGlobalesCases.filter(c => !solvedIds.has(c.id));
 
-        // Si quedan casos por resolver, elegir de esos. Si no, elegir de todos.
         const pool = availableCases.length > 0 ? availableCases : casosGlobalesCases;
 
         const randomCase = pool[Math.floor(Math.random() * pool.length)];
@@ -312,7 +299,7 @@ const App: React.FC = () => {
                     title={
                         infoContent ? infoContent.title :
                         screen === Screen.Case ? currentCase?.title ?? 'Caso en curso' :
-                        screen === Screen.Result ? `Resolución: ${currentCase?.title}` ?? 'Resolución' :
+                        screen === Screen.Result ? (currentCase?.title ? `Resolución: ${currentCase.title}` : 'Resolución') :
                         screen === Screen.Archive ? 'Informes de Casos' :
                         screen === Screen.Registry ? 'Registro de Casos' : 
                         screen === Screen.Stats ? 'Expediente del Jugador' : 

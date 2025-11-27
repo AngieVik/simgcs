@@ -82,25 +82,20 @@ body {
 /* FONDOS DE LA APLICACIÓN
 /* ============================================================================= */
 
-/* --- BACKGROUND: BASIC (Por defecto) --- */
+/* --- BACKGROUND: BASIC--- */
 body.bg-basic {
-  /* Base más clara tipo "papel" */
-  background-color: #e8e6e3; /* Tailwind stone-100 real */
+  background-color: #e8e6e3;
   background-image: 
-    /* Viñeta sutil clara, muy amplia */
     radial-gradient(ellipse at center, rgba(109, 109, 109, 0.478) 20%, rgba(14, 14, 14, 0.528) 100%),
-    /* Textura de ruido sutil */
     linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
   background-size: 100% 100%, 2px 2px, 2px 2px;
 }
 
 .dark body.bg-basic {
-  background-color: #121212; /* Más mate que el negro puro */
+  background-color: #121212;
   background-image: 
-    /* Viñeta para oscurecer bordes, pero más suave */
     radial-gradient(ellipse at center, rgba(40,40,40,0.38) 50%, rgba(0,0,0,0.75) 100%),
-    /* Oscurecimiento general */
     linear-gradient(rgba(25, 28, 39, 0.4), rgba(25, 28, 39, 0.4));
   background-position: top center;
   background-size: cover;
@@ -108,25 +103,24 @@ body.bg-basic {
   background-attachment: fixed;
 }
 
-/* --- BACKGROUND: EMS (Personalizado) --- */
-body.bg-ems {
-  background-color: #1c1917; /* stone-900 fallback */
-  background-image: url('/background.jpg'); 
-  /* Ajuste específico para pantallas pequeñas: centro arriba y abre hacia afuera */
+/* --- BACKGROUND: EMS (Premio desbloqueable) --- */
+body.bg-background1 {
+  background-color: #1c1917;
+  background-image: url('/backgrounds/background1.jpg'); 
   background-position: center top;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-.dark body.bg-ems {
-    /* En modo oscuro, añadimos una capa oscura sutil para mejorar legibilidad del texto */
-    background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
-    url('/background.jpg');
+.dark body.bg-background1 {
+  background-color: #0c111d;
+  background-image: url('/backgrounds/background1.jpg');
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
-
 /* ============================================================================= */
 /* ANIMACIONES GENÉRICAS
 /* ============================================================================= */

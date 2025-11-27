@@ -10,7 +10,7 @@ type IconWithClassName = {
 // ================================================================================================
 const iconProps = {
     className:"w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]",
-    strokeWidth: "1", 
+    strokeWidth: "2", 
     fill:"none", 
     viewBox:"0 0 24 24", 
     stroke:"currentColor",

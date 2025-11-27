@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useAppState, useAppDispatch } from '../context/AppContext';
 import { PhotoIcon, MusicNoteIcon, EyeIcon, DownloadIcon, PlayCircleIcon, StopCircleIcon } from '../components/Icons';
@@ -89,18 +88,21 @@ const RewardCard: React.FC<{
                 </div>
             </div>
 
-            <div className="space-y-2 mb-6">
-                <div className="flex justify-between text-xs font-bold text-stone-500 uppercase tracking-wider">
-                    <span>Objetivo: {requirementText}</span>
-                    <span>{currentProgress}/{target}</span>
+            {/* MODIFICACIÓN: La barra de progreso solo se ve si NO está desbloqueado */}
+            {!isUnlocked && (
+                <div className="space-y-2 mb-6">
+                    <div className="flex justify-between text-xs font-bold text-stone-500 uppercase tracking-wider">
+                        <span>Objetivo: {requirementText}</span>
+                        <span>{currentProgress}/{target}</span>
+                    </div>
+                    <div className="w-full bg-stone-300 dark:bg-stone-700 rounded-full h-2.5 overflow-hidden border border-stone-400/30">
+                        <div 
+                            className="bg-amber-500 h-2.5 rounded-full transition-all duration-1000 ease-out" 
+                            style={{ width: `${progressPercent}%` }}
+                        ></div>
+                    </div>
                 </div>
-                <div className="w-full bg-stone-300 dark:bg-stone-700 rounded-full h-2.5 overflow-hidden border border-stone-400/30">
-                    <div 
-                        className="bg-amber-500 h-2.5 rounded-full transition-all duration-1000 ease-out" 
-                        style={{ width: `${progressPercent}%` }}
-                    ></div>
-                </div>
-            </div>
+            )}
 
             {/* Botón principal: Solo visible si NO está desbloqueado */}
             {!isUnlocked && (
@@ -157,7 +159,7 @@ const LetterScreen: React.FC = () => {
 
     const handleClaimEms = () => {
         dispatch({ type: 'CLAIM_REWARD', payload: 'bg_ems' });
-        dispatch({ type: 'SET_BACKGROUND', payload: 'ems' });
+        dispatch({ type: 'SET_BACKGROUND', payload: 'background1' });
     };
 
     const handleClaimMusic = () => {
@@ -184,7 +186,7 @@ const LetterScreen: React.FC = () => {
                 isUnlocked={unlockedRewards.includes('bg_ems')}
                 onClaim={handleClaimEms}
                 icon={<PhotoIcon className="w-8 h-8" />}
-                assetUrl="/background.jpg"
+                assetUrl="/backgrounds/background1.jpg"
                 assetType="image"
             />
 

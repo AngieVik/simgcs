@@ -37,6 +37,8 @@ const BackgroundSelectCard: React.FC<{
     onChange: (value: AppBackground) => void;
     unlockedRewards: string[];
 }> = ({ label, value, onChange, unlockedRewards }) => {
+    // 1. Comprobamos si el usuario tiene la medalla/premio 'bg_ems'
+    // (Este ID 'bg_ems' viene de LetterScreen.tsx cuando reclamas la carta)
     const isEmsUnlocked = unlockedRewards.includes('bg_ems');
 
     return (
@@ -52,8 +54,14 @@ const BackgroundSelectCard: React.FC<{
                 onChange={(e) => onChange(e.target.value as AppBackground)}
                 className="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-600 text-stone-800 dark:text-stone-200 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 focus:outline-none transition-colors cursor-pointer hover:bg-white dark:hover:bg-stone-700 max-w-[150px]"
             >
+                {/* La opción básica siempre está disponible */}
                 <option value="basic">Básico</option>
-                {isEmsUnlocked && <option value="ems">Operativo EMS</option>}
+                
+                {/* 2. LA CONDICIÓN DE VISIBILIDAD:
+                   Esta línea <option> solo se "dibuja" en la pantalla si isEmsUnlocked es TRUE.
+                   Si no has jugado las 3 partidas y reclamado el premio, esta opción es invisible.
+                */}
+                {isEmsUnlocked && <option value="background1">Operativo EMS</option>}
             </select>
         </div>
     );

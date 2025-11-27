@@ -103,7 +103,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       </section>
 
       {/* Footer */}
-      <footer className="w-full max-w-4xl mt-auto pt-6 mb-2 text-center text-[8px] sm:text-xs text-stone-600 dark:text-stone-400">
+      <footer className="w-full max-w-4xl mt-auto pt-6 mb-2 text-center text-[10px] sm:text-[14px] text-stone-600 dark:text-stone-400">
         <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4">
           <a
             href="https://www.glasgowcomascale.org/"

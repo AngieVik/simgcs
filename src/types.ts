@@ -11,7 +11,7 @@ export enum Screen {
   Letter = 'LETTER',
 }
 
-export type AppBackground = 'basic' | 'ems';
+export type AppBackground = 'basic' | 'background1';
 // Ampliamos los tipos de música disponibles
 export type AppMusic = 'none' | 'track1' | 'track2';
 

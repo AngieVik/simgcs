@@ -178,8 +178,8 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
             key={`${s.title}-${i}`}
             onMouseUp={() => handleCardClick(s)}
             className={
-                "group snap-center shrink-0 select-none w-[clamp(30px,19vw,100px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-2 text-center " +
-                "text-stone-600 dark:text-stone-400 " +
+                "group snap-center shrink-0 select-none w-[clamp(30px,19vw,100px)] aspect-[4/6] rounded-2xl font-league-gothic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:focus-visible:ring-amber-400 transition-all duration-600 flex flex-col items-center justify-between gap-1 p-1 text-center " +
+                "text-stone-800 dark:text-stone-200 " +
                 "bg-gradient-to-b from-stone-100 to-stone-200 dark:from-stone-800 dark:to-stone-900 " +
                 "border border-stone-300/50 hover:border-b-4 hover:border-r-4 dark:border-stone-300/50 " +
                 "shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_4px_8px_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.12)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_0_0_1px_rgba(92,88,85,0.5),0_4px_8px_rgba(0,0,0,0.5)] " +
@@ -194,7 +194,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
              <div className="pointer-events-none mt-1 transition-colors duration-300">
                 {React.cloneElement(s.Icon as React.ReactElement<{ className?: string }>, { className: "w-16 h-16 sm:w-18 sm:h-18" })}
              </div>
-            <span className="text-sm sm:text-lg font-league-gothic tracking-wide leading-tight pointer-events-none mb-1">
+            <span className="text-lg font-league-gothic tracking-wide leading-tight pointer-events-none mb-1">
               {s.title}
             </span>
           </button>
@@ -211,10 +211,10 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
             className="relative w-full h-4 flex items-center cursor-pointer group touch-none"
             title="Deslizar"
           >
-              <div className="absolute w-full h-[2px] bg-stone-300 dark:bg-stone-700 rounded-full overflow-hidden"></div>
+              <div className="absolute w-full h-[2px] bg-stone-700 dark:bg-stone-700 rounded-full overflow-hidden"></div>
               <div 
                   className={`
-                      absolute h-3 w-3 text-amber-600 dark:bg-amber-600 rounded-full shadow-sm 
+                      absolute h-3 w-3 bg-amber-600 dark:bg-amber-600 rounded-full shadow-sm 
                       top-1/2 -translate-y-1/2 -ml-1.5
                       transition-transform duration-650 ease-out
                       group-hover:scale-125
@@ -222,7 +222,7 @@ const ApuntesCarousel: React.FC<Props> = ({ sections, onSelect, isMuted }) => {
                   `}
                   style={{ left: `${scrollProgress}%` }} 
               >
-                  <div className={`absolute inset-0 rounded-full bg-amber-600/30 dark:bg-amber-400/30 ${isScrubberDragging ? 'animate-pulse scale-150' : 'scale-0 group-hover:scale-150'} transition-transform duration-600`}></div>
+                  <div className={`absolute inset-0 rounded-full bg-amber-400/30 dark:bg-amber-400/30 ${isScrubberDragging ? 'animate-pulse scale-150' : 'scale-0 group-hover:scale-150'} transition-transform duration-600`}></div>
               </div>
           </div>
       </div>
