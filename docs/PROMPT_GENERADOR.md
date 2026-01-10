@@ -1,6 +1,3 @@
-// netlify/functions/generateNewCase.js
-const { GoogleGenAI, Type } = require("@google/genai");
-
 // -------------------------
 // ⚙️ PROMPT Y ESQUEMA
 // -------------------------
@@ -67,7 +64,6 @@ const RESPONSE_SCHEMA = {
     gcs: {
       type: Type.OBJECT,
       properties: {
-        // AQUI ESTA EL CAMBIO CLAVE EN LAS DESCRIPCIONES:
         ocular: { 
             type: Type.INTEGER, 
             description: "Puntuación REAL médica (1-4). IMPORTANTE: Si es 'Ninguna respuesta' pon 1. Solo usa 0 si es físicamente imposible evaluar (NV)." 

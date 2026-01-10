@@ -1,7 +1,6 @@
-
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
-import { Screen, Case, GCSScore, AppBackground, AppMusic } from '../types';
-import useLocalStorage from '../hooks/useLocalStorage';
+import React, { createContext, useReducer, useContext, useEffect } from "react";
+import { Screen, Case, GCSScore, AppBackground, AppMusic } from "../types";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 // 1. Definir la forma del estado
 interface AppState {
@@ -11,9 +10,9 @@ interface AppState {
   error: string | null;
   archive: Case[];
   infoContent: { title: string; content: React.ReactNode } | null;
-  codigo3HighScore: number;
+  gameHighScore: number;
   isMuted: boolean;
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   isTypewriterEnabled: boolean;
   appBackground: AppBackground;
   appMusic: AppMusic;
@@ -23,29 +22,28 @@ interface AppState {
 
 // 2. Definir los tipos de acciones
 type Action =
-  | { type: 'START_NEW_CASE' }
-  | { type: 'CASE_LOADED'; payload: Omit<Case, 'id'> }
-  | { type: 'REPLAY_CASE'; payload: Case }
-  | { type: 'API_ERROR'; payload: string }
-  | { type: 'ASSESS_CASE'; payload: GCSScore }
-  | { type: 'GO_HOME' }
-  | { type: 'SHOW_ARCHIVE' }
-  | { type: 'SHOW_REGISTRY' }
-  | { type: 'SHOW_STATS' }
-  | { type: 'SHOW_SETTINGS' }
-  | { type: 'SHOW_LETTER' }
-  | { type: 'START_GAME' }
-  | { type: 'SHOW_INFO'; payload: { title: string; content: React.ReactNode } }
-  | { type: 'CLOSE_INFO' }
-  | { type: 'SET_SCREEN'; payload: Screen }
-  | { type: 'CLEAR_ARCHIVE' }
-  | { type: 'SET_CODIGO3_HIGH_SCORE', payload: number }
-  | { type: 'TOGGLE_MUTE' }
-  | { type: 'TOGGLE_THEME' }
-  | { type: 'TOGGLE_TYPEWRITER' }
-  | { type: 'SET_BACKGROUND'; payload: AppBackground }
-  | { type: 'SET_MUSIC'; payload: AppMusic }
-  | { type: 'CLAIM_REWARD'; payload: string };
+  | { type: "START_NEW_CASE" }
+  | { type: "CASE_LOADED"; payload: Omit<Case, "id"> }
+  | { type: "REPLAY_CASE"; payload: Case }
+  | { type: "API_ERROR"; payload: string }
+  | { type: "ASSESS_CASE"; payload: GCSScore }
+  | { type: "GO_HOME" }
+  | { type: "SHOW_ARCHIVE" }
+  | { type: "SHOW_STATS" }
+  | { type: "SHOW_SETTINGS" }
+  | { type: "SHOW_LETTER" }
+  | { type: "START_GAME" }
+  | { type: "SHOW_INFO"; payload: { title: string; content: React.ReactNode } }
+  | { type: "CLOSE_INFO" }
+  | { type: "SET_SCREEN"; payload: Screen }
+  | { type: "CLEAR_ARCHIVE" }
+  | { type: "SET_GAME_HIGH_SCORE"; payload: number }
+  | { type: "TOGGLE_MUTE" }
+  | { type: "TOGGLE_THEME" }
+  | { type: "TOGGLE_TYPEWRITER" }
+  | { type: "SET_BACKGROUND"; payload: AppBackground }
+  | { type: "SET_MUSIC"; payload: AppMusic }
+  | { type: "CLAIM_REWARD"; payload: string };
 
 // Contextos separados para el estado y para el despachador de acciones (dispatch)
 const AppStateContext = createContext<AppState | null>(null);
@@ -54,113 +52,156 @@ const AppDispatchContext = createContext<React.Dispatch<Action> | null>(null);
 // 3. Función Reducer: El cerebro que maneja las transiciones de estado
 const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
-    case 'START_NEW_CASE':
-      return { ...state, isLoading: true, error: null, casesPlayed: state.casesPlayed + 1 };
-    case 'CASE_LOADED':
+    case "START_NEW_CASE":
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+        casesPlayed: state.casesPlayed + 1,
+      };
+    case "CASE_LOADED":
       return {
         ...state,
         isLoading: false,
         currentCase: { id: new Date().toISOString(), ...action.payload },
         screen: Screen.Case,
       };
-    case 'REPLAY_CASE':
-        const caseToReplay = { ...action.payload };
-        // Reset user-specific data for the replay
-        delete caseToReplay.userGCS;
-        delete caseToReplay.isCorrect;
-        return {
-            ...state,
-            isLoading: false,
-            currentCase: caseToReplay,
-            screen: Screen.Case,
-            casesPlayed: state.casesPlayed + 1
-        };
-    case 'API_ERROR':
-  return { ...state, isLoading: false, error: action.payload };
-    case 'ASSESS_CASE': {
+    case "REPLAY_CASE":
+      const caseToReplay = { ...action.payload };
+      // Reset user-specific data for the replay
+      delete caseToReplay.userGCS;
+      delete caseToReplay.isCorrect;
+      return {
+        ...state,
+        isLoading: false,
+        currentCase: caseToReplay,
+        screen: Screen.Case,
+        casesPlayed: state.casesPlayed + 1,
+      };
+    case "API_ERROR":
+      return { ...state, isLoading: false, error: action.payload };
+    case "ASSESS_CASE": {
       if (!state.currentCase) return state;
       const userGCS = action.payload;
-      const isCorrect = userGCS.ocular === state.currentCase.correctGCS.ocular &&
-                        userGCS.verbal === state.currentCase.correctGCS.verbal &&
-                        userGCS.motor === state.currentCase.correctGCS.motor;
+      const isCorrect =
+        userGCS.ocular === state.currentCase.correctGCS.ocular &&
+        userGCS.verbal === state.currentCase.correctGCS.verbal &&
+        userGCS.motor === state.currentCase.correctGCS.motor;
       const solvedCase: Case = { ...state.currentCase, userGCS, isCorrect };
-      
+
       let newArchive = [...state.archive];
-      const existingCaseIndex = state.archive.findIndex(c => c.id === solvedCase.id);
+      const existingCaseIndex = state.archive.findIndex(
+        (c) => c.id === solvedCase.id
+      );
 
       if (existingCaseIndex > -1) {
-          // Si el caso ya existe (p. ej., un caso offline rejugado), actualízalo.
-          newArchive[existingCaseIndex] = solvedCase;
+        // Si el caso ya existe (p. ej., un caso offline rejugado), actualízalo.
+        newArchive[existingCaseIndex] = solvedCase;
       } else {
-          // Si es un caso nuevo (online o el primer intento de un offline), añádelo.
-          newArchive = [solvedCase, ...newArchive];
+        // Si es un caso nuevo (online o el primer intento de un offline), añádelo.
+        newArchive = [solvedCase, ...newArchive];
       }
-      
-      return { ...state, currentCase: solvedCase, archive: newArchive, screen: Screen.Result };
+
+      return {
+        ...state,
+        currentCase: solvedCase,
+        archive: newArchive,
+        screen: Screen.Result,
+      };
     }
-    case 'GO_HOME':
-      return { ...state, screen: Screen.Home, currentCase: null, error: null, isLoading: false };
-    case 'SHOW_ARCHIVE':
+    case "GO_HOME":
+      return {
+        ...state,
+        screen: Screen.Home,
+        currentCase: null,
+        error: null,
+        isLoading: false,
+      };
+    case "SHOW_ARCHIVE":
       return { ...state, screen: Screen.Archive };
-    case 'SHOW_REGISTRY':
-        return { ...state, screen: Screen.Registry };
-    case 'SHOW_STATS':
-        return { ...state, screen: Screen.Stats };
-    case 'SHOW_SETTINGS':
-        return { ...state, screen: Screen.Settings };
-    case 'SHOW_LETTER':
-        return { ...state, screen: Screen.Letter };
-    case 'START_GAME':
-        return { ...state, screen: Screen.Game };
-    case 'SHOW_INFO':
+    case "SHOW_STATS":
+      return { ...state, screen: Screen.Stats };
+    case "SHOW_SETTINGS":
+      return { ...state, screen: Screen.Settings };
+    case "SHOW_LETTER":
+      return { ...state, screen: Screen.Letter };
+    case "START_GAME":
+      return { ...state, screen: Screen.Game };
+    case "SHOW_INFO":
       return { ...state, infoContent: action.payload };
-    case 'CLOSE_INFO':
+    case "CLOSE_INFO":
       return { ...state, infoContent: null };
-    case 'SET_SCREEN':
+    case "SET_SCREEN":
       return { ...state, screen: action.payload };
-    case 'CLEAR_ARCHIVE':
+    case "CLEAR_ARCHIVE":
       return { ...state, archive: [] };
-    case 'SET_CODIGO3_HIGH_SCORE':
-      if (action.payload > state.codigo3HighScore) {
-        return { ...state, codigo3HighScore: action.payload };
+    case "SET_GAME_HIGH_SCORE":
+      if (action.payload > state.gameHighScore) {
+        return { ...state, gameHighScore: action.payload };
       }
       return state;
-    case 'TOGGLE_MUTE':
+    case "TOGGLE_MUTE":
       return { ...state, isMuted: !state.isMuted };
-    case 'TOGGLE_THEME':
-      return { ...state, theme: state.theme === 'dark' ? 'light' : 'dark' };
-    case 'TOGGLE_TYPEWRITER':
+    case "TOGGLE_THEME":
+      return { ...state, theme: state.theme === "dark" ? "light" : "dark" };
+    case "TOGGLE_TYPEWRITER":
       return { ...state, isTypewriterEnabled: !state.isTypewriterEnabled };
-    case 'SET_BACKGROUND':
+    case "SET_BACKGROUND":
       return { ...state, appBackground: action.payload };
-    case 'SET_MUSIC':
+    case "SET_MUSIC":
       return { ...state, appMusic: action.payload };
-    case 'CLAIM_REWARD':
+    case "CLAIM_REWARD":
       if (state.unlockedRewards.includes(action.payload)) return state;
-      return { ...state, unlockedRewards: [...state.unlockedRewards, action.payload] };
+      return {
+        ...state,
+        unlockedRewards: [...state.unlockedRewards, action.payload],
+      };
     default:
       return state;
   }
 };
 
 // 4. Componente Proveedor: Proporciona el estado y el dispatch a sus hijos
-export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [persistedArchive, setPersistedArchive] = useLocalStorage<Case[]>('gcs-case-archive', []);
-  const [persistedHighScore, setPersistedHighScore] = useLocalStorage<number>('codigo3-high-score', 0);
-  const [persistedIsMuted, setPersistedIsMuted] = useLocalStorage<boolean>('gcs-sound-muted', false);
-  const [persistedTheme, setPersistedTheme] = useLocalStorage<'light' | 'dark'>('gcs-theme', 'dark');
-  const [persistedTypewriter, setPersistedTypewriter] = useLocalStorage<boolean>('gcs-typewriter-enabled', true);
+export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [persistedArchive, setPersistedArchive] = useLocalStorage<Case[]>(
+    "gcs-case-archive",
+    []
+  );
+  const [persistedHighScore, setPersistedHighScore] = useLocalStorage<number>(
+    "game-high-score",
+    0
+  );
+  const [persistedIsMuted, setPersistedIsMuted] = useLocalStorage<boolean>(
+    "gcs-sound-muted",
+    false
+  );
+  const [persistedTheme, setPersistedTheme] = useLocalStorage<"light" | "dark">(
+    "gcs-theme",
+    "dark"
+  );
+  const [persistedTypewriter, setPersistedTypewriter] =
+    useLocalStorage<boolean>("gcs-typewriter-enabled", true);
   // Migración de 'noir' antiguo si existe, sino default 'basic'
-  const [persistedBackground, setPersistedBackground] = useLocalStorage<string>('gcs-background', 'basic');
-  const [persistedMusic, setPersistedMusic] = useLocalStorage<AppMusic>('gcs-music', 'none');
-  const [persistedCasesPlayed, setPersistedCasesPlayed] = useLocalStorage<number>('gcs-cases-played-count', 0);
-  const [persistedUnlockedRewards, setPersistedUnlockedRewards] = useLocalStorage<string[]>('gcs-unlocked-rewards', []);
+  const [persistedBackground, setPersistedBackground] = useLocalStorage<string>(
+    "gcs-background",
+    "basic"
+  );
+  const [persistedMusic, setPersistedMusic] = useLocalStorage<AppMusic>(
+    "gcs-music",
+    "none"
+  );
+  const [persistedCasesPlayed, setPersistedCasesPlayed] =
+    useLocalStorage<number>("gcs-cases-played-count", 0);
+  const [persistedUnlockedRewards, setPersistedUnlockedRewards] =
+    useLocalStorage<string[]>("gcs-unlocked-rewards", []);
 
   // Validación segura del background type
-  let validatedBackground: AppBackground = 'basic';
-  if (persistedBackground === 'ems') validatedBackground = 'ems';
+  let validatedBackground: AppBackground = "basic";
+  if (persistedBackground === "ems") validatedBackground = "ems";
   // Si había un 'noir' guardado de la versión anterior, volver a basic para no romper nada
-  if (persistedBackground === 'noir') validatedBackground = 'basic'; 
+  if (persistedBackground === "noir") validatedBackground = "basic";
 
   const initialState: AppState = {
     screen: Screen.Home,
@@ -169,7 +210,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     error: null,
     archive: persistedArchive,
     infoContent: null,
-    codigo3HighScore: persistedHighScore,
+    gameHighScore: persistedHighScore,
     isMuted: persistedIsMuted,
     theme: persistedTheme,
     isTypewriterEnabled: persistedTypewriter,
@@ -188,8 +229,8 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   // Sincronizar la puntuación máxima con LocalStorage
   useEffect(() => {
-    setPersistedHighScore(state.codigo3HighScore);
-  }, [state.codigo3HighScore, setPersistedHighScore]);
+    setPersistedHighScore(state.gameHighScore);
+  }, [state.gameHighScore, setPersistedHighScore]);
 
   // Sincronizar el estado de silencio con LocalStorage
   useEffect(() => {
@@ -199,10 +240,10 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   // Sincronizar el estado del tema con LocalStorage y la clase en <html>
   useEffect(() => {
     setPersistedTheme(state.theme);
-    if (state.theme === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (state.theme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [state.theme, setPersistedTheme]);
 
@@ -243,7 +284,9 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 export const useAppState = () => {
   const context = useContext(AppStateContext);
   if (context === null) {
-    throw new Error('useAppState debe ser usado dentro de un AppContextProvider');
+    throw new Error(
+      "useAppState debe ser usado dentro de un AppContextProvider"
+    );
   }
   return context;
 };
@@ -251,7 +294,9 @@ export const useAppState = () => {
 export const useAppDispatch = () => {
   const context = useContext(AppDispatchContext);
   if (context === null) {
-    throw new Error('useAppDispatch debe ser usado dentro de un AppContextProvider');
+    throw new Error(
+      "useAppDispatch debe ser usado dentro de un AppContextProvider"
+    );
   }
   return context;
 };

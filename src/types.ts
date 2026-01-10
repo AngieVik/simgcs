@@ -1,19 +1,17 @@
-
 export enum Screen {
-  Home = 'HOME',
-  Case = 'CASE',
-  Result = 'RESULT',
-  Archive = 'ARCHIVE',
-  Registry = 'REGISTRY',
-  Game = 'GAME',
-  Stats = 'STATS',
-  Settings = 'SETTINGS',
-  Letter = 'LETTER',
+  Home = "HOME",
+  Case = "CASE",
+  Result = "RESULT",
+  Archive = "ARCHIVE",
+  Game = "GAME",
+  Stats = "STATS",
+  Settings = "SETTINGS",
+  Letter = "LETTER",
 }
 
-export type AppBackground = 'basic' | 'background1';
+export type AppBackground = "basic" | "background1";
 // Ampliamos los tipos de música disponibles
-export type AppMusic = 'none' | 'track1' | 'track2';
+export type AppMusic = "none" | "track1" | "track2";
 
 export interface GCSScore {
   ocular: number | null;

@@ -1,18 +1,24 @@
-
 import React from "react";
 import EKGLine from "../components/EKGLine";
-import { AmbulanceIcon, ChartBarSquareIcon, Codigo3Icon, RegistryIcon, GlobeIcon, EnvelopeIcon } from "../components/Icons";
+import {
+  AmbulanceIcon,
+  ChartBarSquareIcon,
+  GamepadIcon,
+  EnvelopeIcon,
+} from "../components/Icons";
 import { infoSections, referencesSection } from "../constants/infoContent";
 import ApuntesCarousel from "../components/ApuntesCarousel";
 
 interface HomeScreenProps {
-  onNewCase: () => void;
-  onStartOfflineCase: () => void;
-  onStartGlobalCases: () => void;
+  onActivarnos: () => void;
   onStartGame: () => void;
   onShowStats: () => void;
   onShowLetter: () => void;
-  onShowInfo: (info: { title: string; content: React.ReactNode; icon?: React.ReactNode }) => void;
+  onShowInfo: (info: {
+    title: string;
+    content: React.ReactNode;
+    icon?: React.ReactNode;
+  }) => void;
   isMuted: boolean;
 }
 
@@ -39,55 +45,47 @@ transition-all duration-150
 `;
 
 const HomeScreen: React.FC<HomeScreenProps> = ({
-  onNewCase,
-  onStartOfflineCase,
-  onStartGlobalCases,
+  onActivarnos,
   onShowInfo,
   onStartGame,
   onShowStats,
   onShowLetter,
-  isMuted
+  isMuted,
 }) => {
   return (
     <div className="w-full flex-grow flex flex-col items-center">
       {/* Cabecera */}
       <header className="w-full max-w-xl px-5 pb-8 pt-0 text-center">
-        <p className="text-3xl sm:text-4xl font-lora text-stone-800 dark:text-stone-200">Estás de guardia…</p>
+        <p className="text-3xl sm:text-4xl font-lora text-stone-800 dark:text-stone-200">
+          Estás de guardia…
+        </p>
         <p className="text-lg sm:text-2xl font-lora italic text-stone-600 dark:text-stone-400 mt-2">
           ¿Listo para tu próximo aviso?
         </p>
       </header>
 
-      {/* Acciones principales */}
+      {/* Acciones principales - Grid 2x2 */}
       <section className="w-[90%] max-w-xl py-2 px-2">
         <div className="grid grid-cols-2 gap-2 justify-items-center mx-auto">
-          <button onClick={onStartGlobalCases} className={indexButton}>
-            <GlobeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>Casos Globales</span>
-          </button>        
-          <button onClick={onStartOfflineCase} className={indexButton}>
-            <RegistryIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>Registro</span>
-          </button>
-          <button onClick={onNewCase} className={indexButton}>
-            <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none"/>
+          <button onClick={onActivarnos} className={indexButton}>
+            <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Activarnos</span>
           </button>
           <button onClick={onStartGame} className={indexButton}>
-            <Codigo3Icon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>Código3</span>
+            <GamepadIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
+            <span>Alfa-Mike</span>
           </button>
           <button onClick={onShowStats} className={indexButton}>
             <ChartBarSquareIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Expediente</span>
-          </button>         
+          </button>
           <button onClick={onShowLetter} className={indexButton}>
             <EnvelopeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>La Carta</span>
           </button>
         </div>
       </section>
-      
+
       {/* Línea EKG */}
       <div className="w-full max-w-3xl px-0 mt-2">
         <EKGLine />
