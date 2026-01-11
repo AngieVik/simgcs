@@ -73,43 +73,42 @@ Escribe **2 o 3 párrafos intensos**.
 // }
 
 const RESPONSE_SCHEMA = {
-  type: Type.OBJECT,
   properties: {
     id: {
-      type: Type.STRING,
+      type: "string",
       description:
         "Identificador único del caso. Formato: 'global-X' donde X es un número incremental.",
     },
     title: {
-      type: Type.STRING,
+      type: "string",
       description: "Un título breve, intrigante y estilo 'Noir' sanitario.",
     },
     category: {
-      type: Type.STRING,
+      type: "string",
       description:
         "Categoría principal (ej: Tóxico, Neurológico, Trauma, Metabólico).",
     },
     narrative: {
-      type: Type.STRING,
+      type: "string",
       description:
         "La historia del caso en 2-3 párrafos intensos, segunda persona, sin revelar la solución numérica.",
     },
     correctGCS: {
-      type: Type.OBJECT,
+      type: "object",
       description: "Puntuación GCS correcta del paciente.",
       properties: {
         ocular: {
-          type: Type.INTEGER,
+          type: "integer",
           description:
             "Puntuación REAL médica (1-4). IMPORTANTE: Si es 'Ninguna respuesta' pon 1. Solo usa 0 si es físicamente imposible evaluar (NV, Trauma facial/ocular, ceguera, etc...).",
         },
         verbal: {
-          type: Type.INTEGER,
+          type: "integer",
           description:
             "Puntuación REAL médica (1-5). IMPORTANTE: Si es 'Ninguna respuesta' pon 1. Solo usa 0 si es físicamente imposible evaluar (NV, tubo, afasia, paralisis, etc...).",
         },
         motor: {
-          type: Type.INTEGER,
+          type: "integer",
           description:
             "Puntuación REAL médica (1-6). IMPORTANTE: Si es 'Ninguna respuesta' pon 1. Solo usa 0 si es físicamente imposible evaluar (NV, paralisis, bloqueo, etc...).",
         },
@@ -117,12 +116,12 @@ const RESPONSE_SCHEMA = {
       required: ["ocular", "verbal", "motor"],
     },
     conclusion: {
-      type: Type.STRING,
+      type: "string",
       description:
         "La resolución clínica del misterio: qué tenía el paciente, qué hiciste (XABC) y el desenlace inmediato.",
     },
     gcsJustification: {
-      type: Type.STRING,
+      type: "string",
       description:
         "Explicación técnica. Formato estricto con saltos de línea: 'Ocular(X): Razón.\\nVerbal(Y): Razón.\\nMotora(Z): Razón.'. Si la puntuación es 0, escribe 'NV' en el texto.",
     },
