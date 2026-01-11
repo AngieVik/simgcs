@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "global-1",
+    "title": "El Síndrome de la Clase Turista",
+    "category": "Casos Globales",
+    "narrative": "Un pasajero de un vuelo transoceánico de 12 horas se desploma en la pasarela nada más desembarcar. Es un hombre de 50 años, obeso. Está cianótico y boquea buscando aire (gasping). No responde a vuestra voz. Al aplicar presión en el ángulo mandibular, sus ojos permanecen cerrados y no emite ningún sonido, pero sus brazos se extienden rígidamente a los lados del cuerpo, rotando las muñecas hacia fuera.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 2 },
+    "conclusion": "El paciente ha sufrido un Tromboembolismo Pulmonar (TEP) masivo al movilizarse tras una inmovilidad prolongada. La hipoxia cerebral es crítica, provocando una postura de descerebración. Es una parada cardiorrespiratoria inminente o en curso.",
+    "gcsJustification": "Ocular(1): No hay apertura ocular a ningún estímulo.\nVerbal(1): No hay respuesta verbal, ni siquiera quejidos.\nMotora(2): Responde al dolor con una postura de extensión anormal (descerebración), indicando sufrimiento severo del tronco encefálico por hipoxia."
+  }
+]

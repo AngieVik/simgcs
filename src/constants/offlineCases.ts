@@ -9,7 +9,9 @@ import { laboralCases } from "./cases/laboral";
 import { urbanoCases } from "./cases/urbano";
 import { conciertosCases } from "./cases/conciertos";
 import { incendiosCases } from "./cases/incendios";
-import { casosGlobalesCases } from "./cases/casosglobales";
+
+// Importar casos desde JSON (nuevo formato)
+import casosGCSData from "../data/casosGCS.json";
 
 // Casos offline para estadísticas (StatsScreen)
 export const allOfflineCases: Case[] = [
@@ -25,5 +27,5 @@ export const allOfflineCases: Case[] = [
   ...incendiosCases,
 ];
 
-// Casos para modo "Activarnos"
-export { casosGlobalesCases };
+// Casos para modo "Activarnos" (desde JSON)
+export const casosGlobalesCases: Case[] = casosGCSData as Case[];
