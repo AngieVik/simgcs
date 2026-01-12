@@ -1,19 +1,13 @@
 import React from "react";
 import EKGLine from "../components/EKGLine";
-import {
-  AmbulanceIcon,
-  ChartBarSquareIcon,
-  GamepadIcon,
-  EnvelopeIcon,
-} from "../components/Icons";
+import { AmbulanceIcon, ChartBarSquareIcon } from "../components/Icons";
 import { infoSections, referencesSection } from "../constants/infoContent";
 import ApuntesCarousel from "../components/ApuntesCarousel";
+import { indexButton } from "../styles/buttonStyles";
 
 interface HomeScreenProps {
   onActivarnos: () => void;
-  onStartGame: () => void;
   onShowStats: () => void;
-  onShowLetter: () => void;
   onShowInfo: (info: {
     title: string;
     content: React.ReactNode;
@@ -22,34 +16,10 @@ interface HomeScreenProps {
   isMuted: boolean;
 }
 
-const indexButton = `
-flex flex-row items-center justify-start gap-3 w-full aspect-[3/1] max-w-[220px] rounded-2xl px-2 select-none
-text-[clamp(22px,5vw,28px)] font-league-gothic tracking-wide
-bg-gradient-to-b from-[#f4f1ec] to-[#e0ded9] 
-from-stone-200 to-stone-400 text-stone-800
-dark:from-stone-800 dark:to-stone-900 dark:text-stone-200
-hover:border-b-4 hover:border-r-4
-border-stone-600/40 dark:border-black/50
-shadow-[0_1px_3px_rgba(0,0,0,0.08)]
-hover:shadow-[inset_0_4px_20px_rgba(0,0,0,0.22),inset_0_-2px_10px_rgba(0,0,0,0.16),0_8px_32px_rgba(0,0,0,0.19)]
-dark:shadow-[0_4px_18px_rgba(0,0,0,0.36)]
-dark:hover:shadow-[inset_0_1.5px_10px_rgba(255,255,255,0.10),0_16px_40px_rgba(0,0,0,0.54),0_2px_8px_rgba(0,0,0,0.30)]
-hover:from-[#f8f7f2] hover:to-[#eae8e3] hover:text-amber-600/90
-dark:hover:from-stone-700 dark:hover:to-stone-900 dark:hover:text-amber-600/90
-hover:border-black-400/70 dark:hover:border-stone-700/70
-hover:scale-[0.98]
-active:scale-[0.95] active:shadow-inner
-focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 dark:focus-visible:ring-amber-400/70
-disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale disabled:shadow-none disabled:hover:scale-100 disabled:active:scale-100
-transition-all duration-150
-`;
-
 const HomeScreen: React.FC<HomeScreenProps> = ({
   onActivarnos,
   onShowInfo,
-  onStartGame,
   onShowStats,
-  onShowLetter,
   isMuted,
 }) => {
   return (
@@ -64,24 +34,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
         </p>
       </header>
 
-      {/* Acciones principales - Grid 2x2 */}
+      {/* Acciones principales - 2 botones */}
       <section className="w-[90%] max-w-xl py-2 px-2">
-        <div className="grid grid-cols-2 gap-2 justify-items-center mx-auto">
+        <div className="flex flex-wrap justify-center gap-2 mx-auto">
           <button onClick={onActivarnos} className={indexButton}>
             <AmbulanceIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Activarnos</span>
           </button>
-          <button onClick={onStartGame} className={indexButton}>
-            <GamepadIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>Alfa-Mike</span>
-          </button>
           <button onClick={onShowStats} className={indexButton}>
             <ChartBarSquareIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
             <span>Expediente</span>
-          </button>
-          <button onClick={onShowLetter} className={indexButton}>
-            <EnvelopeIcon className="w-[clamp(20px,10vw,50px)] h-[clamp(20px,10vw,50px)] pointer-events-none" />
-            <span>La Carta</span>
           </button>
         </div>
       </section>

@@ -1,11 +1,281 @@
 [
   {
-    "id": "global-1",
+    "id": "case-1",
     "title": "El Síndrome de la Clase Turista",
     "category": "Casos Globales",
     "narrative": "Un pasajero de un vuelo transoceánico de 12 horas se desploma en la pasarela nada más desembarcar. Es un hombre de 50 años, obeso. Está cianótico y boquea buscando aire (gasping). No responde a vuestra voz. Al aplicar presión en el ángulo mandibular, sus ojos permanecen cerrados y no emite ningún sonido, pero sus brazos se extienden rígidamente a los lados del cuerpo, rotando las muñecas hacia fuera.",
     "correctGCS": { "ocular": 1, "verbal": 1, "motor": 2 },
     "conclusion": "El paciente ha sufrido un Tromboembolismo Pulmonar (TEP) masivo al movilizarse tras una inmovilidad prolongada. La hipoxia cerebral es crítica, provocando una postura de descerebración. Es una parada cardiorrespiratoria inminente o en curso.",
     "gcsJustification": "Ocular(1): No hay apertura ocular a ningún estímulo.\nVerbal(1): No hay respuesta verbal, ni siquiera quejidos.\nMotora(2): Responde al dolor con una postura de extensión anormal (descerebración), indicando sufrimiento severo del tronco encefálico por hipoxia."
+  },
+  {
+    "id": "case-2",
+    "title": "Silencio de Radio",
+    "category": "Neurológico",
+    "narrative": "La cabina de radioaficionado huele a café rancio y ozono. Rodeado de equipos que zumban en la penumbra, un hombre de unos 60 años te mira fijamente desde su silla. Sus ojos te siguen por la habitación, alerta, con una angustia palpable. Notas temblores en su mano derecha que han tirado una pila de tarjetas QSL al suelo.\n\nAl preguntarle su nombre, abre la boca y gesticula con desesperación. Sus cuerdas vocales se tensan, pero solo sale un torrente de sonidos guturales y sílabas rotas: 'Ma... me... ro...'. No articula ninguna palabra real. Le pides que levante la mano izquierda y lo hace al instante, pero cuando le pides que mueva la derecha, se frustra y señala su brazo inmóvil con lágrimas en los ojos.",
+    "correctGCS": { "ocular": 4, "verbal": 1, "motor": 6 },
+    "conclusion": "Ictus Isquémico (Probable ACM izquierda). El paciente presenta una Afasia de Broca o Global severa: comprende órdenes (M6) y está alerta (O4), pero es incapaz de articular lenguaje (V1). La hemiplejia derecha confirma la sospecha. Activación inmediata de Código Ictus.",
+    "gcsJustification": "Ocular(4): Espontánea. Te sigue con la mirada y mantiene contacto visual.\nVerbal(1): Emite sonidos pero no palabras inteligibles ni frases. Aunque intente hablar, funcionalmente es una respuesta nula/incomprensible.\nMotora(6): Obedece órdenes sencillas con el hemicuerpo sano."
+  },
+  {
+    "id": "case-3",
+    "title": "Dulces Sueños",
+    "category": "Tóxicos",
+    "narrative": "La suite presidencial del hotel está en penumbra. El aire es pesado, una mezcla de perfume caro, lavanda y un fondo acre a vómito. Una mujer mayor, vestida de gala, yace sobre la alfombra persa. A su lado, un pastillero volcado de 'Sales de Baño' revela lo que parecen parches de Fentanilo masticados.\n\nEstá pálida, con la piel fría. Notas que su respiración es extremadamente lenta y superficial (6 rpm). No reacciona cuando entras ni cuando la llamas a gritos cerca del oído. Al aplicar presión firme en su lecho ungueal, no abre los ojos ni emite ningún gemido, pero recoge el brazo rápidamente, flexionándolo para intentar apartar tu mano del estímulo.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 4 },
+    "conclusion": "Sobredosis de Opiáceos. La triada de miosis (pupilas puntiformes), depresión respiratoria severa y coma es indicativa. La paciente conserva respuesta motora defensiva (retirada), lo que sugiere que el tronco no está dañado irreversiblemente, pero la hipoventilación es una amenaza vital inmediata. Requiere Naloxona y soporte ventilatorio.",
+    "gcsJustification": "Ocular(1): No abre los ojos ni siquiera ante el estímulo doloroso.\nVerbal(1): Silencio absoluto, sin quejidos ni palabras.\nMotora(4): Retirada. No localiza con precisión (no lleva la mano al punto de dolor para quitarlo), pero flexiona el brazo alejándolo del estímulo."
+  },
+  {
+    "id": "case-4",
+    "title": "La Última Serie",
+    "category": "Metabólico",
+    "narrative": "Zona de pesas libres del gimnasio de barrio. Huele a sudor rancio y linimento. Un culturista de 120kg está sentado en el suelo, rodeado de mancuernas. Está empapado en un sudor frío y pegajoso, pálido como el papel. Tiembla de forma visible.\n\nCuando te acercas, te mira con ojos desorbitados y pupilas dilatadas. Le preguntas qué le ocurre y te grita: '¡Quítame las arañas! ¡Están saliendo de los discos!'. Intenta empujarte agresivamente cuando le vas a tomar el pulso. Sin embargo, cuando su entrenador, que está detrás de ti, le ordena con voz autoritaria: '¡Mike, túmbate ahora mismo!', el paciente deja de forcejear contigo y se tumba en el suelo dócilmente.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 6 },
+    "conclusion": "Hipoglucemia Severa. El cerebro hambriento de glucosa (neuroglucopenia) está provocando un estado de confusión aguda y agresividad que simula un brote psicótico o intoxicación por estimulantes. El sudor frío profuso (descarga adrenérgica) es el signo diferencial clave frente a un golpe de calor o tóxicos simpaticomiméticos.",
+    "gcsJustification": "Ocular(4): Espontánea. Tiene los ojos abiertos y mira al entorno (aunque alucine).\nVerbal(4): Confusa. Habla frases completas y gramaticalmente correctas, pero el contenido es desorientado y alucinatorio ('arañas').\nMotora(6): Obedece órdenes. Aunque esté agitado, es capaz de procesar y ejecutar la orden verbal del entrenador de tumbarse."
+  },
+  {
+    "id": "case-5",
+    "title": "Luces de Neón",
+    "category": "Trauma",
+    "narrative": "Callejón trasero de una sala de juegos recreativos. Llueve. Un chico de 16 años, vestido de skater, yace sobre un charco aceitoso. Hay un casco roto a unos metros. Tiene un hematoma gigante creciendo en la sien derecha (Signo de Battle prematuro) y sangre saliendo por el oído (otorragia).\n\nHace un momento gritaba, pero ahora está en silencio absoluto. Al aplicar presión en el trapecio, sus ojos no se abren. No emite sonidos. Su brazo izquierdo está flácido, pero el derecho se extiende rígidamente, rotando la muñeca hacia fuera de forma antinatural.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 2 },
+    "conclusion": "Traumatismo Craneoencefálico (TCE) Severo con Hematoma Epidural. El paciente ha pasado por un 'intervalo lúcido' clásico antes de herniarse. La midriasis (probablemente visible si mirases) y la postura de descerebración (extensión) indican compresión troncoencefálica inminente. Código Trauma inmediato.",
+    "gcsJustification": "Ocular(1): Ninguna respuesta al dolor.\nVerbal(1): Ninguna respuesta.\nMotora(2): Extensión anormal (Descerebración). La asimetría es común, pero la puntuación se define por la mejor respuesta si es global, o la patológica si define el cuadro grave. En este contexto de herniación, la rigidez extensora define la gravedad."
+  },
+  {
+    "id": "case-6",
+    "title": "El Peso del Mundo",
+    "category": "Funcional",
+    "narrative": "Bufete de abogados, planta 42. Silencio de moqueta cara. Una abogada junior está desplomada sobre su escritorio, con un informe a medio redactar bajo la mejilla. Los compañeros dicen que 'simplemente se apagó' tras una llamada a gritos.\n\nNo responde a tu voz. Cuando intentas abrirle los ojos manualmente, notas una fuerte resistencia activa de los párpados; los aprieta para mantenerlos cerrados. Al levantar su brazo y soltarlo sobre su cara, la mano no golpea su nariz, sino que se desvía suavemente hacia un lado en el último segundo. Respira normal y tiene buen color.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Crisis Psicógena (Trastorno Conversivo/Disociativo). El paciente parece estar en coma, pero los signos de 'resistencia palpebral' y el 'signo de la mano' (evita golpearse la cara) demuestran que la consciencia y la propiocepción están intactas. No es simulación voluntaria necesariamente, pero no es coma orgánico.",
+    "gcsJustification": "Ocular(4): Aunque los tiene cerrados, la resistencia activa (apretar) requiere consciencia. Se puntúa como O4 (Espontánea/Intacta) en el contexto de descartar coma, o técnicamente no valorable, pero el GCS funcional es 15.\nVerbal(5): Se asume intacta aunque no hable por bloqueo.\nMotora(6): Control voluntario (evitación de golpe) conservado."
+  },
+  {
+    "id": "case-7",
+    "title": "Invierno Nuclear",
+    "category": "Ambiental",
+    "narrative": "Sótano okupado sin ventilación. El aire es denso y caliente, con un olor dulce y mareante a gas butano mal quemado. Una estufa vieja sisea en la esquina. Encuentras a una chica joven sentada en el suelo, apoyada contra la pared, con la piel de un color rosado intenso antinatural.\n\nAl sacudirla por los hombros y llamarla, abre los ojos lentamente y te mira, pero parece atravesarte. Murmura: 'Los pájaros... tengo que abrir la jaula de los pájaros...' (no hay pájaros). Cuando le intentas poner la mascarilla de oxígeno, lleva su mano a la cara e intenta apartar la tuya con fuerza.",
+    "correctGCS": { "ocular": 3, "verbal": 3, "motor": 5 },
+    "conclusion": "Intoxicación por Monóxido de Carbono (CO). El 'asesino silencioso' de las estufas en invierno. La coloración cereza de la piel es un signo tardío y grave. La confusión y las alucinaciones indican hipoxia tisular cerebral. Requiere evacuación inmediata y O2 al 100% (o hiperbárica).",
+    "gcsJustification": "Ocular(3): Abre los ojos a la orden verbal/estímulo físico suave (sacudida).\nVerbal(3): Palabras inapropiadas. Habla de cosas que no existen (pájaros), discurso incoherente.\nMotora(5): Localiza el estímulo. Lleva la mano a la mascarilla (el estímulo molesto) para quitársela."
+  },
+  {
+    "id": "case-8",
+    "title": "Domingo de Ramos",
+    "category": "Trauma",
+    "narrative": "Carretera secundaria, curva cerrada. Una moto de gran cilindrada humea en la cuneta. El motorista ha salido despedido 20 metros y yace sobre un campo de trigo. El casco integral está partido. Su pierna derecha está en una posición anatómicamente imposible (fractura de fémur abierta).\n\nAl acercarte, gime de dolor. Cuando le preguntas qué ha pasado, grita: '¡Mi pierna, mi pierna, ayúdame joder!' con claridad. Tiene los ojos cerrados por la mueca de dolor, pero los abre en cuanto le hablas. Le pides que te apriete la mano y lo hace con fuerza, aunque sigue gritando por el dolor de la pierna.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Politraumatismo grave pero con GCS 15. A pesar de lo aparatoso de la escena y las lesiones periféricas graves (fémur), el nivel de consciencia está preservado. El paciente está orientado, obedece órdenes y mantiene la vía aérea permeable. La prioridad es el control de hemorragias (C) y la inmovilización, pero neurológicamente está intacto por ahora.",
+    "gcsJustification": "Ocular(4): Apertura espontánea (o a la orden verbal inmediata). Los cierra por dolor, no por coma.\nVerbal(5): Orientado y conversa (aunque sea a gritos/tacos). Sabe lo que le pasa.\nMotora(6): Obedece órdenes perfectamente con las extremidades sanas."
+  },
+  {
+    "id": "case-9",
+    "title": "Tormenta Eléctrica",
+    "category": "Neurológico",
+    "narrative": "Andén del metro, hora punta. Un corro de gente rodea a un hombre de 30 años en el suelo. Cuentan que 'ha empezado a bailar raro y ha caído a plomo', convulsionando durante 2 minutos. Ahora ha dejado de temblar, pero yace inmóvil en decúbito supino, con espuma manchada de sangre en la boca (mordedura de lengua).\n\nEstá profundamente dormido, ronca (eupneico) y está hipotónico (flácido). No responde a tu voz. Al pellizcarle el trapecio con fuerza, emite un gemido inarticulado ('Ughhh...') y flexiona débilmente ambos brazos acercándolos al cuerpo de forma lenta, pero no dirige la mano al sitio del dolor. Sus ojos permanecen cerrados.",
+    "correctGCS": { "ocular": 1, "verbal": 2, "motor": 3 },
+    "conclusion": "Estado Post-crítico (Post-ictal). Tras una crisis tónico-clónica generalizada, el cerebro entra en un estado de 'reinicio' (Fase clónica -> Coma post-crítico). Es vital asegurar la vía aérea (cánula de Guedel si tolera) y posición lateral de seguridad. La respuesta de flexión anormal (decorticación leve) o retirada lenta es común en la recuperación progresiva.",
+    "gcsJustification": "Ocular(1): No abre ojos al dolor.\nVerbal(2): Sonidos incomprensibles (gemidos).\nMotora(3): Flexión anormal. No es una retirada clara y rápida (M4), ni localiza (M5). Adopta una postura flexora lenta ante el estímulo."
+  },
+  {
+    "id": "case-10",
+    "title": "Fiebre del Sábado Noche",
+    "category": "Metabólico/Infeccioso",
+    "narrative": "Piso de estudiantes, huele a alcohol rancio y vómito. En una habitación a oscuras, encuentras a una chica de 19 años en la cama. Sus compañeros pensaban que tenía resaca, pero 'arde' al tacto. Tiene manchas rojas (petequias) que no desaparecen a la vitropresión en el tórax y cuello. Rigidez de nuca evidente.\n\nEstá muy agitada, moviéndose sin parar en la cama. Tiene los ojos abiertos y mira con terror a todos lados. No para de decir: 'Mamá, apaga la luz, qué ruido hacen las hormigas, me duele el color azul...'. Cuando intentas explorarla, te aparta las manos con fuerza y precisión, gritando que la dejes en paz.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Sepsis Meningocócica (Sospecha de Meningitis). La fiebre alta, rigidez de nuca y el exantema petequial (púrpura) son signos de alarma vital inmediata. La alteración del estado mental (delirio) es por la infección del SNC. Es una emergencia tiempo-dependiente (antibiótico precoz).",
+    "gcsJustification": "Ocular(4): Espontánea, aunque la mirada sea alucinada. La fotofobia es típica.\nVerbal(4): Confusa. Habla mucho pero el contenido es incoherente y delirante.\nMotora(5): Localiza el dolor/estímulo molesto. Te aparta las manos intencionadamente."
+  },
+  {
+    "id": "case-11",
+    "title": "Niebla de Guerra",
+    "category": "Geriatría/Infeccioso",
+    "narrative": "Residencia de ancianos, pasillo 3. Olor a lejía y sopa tibia. En la cama 4, encuentras a Doña Carmen, de 85 años. Su historial dice que es 'muy charlatana', pero hoy yace encogida, mirando a la nada. La auxiliar dice que 'no es ella hoy'.\n\nAl acercarte, te mira con ojos vidriosos y asustados. Le preguntas su nombre y te susurra: 'Cuidado con las gallinas, están picando el techo...'. No tiene sentido. Al intentar tomarle la tensión, te da un manotazo débil en la mano, apartándote con cara de enfado, como si fueras una molestia.",
+    "correctGCS": { "ocular": 4, "verbal": 3, "motor": 5 },
+    "conclusion": "Delirium (Síndrome Confusional Agudo) hipoactivo. Probablemente secundario a infección (ITU o Respiratoria). La desorientación aguda y el lenguaje incoherente ('gallinas') en un anciano es urgencia médica. No es demencia (que es crónica), es un fallo cerebral agudo por sepsis.",
+    "gcsJustification": "Ocular(4): Espontánea. Mantiene los ojos abiertos y mira (aunque disocie).\nVerbal(3): Palabras inapropiadas. Frases que se entienden pero no tienen sentido en el contexto ('gallinas en el techo').\nMotora(5): Localiza. El manotazo va dirigido a quitar el estímulo (tu mano)."
+  },
+  {
+    "id": "case-12",
+    "title": "Gravedad Cero",
+    "category": "Geriatría/Trauma",
+    "narrative": "Domicilio antiguo. Un señor de 70 años ha resbalado en la bañera. Lo encuentras en el suelo del baño, con un albornoz empapado en sangre por una herida en la cabeza. Está tomando Sintrom (anticoagulante). Hace 15 minutos hablaba con su mujer, pero ahora 'se ha dormido'.\n\nYace con los ojos cerrados. Al llamarle por su nombre, no reacciona. Al aplicar presión en el trapecio, abre los ojos, te mira con confusión y emite quejidos sin formar palabras, para volver a cerrarlos. Su mano derecha sube y agarra tu muñeca intentando frenar el dolor, pero el brazo izquierdo no se mueve.",
+    "correctGCS": { "ocular": 2, "verbal": 2, "motor": 5 },
+    "conclusion": "Hematoma Subdural Agudo. La caída en paciente anticoagulado es una bomba de relojería. El deterioro de consciencia (de hablar a solo quejarse) indica expansión del hematoma. La focalidad motora (plejia izquierda) sugiere compresión del hemisferio derecho.",
+    "gcsJustification": "Ocular(2): Solo abre los ojos ante el estímulo doloroso.\nVerbal(2): Sonidos incomprensibles. Ya no articula palabras, solo quejidos.\nMotora(5): Localiza. Es capaz de identificar dónde le duele y llevar la mano (sana) para intentar quitar la fuente del dolor."
+  },
+  {
+    "id": "case-13",
+    "title": "Cóctel de la Abuela",
+    "category": "Geriatría/Tóxicos",
+    "narrative": "Salón lleno de fotos de familia. Una mujer de 82 años está 'profundamente dormida' en su butaca frente a la tele apagada. Sobre la mesa, un organizador de pastillas semanal volcado y vacío: Digoxina, Benzodiacepinas, Opiáceos... Faltan las dosis de tres días.\n\nSu respiración es superficial y agónica. No responde a gritos. Al aplicar presión mandibular intensa, no abre los ojos ni emite el más mínimo sonido. Sus brazos y piernas están flácidos y no se mueven en absoluto, cayendo a plomo si los levantas.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 1 },
+    "conclusion": "Intoxicación Plurimedicamentosa Grave (Coma Tóxico). La combinación de depresores del SNC ha provocado un coma profundo (GCS 3). La ausencia total de respuesta motora (flacidez) y respiratoria es signo de gravedad extrema. Requiere soporte vital avanzado inmediato (Intubación).",
+    "gcsJustification": "Ocular(1): Nula. Ojos cerrados a pesar del dolor intenso.\nVerbal(1): Nula. Silencio absoluto.\nMotora(1): Nula. Flacidez total, sin respuesta de retirada ni postura anormal."
+  },
+  {
+    "id": "case-14",
+    "title": "Estatua de Sal",
+    "category": "Psiquiátrico",
+    "narrative": "Habitación blanca y austera en un centro de salud mental. Un paciente joven está sentado en el borde de la cama, inmóvil como una estatua, mirando a la pared. Lleva así 6 horas. Tiene los brazos levantados en una postura extraña y antigravitatoria (flexibilidad cérea).\n\nNo parpadea cuando le pasas la mano por delante de la cara. No responde a tu voz ni a los gritos. Al intentar bajarle el brazo, notas una resistencia plástica, como si fuera de cera, pero se queda en la nueva posición donde lo dejes. Al pellizcarle, no hace ninguna mueca ni retira el miembro, permaneciendo imperturbable.",
+    "correctGCS": { "ocular": 4, "verbal": 1, "motor": 6 },
+    "conclusion": "Síndrome Catatónico (Catatonía). Es uno de los desafíos más grandes del GCS. Aunque parece un coma (no habla, no se mueve), el paciente está despierto (O4) y neurológicamente 'conectado', pero atrapado en un bloqueo psicomotor. Puntuación trampa: O4 (ojos abiertos), V1 (mutismo), M6 (cumple órdenes 'pasivas' o mantiene postura, a veces se puntúa M1 si es rígido, pero la flexibilidad cérea implica tono). *Nota: En GCS estricto suele ser 4-1-4 o 4-1-6 según escuela, aquí valoramos 'Estar despierto' como O4.*",
+    "gcsJustification": "Ocular(4): Espontánea. Tiene los ojos abiertos fijamente.\nVerbal(1): Ninguna. Mutismo absoluto.\nMotora(6): Obedece/Mantiene. La flexibilidad cérea (catalepsia) se considera a menudo una forma de 'obediencia automática' o preservación de postura, distinta a la falta de respuesta del coma. No es M1 (flácido) ni M2 (descerebración)."
+  },
+  {
+    "id": "case-15",
+    "title": "El Rey del Mundo",
+    "category": "Psiquiátrico",
+    "narrative": "Comisaría de policía. Tienen retenido a un hombre de 40 años que intentaba dirigir el tráfico desnudo 'porque es el Mesías'. Grita a una velocidad vertiginosa, saltando de una idea a otra sin pausa. Está sudoroso y eufórico.\n\nNo para quieto. Te saluda efusivamente: '¡Doctor, doctor, mire mis alas, vamos a volar, el bitcoin va a subir, tengo que llamar al Papa!'. Obedece cuando le pides que se siente, pero se levanta al segundo. Sus ojos brillan y escanean la habitación buscando estímulos constantemente.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Episodio Maníaco Agudo (Trastorno Bipolar). El GCS es 15, pero el paciente es inmanejable. La taquipsiquia (pensamiento acelerado) y la logorrea (habla imparable) no deben confundirse con desorientación; sabe quién es y dónde está, pero su interpretación de la realidad es grandilocuente. Riesgo de agotamiento físico.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Sabe que eres médico, sabe que está 'retenido' (o en misión). Su discurso es coherente gramaticalmente aunque el contenido sea delirante.\nMotora(6): Obedece órdenes (aunque sea por poco tiempo)."
+  },
+  {
+    "id": "case-16",
+    "title": "Voces en la Oscuridad",
+    "category": "Psiquiátrico",
+    "narrative": "Bajo un puente. Un hombre sin hogar está acurrucado contra una columna. Está hablando animadamente con una pared vacía, gesticulando y riéndose, para luego enfadarse y gritarle al aire. Parece aterrorizado por momentos.\n\nCuando te acercas, te mira y te dice: 'Diles que se callen, están transmitiendo mis pensamientos por la 5G'. Le preguntas si sabe dónde está y te dice 'En la base secreta'. Cuando le pides que te enseñe las manos, te las muestra, pero te dice 'Cuidado, son de cristal'.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 6 },
+    "conclusion": "Brote Psicótico (Esquizofrenia Paranoide). Las alucinaciones auditivas (voces) y el delirio de perjuicio/control son de libro. Aunque está 'desorientado' en tiempo/espacio (cree estar en una base), su GCS es alto. El fallo es de contenido (psicosis), no de nivel de consciencia (coma).",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(4): Confusa. El discurso es fluido pero el contenido es delirante y está desorientado en lugar/situación real.\nMotora(6): Obedece órdenes."
+  },
+  {
+    "id": "case-17",
+    "title": "El Escondite",
+    "category": "Pediátrico/Trauma",
+    "narrative": "Parque infantil, atardecer. Una madre grita histérica junto a un tobogán alto. En el suelo de caucho yace un niño de 4 años, inmóvil. '¡Se ha caído de cabeza, no se mueve!', chilla ella.\n\nEl niño está pálido, con una respiración irregular. Tiene los ojos cerrados. Cuando le llamas por su nombre ('¡Hugo!'), abre los ojos un instante, mira hacia tu voz y empieza a llorar desconsoladamente, gritando '¡Mamá, pupa, pupa!'. Le pides que levante los brazos 'como un superhéroe', y lo hace llorando, buscando el abrazo de su madre.",
+    "correctGCS": { "ocular": 3, "verbal": 5, "motor": 6 },
+    "conclusion": "TCE Moderado Pediátrico. Aunque el niño llora, la interacción es adecuada para su edad. Abre ojos a la voz (O3), su verbalización es coherente (llama a mamá y dice dónde le duele = V5 Pediátrico) y obedece órdenes sencillas (M6). La palidez y la respiración irregular son signos de alarma que requieren observación, pero el GCS inicial es bueno (14).",
+    "gcsJustification": "Ocular(3): A la orden verbal. Abre los ojos al llamarle.\nVerbal(5): Orientado/Conversa (Pediátrico). Palabras adecuadas, reconoce a los padres, expresa dolor. El llanto es consolable.\nMotora(6): Obedece órdenes. Levanta los brazos a la orden."
+  },
+  {
+    "id": "case-18",
+    "title": "Fiebre de Sábado Tarde",
+    "category": "Pediátrico/Neurológico",
+    "narrative": "Domicilio. Un bebé de 10 meses está en brazos de su padre, que está empapado en sudor y tiembla. '¡Ha tenido un ataque, se ha puesto morado y rígido!', te dice. El bebé ahora está flácido y caliente (39.5ºC).\n\nTiene los ojos abiertos, pero la mirada está perdida en el infinito, sin fijar la vista en tu cara ni en la luz. No emite sonidos, solo un babeo constante. Al pellizcarle suavemente la planta del pie, retira la pierna con un movimiento lento y torpe, pero no llora ni hace muecas.",
+    "correctGCS": { "ocular": 4, "verbal": 1, "motor": 4 },
+    "conclusion": "Crisis Febril (Periodo Post-crítico). El estado post-ictal en lactantes se manifiesta con hipotonía y desconexión ambiental. Aunque tiene los ojos abiertos (O4), no hay contacto 'social' (conexión). La ausencia de llanto al dolor (V1) y la retirada débil (M4) indican un GCS bajo (9), típico tras la convulsión. Recuperará gradualmente.",
+    "gcsJustification": "Ocular(4): Espontánea. Ojos abiertos, aunque no conecte.\nVerbal(1): Ninguna. No hay balbuceo, ni llanto, ni quejidos.\nMotora(4): Retirada. Flexiona la pierna ante el estímulo doloroso."
+  },
+  {
+    "id": "case-19",
+    "title": "Silencio en la Guardería",
+    "category": "Pediátrico/Respiratorio",
+    "narrative": "Comedor de una guardería. El ambiente es caótico, pero en una trona reina un silencio aterrador. Una niña de 2 años se lleva las manos al cuello (signo universal de asfixia). Su cara está pasando de rojo intenso a un tono azulado violáceo.\n\nNo puede toser ni llorar. Tiene los ojos muy abiertos, inyectados en sangre, mirándote con pánico puro. Está consciente y patalea con fuerza intentando bajarse de la silla. Su boca está abierta pero no sale ni entra aire. Hay trozos de salchicha en el plato.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Obstrucción Vía Aérea (OVACE) Completa. ¡Cuidado! Es una trampa de GCS 15. La niña está totalmente consciente y alerta. No habla (V1 técnico) porque NO PUEDE físicamente, no por daño cerebral. Su GCS es 15 (O4, V5-intento, M6). La prioridad es la MANIOBRA DE HEIMLICH (o golpes interescapulares), no el GCS. Es una emergencia XABC, la 'A' mata en segundos.",
+    "gcsJustification": "Ocular(4): Espontánea. Alerta y terror.\nVerbal(5): (Técnicamente 1 por bloqueo mecánico, pero neurológicamente 5). Intenta comunicarse gestualmente. Se asume consciencia plena.\nMotora(6): Obedece/Espontánea intencional. Se lleva las manos al cuello, patalea con propósito."
+  },
+  {
+    "id": "case-20",
+    "title": "Corazón de Hielo",
+    "category": "Ambiental/Térmico",
+    "narrative": "Cámara frigorífica de un matadero. Han encontrado al operario del turno de noche tras 4 horas encerrado a -20ºC. Estaba ovillado en una esquina, pálido como la cera y rígido al tacto como si fuera mármol. No tiritona (agotamiento).\n\nSu respiración es imperceptible (4 rpm). Al moverlo, parece un maniquí. No responde a gritos. Al aplicar presión intensa en el trapecio, no abre los ojos. Emite un gemido muy lento y gutural, casi inaudible. Sus brazos se flexionan hacia el pecho con una lentitud desesperante, temblando por la rigidez muscular, pero no tocan el punto de dolor.",
+    "correctGCS": { "ocular": 1, "verbal": 2, "motor": 3 },
+    "conclusion": "Hipotermia Severa (<28ºC). El metabolismo cerebral se ha ralentizado casi hasta la muerte aparente. La rigidez muscular no es rigor mortis (es reversible) y simula descerebración/decorticación, pero el movimiento lento de flexión (M3) indica cierta función de tronco. ¡No está muerto hasta que está caliente y muerto! Resucitación prolongada.",
+    "gcsJustification": "Ocular(1): No abre ojos al dolor.\nVerbal(2): Sonidos incomprensibles. Apenas un gemido agónico.\nMotora(3): Flexión anormal. El frío causa rigidez muscular extrema, haciendo que la respuesta de retirada parezca una flexión patológica lenta."
+  },
+  {
+    "id": "case-21",
+    "title": "Asfalto Ardiente",
+    "category": "Ambiental/Térmico",
+    "narrative": "Maratón popular, mes de agosto, 40ºC a la sombra. Un corredor se ha desplomado en el kilómetro 38. Está en el suelo del asfalto caliente, con la piel roja, seca y ardiendo al tacto (Anhidrosis). Vómito alrededor.\n\nSe retuerce en el suelo violentamente. Tiene los ojos abiertos y la mirada inyectada en sangre, llena de ira. Te grita: '¡Soltadme, las ratas me están comiendo las piernas!'. Cuando intentas ponerle vías frías, te lanza un puñetazo con fuerza y precisión a la cara, gritando que eres el diablo.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Golpe de Calor (Heat Stroke). Emergencia médica real. El cerebro se está 'cocinando' (edema cerebral térmico), provocando delirio agresivo y alucinaciones. La piel seca y caliente es el signo clave (fallo termorregulación). Requiere enfriamiento inmersivo inmediato antes que nada.",
+    "gcsJustification": "Ocular(4): Espontánea. Ojos abiertos con mirada agresiva.\nVerbal(4): Confusa/Delirio. Habla frases completas y grita, pero el contenido es alucinatorio ('ratas', 'diablo').\nMotora(5): Localiza. El puñetazo es una respuesta dirigida y precisa ante tu intento de tocarle (estímulo molesto/doloroso)."
+  },
+  {
+    "id": "case-22",
+    "title": "Alto Voltaje",
+    "category": "Ambiental/Eléctrico",
+    "narrative": "Subestación eléctrica abandonada. Un 'ladrón de cobre' ha tocado una línea de media tensión. Ha salido despedido 3 metros. Huele a ozono y carne quemada. Tiene quemaduras de entrada en las manos y de salida en los pies.\n\nEstá sentado, mirando sus manos quemadas con perplejidad. Te acercas y le preguntas qué pasó. Te mira y dice: '¿Qué hora es?'. Le respondes. Diez segundos después, te mira y dice: '¿Qué hora es?'. Le vuelves a responder. Te agarra el brazo con fuerza y te pregunta: '¿Pero qué hora es?'. Obedece cuando le pides que se tumbe, pero se olvida al instante y se vuelve a sentar.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 6 },
+    "conclusion": "Electrocución con Amnesia Global Transitoria (Looping). El paso de corriente por el cerebro ha provocado un 'reset' de la memoria a corto plazo. El paciente está despierto (O4) y obedece (M6), pero su discurso es repetitivo (V4 Confuso) porque no puede fijar nueva información. Es un signo de lesión difusa eléctrica.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(4): Confusa. Aunque la frase es gramaticalmente perfecta ('¿Qué hora es?'), la repetición en bucle (looping) demuestra desorientación temporal y fallo de memoria de trabajo.\nMotora(6): Obedece órdenes (aunque la ejecución sea breve por el olvido)."
+  },
+  {
+    "id": "case-23",
+    "title": "Punto de Quiebre",
+    "category": "Trauma/Raquimedular",
+    "narrative": "Parque acuático abandonado. Un chico de 20 años ha saltado a una piscina vacía, cayendo de pie pero colapsando después. Yace en el fondo. Está despierto y te mira con pánico absoluto. Llora y grita: '¡No siento las piernas! ¡No siento nada!'.\n\nSus ojos te siguen. Al pedirle que te apriete las manos, te mira desesperado y dice '¡Lo estoy intentando!', pero sus manos no se mueven ni un milímetro. Al pellizcarle el tórax y las piernas con fuerza, no hace ninguna mueca de dolor ni retira las extremidades. Solo mueve la cabeza y habla.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Lesión Medular Completa (Shock Medular). Es el gran falso negativo del GCS. El paciente tiene un GCS de 15 (Consciencia intacta) pero una puntuación motora periférica de 0 (Tetraplejia). Sin embargo, como obedece órdenes con los músculos craneales preservados (abrir boca, sacar lengua, cerrar ojos) o la orden se puntúa como 'Obedece' si se entiende que la falta de movimiento es periférica. *Nota: En la práctica se suele anotar GCS 15 (M0-Tetraplejia) para evitar confusión.*",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Sabe perfectamente lo que le pasa.\nMotora(6): Obedece órdenes (Conceptualmente). Aunque no pueda mover extremidades por lesión espinal, el cerebro procesa y envía la orden. Se verifica pidiendo movimientos faciales (sacar lengua)."
+  },
+  {
+    "id": "case-24",
+    "title": "Aliento de Manzana",
+    "category": "Metabólico",
+    "narrative": "Baño de una discoteca. Encuentras a una chica de 16 años sentada contra los azulejos. Un amigo dice que 'solo ha tomado Coca-Cola'. Huele intensamente a fruta podrida o acetona. Respira muy rápido y profundo, como si acabara de correr una carrera (Respiración de Kussmaul).\n\nTiene los ojos cerrados. Al sacudirla, los abre y te mira borrosa. Le preguntas qué ha tomado y murmura lentamente: 'Tengo mucha sed... quiero agua...'. Al decirle que levante los brazos, te ignora y sigue pidiendo agua, pero cuando le pinchas el dedo para una glucemia, retira la mano con fuerza y te dice '¡Au!'.",
+    "correctGCS": { "ocular": 3, "verbal": 4, "motor": 5 },
+    "conclusion": "Cetoacidosis Diabética (CAD). El olor a acetona y la polidipsia (sed) son clásicos. La hiperpnea (Kussmaul) intenta compensar la acidosis metabólica. La somnolencia (O3) y confusión (V4) son por el edema cerebral incipiente o la acidosis severa. No es alcohol, es coma diabético inminente.",
+    "gcsJustification": "Ocular(3): A la orden verbal (o estímulo físico suave). Abre los ojos al interactuar.\nVerbal(4): Confusa/Desorientada. Responde, pero su discurso es lento y monotemático (sed), no totalmente conectado con la situación de emergencia.\nMotora(5): Localiza. Retira la mano ante el dolor del pinchazo de forma dirigida."
+  },
+  {
+    "id": "case-25",
+    "title": "La Torre de Babel",
+    "category": "Neurológico",
+    "narrative": "Residencia de tercera edad. Sala de estar. Un señor de 70 años está sentado leyendo el periódico... al revés. Al acercarte, levanta la vista, te sonríe amablemente y empieza a hablarte con una fluidez y entonación perfectas: 'Claro que sí, porque el tranvía de los miércoles siempre cocina nubes azules en el zapato, ¿verdad?'.\n\nTe habla con total naturalidad, esperando respuesta. Le pides que levante la mano derecha, y te contesta: 'El mercado de flores gira muy rápido'. No obedece ninguna orden, no porque no pueda moverse, sino porque no parece entender ni una palabra de lo que dices. Se mueve con normalidad y te imita si le haces gestos.",
+    "correctGCS": { "ocular": 4, "verbal": 3, "motor": 6 },
+    "conclusion": "Afasia de Wernicke (Sensitiva/Fluente). Ictus en lóbulo temporal izquierdo. A diferencia de Broca (que entiende pero no habla), Wernicke habla por los codos (logorrea) pero no tiene sentido (ensalada de palabras) y NO comprende. Es una trampa: parece V5 por la fluidez, pero es V3 (palabras inapropiadas o discurso incomprensible).",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(3): Palabras inapropiadas. Aunque sintácticamente parezcan frases, el contenido carece totalmente de significado lógico (Jergaphasia/Ensalada). *Algunas guías puntúan V4 si hay frases, pero el criterio 'Confuso' implica conversación posible. Aquí no hay conversación real.* \nMotora(6): Obedece órdenes (Por imitación/gestos). Si no entiende el lenguaje, no obedecerá verbalmente (M1 aparente), pero si le haces el gesto (mímica) lo hará (M6). Se valora la capacidad motora, salvando la barrera idiomática/afásica."
+  },
+  {
+    "id": "case-26",
+    "title": "Golpe Bajo",
+    "category": "Trauma/Facial",
+    "narrative": "Pelea de bar. Un hombre ha recibido un golpe directo en la cara con un bate de béisbol. Su cara es una masa irreconocible de sangre y edema. Ambos ojos están tan hinchados que es anatómicamente imposible abrirlos ('Ojos de Mapache').\n\nEstá sentado, escupiendo sangre (consciente). Grita '¡No veo nada, cabrones!'. Cuando le pides que levante el brazo, lo hace inmediatamente. Cuando te acercas y le tocas el hombro, te aparta la mano de un manotazo defensivo.",
+    "correctGCS": { "ocular": 0, "verbal": 5, "motor": 6 },
+    "conclusion": "Trauma Facial Severo (Edema Palpebral Masivo). El paciente está alerta y orientado, pero el componente ocular es NO VALORABLE (NV) por causa física. No es que no abra los ojos (O1 coma), es que no puede. Se puntúa como NV (o 0 en esta app) para no falsear la suma.",
+    "gcsJustification": "Ocular(0): No Valorable (NV). El edema impide la apertura física. Puntuar 1 sería incorrecto (sugeriría coma).\nVerbal(5): Orientado. Grita con coherencia sobre su ceguera traumática.\nMotora(6): Obedece órdenes."
+  },
+  {
+    "id": "case-27",
+    "title": "La Jaula",
+    "category": "Neurológico/Vascular",
+    "narrative": "UCI de traslado. Paciente de 45 años con antecedentes de infarto troncoencefálico (basilar). Yace inmóvil en la camilla, conectado al ventilador (traqueostomía). Parece en coma profundo.\n\nSin embargo, notas que sus ojos están abiertos y te siguen constantemente. Le dices: 'Si me oyes, mira hacia arriba'. Al instante, sus ojos suben. 'Mira hacia abajo'. Bajan. Le pides que mueva un dedo, y nada ocurre. Le pellizcas con fuerza y no hay ninguna retirada motora, solo una lágrima cae por su mejilla.",
+    "correctGCS": { "ocular": 4, "verbal": 0, "motor": 1 },
+    "conclusion": "Síndrome de Cautiverio (Locked-in Syndrome). Infarto protuberancial ventral. El paciente está plenamente consciente (cuatruplejia y anartria), pero solo conserva los movimientos oculares verticales. Es la pesadilla definitiva. GCS técnico bajo (falsamente coma), pero O4 + movimiento ocular a la orden confirma consciencia.",
+    "gcsJustification": "Ocular(4): Espontánea y con seguimiento (Rastreo).\nVerbal(0): No Valorable (NV) por Traqueostomía y parálisis bulbar. (Si no tuviera tubo sería V1, pero aquí el tubo justifica NV).\nMotora(1): Nula. La parálisis es completa (tetraplejia) por daño de vías motoras descendentes, aunque la consciencia y sensibilidad dolorosa se preserven."
+  },
+  {
+    "id": "case-28",
+    "title": "Humo y Espejos",
+    "category": "Respiratorio/Metabólico",
+    "narrative": "Domicilio de paciente EPOC terminal. La habitación está cerrada y huele a tabaco rancio y falta de oxígeno. El paciente, con oxígeno a bajo flujo, está 'muy dormilón' según la familia.\n\nAl llamarlo, abre los ojos y murmura cosas sin sentido sobre 'el humo'. Cuando le pides que levante los brazos, los extiende al frente ('holding a pizza box'), pero las manos le tiemblan haciendo movimientos de aleteo rítmico (flapping/asterixis) y se le caen. Se vuelve a dormir a los 10 segundos.",
+    "correctGCS": { "ocular": 3, "verbal": 4, "motor": 6 },
+    "conclusion": "Encefalopatía Hipercapnica (Narcosis por CO2). La retención de CO2 provoca somnolencia y confusión. El 'Flapping tremor' (Asterixis) es el signo neurológico clave de fallo metabólico (hepático o respiratorio). Requiere ventilación (BIPAP/Intubación) para 'lavar' el CO2 y despertar.",
+    "gcsJustification": "Ocular(3): A la orden. Se duerme si no le estimulas.\nVerbal(4): Confusa. La hipercapnia causa obnubilación y desorientación.\nMotora(6): Obedece órdenes. Aunque tenga temblor (asterixis) y debilidad, comprende y ejecuta la orden de levantar los brazos."
+  },
+  {
+    "id": "case-29",
+    "title": "Furia Ciega",
+    "category": "Tóxico/Psiquiátrico",
+    "narrative": "Parking exterior de un centro comercial. Tres policías intentan reducir a un hombre de 30 años que está desnudo de cintura para arriba, gritando y lanzando golpes. No parece sentir los golpes ni la inmovilización. Ha arrancado el espejo retrovisor de un coche con las manos desnudas.\n\nCuando la policía consigue ponerle las esposas, te acercas. Tiene los ojos abiertos de par en par, inyectados en sangre. Grita amenazas coherentes ('¡Os voy a matar a todos, soy inmortal!'). Al intentar pincharle sedación intramuscular, ni se inmuta (analgesia total), y sigue pateando y obedeciendo a sus alucinaciones de lucha.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Delirio Agitado (Excited Delirium Syndrome). Probable intoxicación por PCP, Metanfetamina o Sales de Baño. La fuerza sobrehumana, la analgesia (falta de respuesta al dolor) y la hipertermia son característicos. Aunque parece 'loco', su GCS es 15 (Alerta, Orientado en su furia, Obedece a su lógica interna/pelea con propósito). Es riesgo de parada cardiaca súbita.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Aunque grite amenazas, el discurso es coherente con su estado de lucha y reconoce a la policía/sanitarios como enemigos.\nMotora(6): Obedece/Espontánea. Lucha activamente, dirige golpes. *Nota: La falta de retirada al dolor (M1 aparente) es por analgesia farmacológica, no por coma. Su motilidad espontánea es M6.*"
+  },
+  {
+    "id": "case-30",
+    "title": "El Lado Oscuro",
+    "category": "Neurológico",
+    "narrative": "Urgencias. Traen a un señor que 'se ha caído de la silla hacia la izquierda'. Está sentado en la camilla, con la cabeza girada hacia la derecha. Cuando te pones a su izquierda y le hablas, no te hace ni caso. Cuando te pones a su derecha, te mira y sonríe.\n\nLe pides que levante el brazo derecho y lo hace perfecto. Le pides que levante el izquierdo, y no hace nada, como si no tuviera brazo izquierdo. Incluso si le coges su brazo izquierdo y se lo enseñas, te dice: 'Ese brazo no es mío, doctor, es del de al lado'. Al pellizcarle el lado izquierdo, no reacciona.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 6 },
+    "conclusion": "Ictus Hemisférico Derecho (Heminegligencia/Angosognosia). El paciente ignora la mitad izquierda del mundo (extinción visual/táctil) y niega su enfermedad (anosognosia). Aunque tiene hemiplejia izquierda (M0), el GCS se puntúa con la MEJOR respuesta (Lado sano = M6).",
+    "gcsJustification": "Ocular(4): Espontánea. (Aunque solo mire a la derecha).\nVerbal(4): Confusa. La negación de su propio cuerpo ('no es mi brazo') es un signo de desorientación sobre su propia persona/estado.\nMotora(6): Obedece órdenes. (Con el lado sano). La regla del GCS es registrar la mejor respuesta motora para predecir el pronóstico vital, aunque la focalidad exista."
+  },
+  {
+    "id": "case-31",
+    "title": "Lágrimas Negras",
+    "category": "Tóxico/Agro",
+    "narrative": "Invernadero. Un agricultor ha sido encontrado tirado entre los fumigadores. Huele fuertemente a ajo o disolvente. El suelo está manchado de vómito y orina involuntaria. El paciente está empapado en sudor, llorando y babeando profusamente (Sialorrea).\n\nEstá somnoliento. Al sacudirlo, abre los ojos y murmura: 'Apaga la bomba... apaga la bomba...'. Notas que los músculos de su cara y brazos tienen espasmos rápidos (fasciculaciones) como gusanos bajo la piel. Sus pupilas son puntiformes (miosis extrema). Al pellizcarle, retira débilmente el brazo, pero sin fuerza.",
+    "correctGCS": { "ocular": 3, "verbal": 4, "motor": 5 },
+    "conclusion": "Intoxicación por Organofosforados (Síndrome Colinérgico). El cuadro SLUDGE (Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis) es de libro. Las fasciculaciones indican toxicidad nicotínica (placa motora). Requiere Atropina a dosis altas + Pralidoxima. Peligro de fallo respiratorio neuromuscular.",
+    "gcsJustification": "Ocular(3): A la orden/estímulo verbal.\nVerbal(4): Confusa. Responde pero está obnubilado y repetitivo.\nMotora(5): Localiza (o Retira M4 débil). La debilidad muscular por bloqueo neuromuscular puede simular una respuesta motora baja, pero suele conservar la localización si no está en parálisis total."
   }
 ]

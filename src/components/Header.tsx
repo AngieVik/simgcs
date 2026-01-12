@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   FolderIcon,
   OpenFolderIcon,
@@ -7,6 +7,7 @@ import {
   StopCircleIcon,
 } from "./Icons";
 import { useAppState, useAppDispatch } from "../context/AppContext";
+import { iconButton } from "../styles/buttonStyles";
 
 interface HeaderProps {
   onShowArchive: () => void;
@@ -16,21 +17,7 @@ interface HeaderProps {
 }
 
 const Ticker = () => {
-  const { casesPlayed, unlockedRewards, archive } = useAppState();
-
-  const totalCorrectCases = useMemo(() => {
-    return archive.filter((c) => c.isCorrect).length;
-  }, [archive]);
-
-  let text = "";
-
-  if (!unlockedRewards.includes("bg_ems")) {
-    text = `OBJETIVO: JUGAR 3 CASOS (${casesPlayed}/3) • RECOMPENSA: FONDO OPERATIVO EMS`;
-  } else if (!unlockedRewards.includes("music_pack_1")) {
-    text = `OBJETIVO: 5 CASOS ACERTADOS (${totalCorrectCases}/5) • RECOMPENSA: BSO ORIGINAL`;
-  } else {
-    text = `SERVICIO OPERATIVO • TODAS LAS RECOMPENSAS DESBLOQUEADAS`;
-  }
+  const text = "SIMULADOR DE CASOS GCS • SERVICIO OPERATIVO";
 
   return (
     <div className="flex-1 mx-3 overflow-hidden relative h-7 bg-black/10 dark:bg-black/30 rounded flex items-center border border-stone-300/30 dark:border-stone-600/30 shadow-inner">
@@ -64,9 +51,6 @@ const FolderButton =
   "transition-all duration-150 touch-manipulation fancy-hover-effect";
 
 const Header: React.FC<HeaderProps> = ({ onShowArchive, onShowSettings }) => {
-  const iconButton =
-    "p-1.5 rounded-full bg-gradient-to-b from-stone-200 to-stone-100 text-stone-500 border border-stone-300/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_6px_rgba(0,0,0,0.1)] hover:from-stone-100 hover:to-stone-50 hover:text-amber-500 dark:from-stone-800 dark:to-stone-900 dark:text-stone-400 dark:border-black/50 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] dark:hover:from-stone-700 dark:hover:to-stone-800 dark:hover:text-amber-300 transition-all duration-150 active:scale-95 fancy-hover-effect z-100 shrink-0";
-
   // Hook para controlar la música
   const { isMuted } = useAppState();
   const dispatch = useAppDispatch();

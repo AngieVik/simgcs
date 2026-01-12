@@ -1,43 +1,30 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-} from "react";
+import React, { useCallback, useEffect, useState, Suspense, lazy } from "react";
 
 // Types
-import { Screen, Case, GCSScore, AppMusic } from "./types";
+import { Screen, Case, GCSScore } from "./types";
 
 // Context
 import { useAppState, useAppDispatch } from "./context/AppContext";
 
+// Hooks
+import { useBackgroundClass } from "./hooks/useBackgroundClass";
+
 // Utils & Constants
-import { gcsScoreToString, calculateTotalGCS } from "./utils/gcs";
 import { playClickSound } from "./utils/soundUtils";
-import { casosGlobalesCases } from "./constants/offlineCases";
+import { getRandomUnplayedCase } from "./services/localCaseService";
 
 // Components
 import Header from "./components/Header";
 import LoadingSpinner from "./components/LoadingSpinner";
 import InfoModal from "./components/InfoModal";
 
-// Screens
-import HomeScreen from "./screens/HomeScreen";
-import CaseScreen from "./screens/CaseScreen";
-import ResultScreen from "./screens/ResultScreen";
-import ArchiveScreen from "./screens/ArchiveScreen";
-import GameScreen from "./screens/GameScreen";
-import StatsScreen from "./screens/StatsScreen";
-import SettingsScreen from "./screens/SettingsScreen";
-import LetterScreen from "./screens/LetterScreen";
-
-// --- Mapeo de pistas de música ---
-const MUSIC_TRACKS: Record<AppMusic, string> = {
-  none: "",
-  track1: "/music/track1.mp3",
-  track2: "/music/track2.mp3",
-};
+// Screens (Lazy-loaded for performance)
+import HomeScreen from "./screens/HomeScreen"; // HomeScreen cargado normalmente (primera pantalla)
+const CaseScreen = lazy(() => import("./screens/CaseScreen"));
+const ResultScreen = lazy(() => import("./screens/ResultScreen"));
+const ArchiveScreen = lazy(() => import("./screens/ArchiveScreen"));
+const StatsScreen = lazy(() => import("./screens/StatsScreen"));
+const SettingsScreen = lazy(() => import("./screens/SettingsScreen"));
 
 // --- Main App Component ---
 const App: React.FC = () => {
@@ -48,17 +35,12 @@ const App: React.FC = () => {
     error,
     archive,
     infoContent,
-    gameHighScore,
     isMuted,
     theme,
     appBackground,
-    appMusic,
   } = useAppState();
   const dispatch = useAppDispatch();
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
-
-  // Referencia para el elemento de audio
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Effect for scrolling to top on certain screen changes
   useEffect(() => {
@@ -67,26 +49,8 @@ const App: React.FC = () => {
     }
   }, [screen]);
 
-  // Effect for applying a background class to the body
-  useEffect(() => {
-    // 1. Limpiar clases anteriores
-    document.body.classList.remove(
-      "home-background",
-      "bg-basic",
-      "bg-background1"
-    );
-
-    if (screen !== Screen.Game) {
-      document.body.classList.add("home-background");
-
-      // 2. Lógica de selección
-      if (appBackground === "background1") {
-        document.body.classList.add("bg-background1"); // Pone la FOTO
-      } else {
-        document.body.classList.add("bg-basic"); // Pone la TEXTURA (Por defecto)
-      }
-    }
-  }, [screen, appBackground]);
+  // Apply background class based on user preference
+  useBackgroundClass(appBackground);
 
   // Effect for UI click sounds
   useEffect(() => {
@@ -103,61 +67,21 @@ const App: React.FC = () => {
     };
   }, [isMuted]);
 
-  // --- Lógica del Reproductor de Música ---
-  useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-      audioRef.current.loop = true;
-      audioRef.current.volume = 0.4;
+  // Handler principal: carga un caso aleatorio usando el servicio local
+  const handleActivarnos = useCallback(async () => {
+    dispatch({ type: "START_NEW_CASE" });
+
+    try {
+      const solvedIds = new Set(
+        archive.filter((c) => c.isCorrect).map((c) => c.id)
+      );
+      const randomCase = await getRandomUnplayedCase(solvedIds);
+      dispatch({ type: "CASE_LOADED", payload: randomCase });
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "Error al cargar el caso.";
+      dispatch({ type: "API_ERROR", payload: message });
     }
-
-    const audio = audioRef.current;
-
-    if (isMuted || appMusic === "none") {
-      audio.pause();
-      return;
-    }
-
-    if (screen === Screen.Game) {
-      audio.pause();
-      return;
-    }
-
-    const trackUrl = MUSIC_TRACKS[appMusic];
-
-    if (trackUrl && !audio.src.endsWith(trackUrl)) {
-      audio.src = trackUrl;
-      audio.play().catch((e) => {
-        console.log("Reproducción automática bloqueada hasta interacción:", e);
-      });
-    } else if (trackUrl && audio.paused) {
-      audio.play().catch(() => {});
-    }
-  }, [appMusic, isMuted, screen]);
-
-  const handleStartGame = useCallback(() => {
-    dispatch({ type: "START_GAME" });
-  }, [dispatch]);
-
-  // Handler principal: carga un caso aleatorio de casosGlobalesCases
-  const handleActivarnos = useCallback(() => {
-    if (!casosGlobalesCases || casosGlobalesCases.length === 0) {
-      alert("No hay casos disponibles por el momento.");
-      return;
-    }
-
-    const solvedIds = new Set(
-      archive.filter((c) => c.isCorrect).map((c) => c.id)
-    );
-    const availableCases = casosGlobalesCases.filter(
-      (c) => !solvedIds.has(c.id)
-    );
-
-    const pool =
-      availableCases.length > 0 ? availableCases : casosGlobalesCases;
-
-    const randomCase = pool[Math.floor(Math.random() * pool.length)];
-    dispatch({ type: "REPLAY_CASE", payload: randomCase });
   }, [archive, dispatch]);
 
   // Effect for PWA shortcuts
@@ -168,8 +92,6 @@ const App: React.FC = () => {
     if (action) {
       if (action === "new-case" || action === "global-case") {
         handleActivarnos();
-      } else if (action === "start-game") {
-        handleStartGame();
       }
 
       if (window.history.replaceState) {
@@ -177,7 +99,7 @@ const App: React.FC = () => {
         window.history.replaceState({}, document.title, cleanUrl);
       }
     }
-  }, [handleActivarnos, handleStartGame]);
+  }, [handleActivarnos]);
 
   const handleAssess = (userGCS: GCSScore) => {
     dispatch({ type: "ASSESS_CASE", payload: userGCS });
@@ -199,16 +121,8 @@ const App: React.FC = () => {
     dispatch({ type: "SHOW_SETTINGS" });
   };
 
-  const handleShowLetter = () => {
-    dispatch({ type: "SHOW_LETTER" });
-  };
-
   const handleGoHome = () => {
     dispatch({ type: "GO_HOME" });
-  };
-
-  const handleSetGameHighScore = (score: number) => {
-    dispatch({ type: "SET_GAME_HIGH_SCORE", payload: score });
   };
 
   const handleShowInfo = (section: {
@@ -246,9 +160,7 @@ const App: React.FC = () => {
   };
 
   const mainContainerClasses =
-    screen === Screen.Game
-      ? "h-screen w-screen"
-      : "min-h-screen text-stone-800 dark:text-stone-200 flex flex-col";
+    "min-h-screen text-stone-800 dark:text-stone-200 flex flex-col";
 
   const isModalScreen = [
     Screen.Case,
@@ -256,44 +168,24 @@ const App: React.FC = () => {
     Screen.Archive,
     Screen.Stats,
     Screen.Settings,
-    Screen.Letter,
   ].includes(screen);
 
   return (
     <div className={mainContainerClasses}>
-      {screen !== Screen.Game && (
-        <Header
-          onShowArchive={handleShowArchive}
-          onGoHome={handleGoHome}
-          onShowSettings={handleShowSettings}
-          showCloseButton={screen !== Screen.Home}
-        />
-      )}
+      <Header
+        onShowArchive={handleShowArchive}
+        onGoHome={handleGoHome}
+        onShowSettings={handleShowSettings}
+        showCloseButton={screen !== Screen.Home}
+      />
 
-      <main
-        className={
-          screen === Screen.Game
-            ? "h-full"
-            : "w-full flex-grow flex flex-col py-4 pt-20"
-        }
-      >
+      <main className="w-full flex-grow flex flex-col py-4 pt-20">
         {screen === Screen.Home && (
           <HomeScreen
             onActivarnos={handleActivarnos}
             onShowInfo={handleShowInfo}
-            onStartGame={handleStartGame}
             onShowStats={handleShowStats}
-            onShowLetter={handleShowLetter}
             isMuted={isMuted}
-          />
-        )}
-        {screen === Screen.Game && (
-          <GameScreen
-            onExit={handleGoHome}
-            highScore={gameHighScore}
-            onSetHighScore={handleSetGameHighScore}
-            isMuted={isMuted}
-            onToggleMute={handleToggleMute}
           />
         )}
       </main>
@@ -321,34 +213,41 @@ const App: React.FC = () => {
               ? "Expediente del Jugador"
               : screen === Screen.Settings
               ? "Configuración"
-              : screen === Screen.Letter
-              ? "La Carta"
               : ""
           }
           content={
-            infoContent ? (
-              infoContent.content
-            ) : screen === Screen.Case ? (
-              currentCase && (
-                <CaseScreen currentCase={currentCase} onAssess={handleAssess} />
-              )
-            ) : screen === Screen.Result ? (
-              currentCase && (
-                <ResultScreen
-                  lastCase={currentCase}
-                  onActivarnos={handleActivarnos}
-                  onEndService={handleGoHome}
-                />
-              )
-            ) : screen === Screen.Archive ? (
-              <ArchiveScreen archive={archive} onReplay={handleReplayCase} />
-            ) : screen === Screen.Stats ? (
-              <StatsScreen archive={archive} />
-            ) : screen === Screen.Settings ? (
-              <SettingsScreen />
-            ) : screen === Screen.Letter ? (
-              <LetterScreen />
-            ) : null
+            <Suspense
+              fallback={
+                <div className="flex justify-center py-8">
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+              {infoContent ? (
+                infoContent.content
+              ) : screen === Screen.Case ? (
+                currentCase && (
+                  <CaseScreen
+                    currentCase={currentCase}
+                    onAssess={handleAssess}
+                  />
+                )
+              ) : screen === Screen.Result ? (
+                currentCase && (
+                  <ResultScreen
+                    lastCase={currentCase}
+                    onActivarnos={handleActivarnos}
+                    onEndService={handleGoHome}
+                  />
+                )
+              ) : screen === Screen.Archive ? (
+                <ArchiveScreen archive={archive} onReplay={handleReplayCase} />
+              ) : screen === Screen.Stats ? (
+                <StatsScreen archive={archive} />
+              ) : screen === Screen.Settings ? (
+                <SettingsScreen />
+              ) : null}
+            </Suspense>
           }
           onClose={infoContent ? handleCloseInfo : handleGoHome}
           headerAction={undefined}

@@ -3,15 +3,11 @@ export enum Screen {
   Case = "CASE",
   Result = "RESULT",
   Archive = "ARCHIVE",
-  Game = "GAME",
   Stats = "STATS",
   Settings = "SETTINGS",
-  Letter = "LETTER",
 }
 
 export type AppBackground = "basic" | "background1";
-// Ampliamos los tipos de música disponibles
-export type AppMusic = "none" | "track1" | "track2";
 
 export interface GCSScore {
   ocular: number | null;
@@ -33,11 +29,5 @@ export interface Case {
   gcsJustification: string;
   userGCS?: GCSScore;
   isCorrect?: boolean;
-}
-
-export interface GameQuestion {
-  frase: string;
-  correcta: string;
-  incorrecta1: string;
-  incorrecta2: string;
+  playedAt?: string; // Timestamp de cuando se jugó
 }

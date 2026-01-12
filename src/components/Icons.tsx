@@ -45,42 +45,6 @@ export const AmbulanceIcon = ({ className }: IconWithClassName) => (
   </svg>
 );
 
-export const RegistryIcon = ({ className }: IconWithClassName) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className || "w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]"}
-  >
-    <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z" />
-  </svg>
-);
-
-export const Codigo3Icon = ({ className }: IconWithClassName) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className || "w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]"}
-  >
-    <path d="M280-120v-720 720Zm200-600q17 0 28.5-11.5T520-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760q0 17 11.5 28.5T480-720ZM280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v124q18 7 29 22t11 34v80q0 19-11 34t-29 22v84h-80v-400H280v720h80v80h-80Zm304-16L440-200l144-144 56 57-87 87 87 87-56 57Zm192 0-56-57 87-87-87-87 56-57 144 144L776-56Z" />
-  </svg>
-);
-
-export const GamepadIcon = ({ className }: IconWithClassName) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className || "w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]"}
-  >
-    <path d="M189-160q-54 0-91.5-37.5T60-289q0-49 31.5-84.5T174-415l38-166q15-64 66-101.5T400-720h160q71 0 122 37.5t66 101.5l38 166q51 6 82.5 41.5T900-289q0 54-37.5 91.5T771-160q-54 0-91.5-37.5T642-289q0-43 26-77t66-46l-32-143q-9-42-41-68.5T589-650H561v70h-70v-70h-22v70h-70v-70h-28q-40 0-72 26.5T258-555l-32 143q40 12 66 46t26 77q0 54-37.5 91.5T189-160Zm0-80q21 0 35.5-14.5T239-289q0-21-14.5-35.5T189-339q-21 0-35.5 14.5T139-289q0 20 14.5 34.5T189-240Zm582 0q21 0 35.5-14.5T821-289q0-21-14.5-35.5T771-339q-21 0-35.5 14.5T721-289q0 20 14.5 34.5T771-240ZM330-410q13 0 21.5-8.5T360-440q0-13-8.5-21.5T330-470q-13 0-21.5 8.5T300-440q0 13 8.5 21.5T330-410Zm120-80q13 0 21.5-8.5T480-520q0-13-8.5-21.5T450-550q-13 0-21.5 8.5T420-520q0 13 8.5 21.5T450-490Zm60 80q13 0 21.5-8.5T540-440q0-13-8.5-21.5T510-470q-13 0-21.5 8.5T480-440q0 13 8.5 21.5T510-410Zm120 80q13 0 21.5-8.5T660-360q0-13-8.5-21.5T630-390q-13 0-21.5 8.5T600-360q0 13 8.5 21.5T630-330ZM189-289Zm582 0Z" />
-  </svg>
-);
-
 export const ChartBarSquareIcon = ({ className }: IconWithClassName) => (
   <svg
     {...iconProps}
@@ -89,30 +53,6 @@ export const ChartBarSquareIcon = ({ className }: IconWithClassName) => (
     strokeLinejoin="round"
   >
     <path d="M7.5 14.25v2.25m3-3.75v3.75m3-2.25v2.25m3-3.75v3.75M3 3h18v18H3V3z" />
-  </svg>
-);
-
-export const GlobeIcon = ({ className }: IconWithClassName) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className || "w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]"}
-  >
-    <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-7-.5-14.5T799-507q-5 29-27 48t-52 19h-80q-33 0-56.5-23.5T560-520v-40H400v-80q0-33 23.5-56.5T480-720h40q0-23 12.5-40.5T563-789q-20-5-40.5-8t-42.5-3q-134 0-227 93t-93 227h200q66 0 113 47t47 113v40H400v110q20 5 39.5 7.5T480-160Z" />
-  </svg>
-);
-
-export const EnvelopeIcon = ({ className }: IconWithClassName) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className || "w-[clamp(32px,7vw,44px)] h-[clamp(32px,7vw,44px)]"}
-  >
-    <path d="m608-368 46-166-142-98-46 166 142 98ZM160-207l-33-16q-31-13-42-44.5t3-62.5l72-156v279Zm160 87q-33 0-56.5-24T240-201v-239l107 294q3 7 5 13.5t7 12.5h-39Zm206-5q-31 11-62-3t-42-45L245-662q-11-31 3-61.5t45-41.5l301-110q31-11 61.5 3t41.5 45l178 489q11 31-3 61.5T827-235L526-125Zm-28-75 302-110-179-490-301 110 178 490Zm62-300Z" />
   </svg>
 );
 
@@ -173,29 +113,6 @@ export const Cog6ToothIcon = ({ className }: IconWithClassName) => (
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-    />
-  </svg>
-);
-
-export const TrophyIcon = ({ className }: IconWithClassName) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    className={className || "w-6 h-6"}
-    aria-hidden="true"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.504-1.125-1.125-1.125h-1.5c-.621 0-1.125.504-1.125 1.125v3.375m-6.75V15.375c0-.621.504-1.125 1.125-1.125h1.5c.621 0 1.125.504 1.125 1.125v3.375m0 0h-4.5"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 14.25V4.5m0 9.75a3.75 3.75 0 00-3.75 3.75h7.5A3.75 3.75 0 0012 14.25z"
-      fill="currentColor"
     />
   </svg>
 );
