@@ -87,7 +87,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
 
       let newArchive = [...state.archive];
       const existingCaseIndex = state.archive.findIndex(
-        (c) => c.id === solvedCase.id
+        (c) => c.id === solvedCase.id,
       );
 
       if (existingCaseIndex > -1) {
@@ -146,29 +146,35 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [persistedArchive, setPersistedArchive] = useLocalStorage<Case[]>(
     "gcs-case-archive",
-    []
+    [],
   );
   const [persistedIsMuted, setPersistedIsMuted] = useLocalStorage<boolean>(
     "gcs-sound-muted",
-    false
+    false,
   );
   const [persistedTheme, setPersistedTheme] = useLocalStorage<"light" | "dark">(
     "gcs-theme",
-    "dark"
+    "dark",
   );
   const [persistedTypewriter, setPersistedTypewriter] =
     useLocalStorage<boolean>("gcs-typewriter-enabled", true);
   const [persistedBackground, setPersistedBackground] = useLocalStorage<string>(
     "gcs-background",
-    "basic"
+    "basic",
   );
   const [persistedCasesPlayed, setPersistedCasesPlayed] =
     useLocalStorage<number>("gcs-cases-played-count", 0);
 
-  // Validación segura del background type
-  let validatedBackground: AppBackground = "basic";
-  if (persistedBackground === "background1")
-    validatedBackground = "background1";
+  // Constante con valores válidos para el fondo
+  const VALID_BACKGROUNDS: AppBackground[] = ["basic", "background1"];
+  const DEFAULT_BACKGROUND: AppBackground = "basic";
+
+  // Validación segura del background type usando el array de valores válidos
+  const validatedBackground: AppBackground = VALID_BACKGROUNDS.includes(
+    persistedBackground as AppBackground,
+  )
+    ? (persistedBackground as AppBackground)
+    : DEFAULT_BACKGROUND;
 
   const initialState: AppState = {
     screen: Screen.Home,
@@ -235,7 +241,7 @@ export const useAppState = () => {
   const context = useContext(AppStateContext);
   if (context === null) {
     throw new Error(
-      "useAppState debe ser usado dentro de un AppContextProvider"
+      "useAppState debe ser usado dentro de un AppContextProvider",
     );
   }
   return context;
@@ -245,7 +251,7 @@ export const useAppDispatch = () => {
   const context = useContext(AppDispatchContext);
   if (context === null) {
     throw new Error(
-      "useAppDispatch debe ser usado dentro de un AppContextProvider"
+      "useAppDispatch debe ser usado dentro de un AppContextProvider",
     );
   }
   return context;
