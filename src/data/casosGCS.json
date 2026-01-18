@@ -277,5 +277,194 @@
     "correctGCS": { "ocular": 3, "verbal": 4, "motor": 5 },
     "conclusion": "Intoxicación por Organofosforados (Síndrome Colinérgico). El cuadro SLUDGE (Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis) es de libro. Las fasciculaciones indican toxicidad nicotínica (placa motora). Requiere Atropina a dosis altas + Pralidoxima. Peligro de fallo respiratorio neuromuscular.",
     "gcsJustification": "Ocular(3): A la orden/estímulo verbal.\nVerbal(4): Confusa. Responde pero está obnubilado y repetitivo.\nMotora(5): Localiza (o Retira M4 débil). La debilidad muscular por bloqueo neuromuscular puede simular una respuesta motora baja, pero suele conservar la localización si no está en parálisis total."
+  },
+  {
+    "id": "case-32",
+    "title": "El Hombre de Hojalata",
+    "category": "Trauma/Quemado",
+    "narrative": "Incendio en nave industrial. El primer paciente que te traen viene caminando, pero algo va muy mal. Tiene la cara tiznada de hollín, las cejas y pestañas chamuscadas, y una voz ronca como papel de lija. Tose y escupe esputo negro (carbonáceo).\n\nEstá muy agitado, gritando: '¡Sacadme de aquí, me ahogo!'. Tiene los ojos abiertos, inyectados en sangre. Obedece todas tus órdenes de forma frenética (sentarse, dar la mano), pero cada vez habla con más dificultad, con un estridor inspiratorio creciente. Sus labios empiezan a hincharse.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Quemadura de Vía Aérea (Inhalatoria). ¡ALERTA MÁXIMA! El GCS es 15, pero es una trampa mortal. El paciente está consciente AHORA, pero el edema de glotis va a cerrar la vía aérea en minutos. Los signos clave son: hollín facial/nasal, esputo carbonáceo, estridor, ronquera. Requiere intubación PROFILÁCTICA urgente antes de que sea imposible.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Grita coherentemente sobre su situación.\nMotora(6): Obedece órdenes.\n*NOTA CRÍTICA: Un GCS de 15 NO significa 'paciente estable'. La vía aérea (A) tiene prioridad absoluta sobre el nivel de consciencia.*"
+  },
+  {
+    "id": "case-33",
+    "title": "El Trueno",
+    "category": "Neurológico",
+    "narrative": "Gimnasio, clase de spinning. Una mujer de 40 años se ha desplomado de la bicicleta gritando '¡Mi cabeza!'. Se agarra el cráneo con ambas manos como si fuera a explotar. 'Es el peor dolor de cabeza de mi vida', dice antes de empezar a vomitar.\n\nCuando llegas, está tumbada en posición fetal, llorando de dolor. Tiene los ojos cerrados, pero los abre al llamarla. Te dice su nombre y qué pasó, pero está claramente confusa sobre la hora y el día. Al tocarle el cuello para valorar rigidez, grita y aparta tu mano con precisión. Tiene fotofobia intensa.",
+    "correctGCS": { "ocular": 3, "verbal": 4, "motor": 5 },
+    "conclusion": "Hemorragia Subaracnoidea (HSA). El 'peor dolor de cabeza de mi vida' (Cefalea en Trueno/Thunderclap Headache) durante esfuerzo físico es el cuadro clásico de rotura de aneurisma. La rigidez de nuca (meningismo) y los vómitos en escopetazo lo confirman. Código Ictus (Hemorrágico) urgente. Puede deteriorarse rápidamente.",
+    "gcsJustification": "Ocular(3): A la orden verbal. Abre los ojos cuando le llamas.\nVerbal(4): Confusa. Sabe quién es pero no el tiempo/espacio. El dolor intenso dificulta la conversación fluida.\nMotora(5): Localiza. Aparta tu mano del cuello (estímulo doloroso) con precisión."
+  },
+  {
+    "id": "case-34",
+    "title": "Otra Noche Más",
+    "category": "Tóxico/Alcohol",
+    "narrative": "Banco de la plaza, 3 de la madrugada. La policía te llama por un 'habitual': un hombre de 55 años, conocido por dormir en la calle, que 'huele a vino' y no responde. Lo encuentras tirado en el suelo, con una botella vacía a su lado y un charco de vómito.\n\nTiene los ojos cerrados. Al gritarle, no reacciona. Al pellizcarle el trapecio con fuerza, abre los ojos un momento, emite un gruñido gutural ('Aaaargh...') y flexiona el brazo hacia el pecho de forma lenta y torpe, sin dirigir la mano al dolor. Notas un hematoma verdoso en la sien que 'nadie sabe de cuándo es'. Huele intensamente a alcohol.",
+    "correctGCS": { "ocular": 2, "verbal": 2, "motor": 3 },
+    "conclusion": "Coma Etílico vs TCE No Filiado (Diagnóstico Diferencial Crítico). ¡NUNCA asumas que es 'solo alcohol'! El hematoma temporal, la respuesta de flexión anormal (M3) y la falta de localización son banderas rojas de lesión intracraneal. Una intoxicación etílica pura suele dar respuestas motoras más normales (retirada M4 o localización M5). Requiere TAC craneal urgente. 'El olor a alcohol es un síntoma, no un diagnóstico'.",
+    "gcsJustification": "Ocular(2): Al dolor. No abre espontáneamente ni a la voz.\nVerbal(2): Sonidos incomprensibles. Gruñidos sin formar palabras.\nMotora(3): Flexión anormal. No es retirada rápida (M4), ni localiza (M5). Es una flexión lenta hacia el cuerpo, sugestiva de daño cerebral."
+  },
+  {
+    "id": "case-35",
+    "title": "El Aliento del Dragón",
+    "category": "Metabólico/Hepático",
+    "narrative": "Urgencias. Traen a un hombre de 60 años con 'antecedentes de cirrosis' que está 'más dormido de lo habitual'. Su familia dice que lleva días sin ir al baño y comiendo mucha carne. El aire a su alrededor huele dulzón, como a fruta podrida o moho (Fetor Hepático).\n\nEstá somnoliento pero se le puede despertar. Cuando le hablas, abre los ojos y te mira confuso. Le preguntas qué día es y te dice: 'Miércoles... no, espera... ¿es de noche?'. Está claramente desorientado. Al pedirle que extienda los brazos, lo hace, pero notas un temblor grueso de aleteo (Flapping Tremor/Asterixis). Obedece órdenes simples.",
+    "correctGCS": { "ocular": 3, "verbal": 4, "motor": 6 },
+    "conclusion": "Encefalopatía Hepática. El hígado no filtra el amoníaco, que intoxica el cerebro. Los signos clave son: Fetor Hepático (olor dulce), Asterixis (flapping), confusión/letargia progresiva. Factor precipitante probable: estreñimiento + ingesta proteica. Tratamiento: Lactulosa, Rifaximina.",
+    "gcsJustification": "Ocular(3): A la orden verbal. Abre ojos cuando le hablas.\nVerbal(4): Confusa. Desorientado en tiempo y espacio, aunque intenta conversar.\nMotora(6): Obedece órdenes. El asterixis es un temblor involuntario, no afecta la puntuación motora del GCS."
+  },
+  {
+    "id": "case-36",
+    "title": "La Tormenta Perfecta",
+    "category": "Tóxico/Farmacológico",
+    "narrative": "Domicilio. Una mujer de 35 años empezó tratamiento con un nuevo antidepresivo hace 3 días. Su pareja te llama porque 'está temblando y sudando como loca'. Al llegar, la encuentras agitada, con los ojos muy abiertos y las pupilas dilatadas (midriasis). Está empapada en sudor y arde al tacto (hipertermia).\n\nNo para de moverse. Te habla atropelladamente: '¡Siento que me voy a morir, el corazón me va a mil!'. Sus piernas tienen sacudidas involuntarias (mioclonías). Obedece cuando le pides que se siente, pero se levanta a los 5 segundos. Tiene reflejos exaltados e hiperreflexia.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Síndrome Serotoninérgico. Causado por exceso de serotonina (nuevo ISRS, combinación con tramadol, triptanes, etc.). La triada es: Alteración mental (agitación), Hiperactividad autonómica (fiebre, taquicardia, sudoración, midriasis) e Hiperactividad Neuromuscular (temblor, mioclonías, hiperreflexia). Puede ser mortal. Tratamiento: Ciproheptadina, enfriamiento.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientada. Aunque hable rápido y ansioso, el contenido es coherente y sabe lo que le pasa.\nMotora(6): Obedece órdenes. Las mioclonías son involuntarias, no afectan la puntuación."
+  },
+  {
+    "id": "case-37",
+    "title": "El Cinturón de Seguridad",
+    "category": "Trauma/Torácico",
+    "narrative": "Accidente de tráfico, colisión frontal. El conductor llevaba cinturón pero el airbag no saltó. Lo encuentras sentado en el asiento, consciente, quejándose de dolor en el pecho. Tiene una marca lineal del cinturón atravesando el tórax (Signo del Cinturón de Seguridad).\n\nHabla entre jadeos: 'Me cuesta... respirar...'. Está pálido y sudoroso. Los ojos abiertos, te mira angustiado. Obedece órdenes perfectamente, pero cada vez respira peor. Su saturación de O2 baja progresivamente (92%... 88%...). Al auscultar, el murmullo vesicular está disminuido en un hemitórax.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Contusión Pulmonar / Neumotórax incipiente. Otro GCS 15 que es una trampa. El paciente está neurológicamente intacto, pero tiene un problema de 'B' (Breathing) que va a matarlo. El Signo del Cinturón indica trauma torácico significativo. Vigilar desaturación progresiva. Puede requerir drenaje torácico o intubación.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Aunque jadee, articula frases con sentido.\nMotora(6): Obedece órdenes.\n*NOTA: El GCS solo mide consciencia, no oxigenación. Un paciente con GCS 15 puede morir de hipoxia en minutos.*"
+  },
+  {
+    "id": "case-38",
+    "title": "La Ausencia",
+    "category": "Neurológico",
+    "narrative": "Biblioteca municipal. Un estudiante de oposiciones está sentado frente a sus libros, inmóvil. La bibliotecaria dice que lleva así 20 minutos, 'mirando al vacío'. No ha habido convulsiones, pero se ha orinado encima (relajación de esfínteres).\n\nTe acercas y le chasqueas los dedos delante de la cara. No parpadea. Tiene los ojos abiertos, fijos en un punto. No responde a tu voz. Al pellizcarle el trapecio, no hace ninguna mueca ni retira. Solo observas un parpadeo rítmico muy sutil (nistagmo/mioclonía palpebral) constante.",
+    "correctGCS": { "ocular": 4, "verbal": 1, "motor": 1 },
+    "conclusion": "Status Epiléptico No Convulsivo (SENC). No todas las convulsiones son sacudidas. El paciente está en un 'estado de ausencia' continuo. Clínicamente parece un coma vigil, pero el EEG mostraría actividad de crisis. La incontinencia y la desconexión total con ojos abiertos son pistas clave. Es una emergencia neurológica.",
+    "gcsJustification": "Ocular(4): Espontánea. Ojos abiertos, pero funcionalmente ausente. (Algunos puristas puntúan O1 si no hay fijación, pero O4 describe la apertura física).\nVerbal(1): Nula. Mutismo.\nMotora(1): Nula. No hay respuesta motora voluntaria ni refleja evidente al dolor, más allá de los automatismos oculares."
+  },
+  {
+    "id": "case-39",
+    "title": "Muñeco de Trapo",
+    "category": "Trauma/Raquimedular",
+    "narrative": "Accidente de moto. El motorista ha impactado contra una farola de espaldas. Está consciente y terroríficamente tranquilo. Tiene una frecuencia cardiaca de 50 lpm (bradicardia) y la piel caliente y seca, a pesar de estar hipotenso (80/40).\n\nTe mira y te dice con voz suave: 'No me duele nada, jefe'. Le pides que mueva los pies y te dice 'Ya los estoy moviendo', pero están inmóviles. Al pellizcarle fuertemente en el pezón (por encima de T4), hace una mueca de dolor y trata de morderte, pero sus brazos yacen flácidos a su lado y no se levantan para defenderse.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Shock Neurogénico por Sección Medular Alta (Cervical). La triada de Hipotensión + Bradicardia + Piel Caliente es patognomónica (pérdida de tono simpático). Es un GCS 15 'trampa' porque el paciente está tetrapléjico (M0 periférico) pero obedece órdenes con lo que le queda (músculos bulbares/faciales). La 'retirada' a mordiscos es M6 (obedecer/intencional).",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Describe su estado (aunque la analgesia sea por la sección medular).\nMotora(6): Obedece órdenes (Facial/Bulbar). Al no poder mover extremidades, se valora la intención motora en la cara o lengua. Intentar morderte es un acto voluntario dirigido."
+  },
+  {
+    "id": "case-40",
+    "title": "El Sombrerero Loco",
+    "category": "Tóxico/Anticolinérgico",
+    "narrative": "Bosque, tras una 'rave'. Encuentras a un joven vagando desnudo entre los arbustos. Está rojo como un tomate (rubor) y seco como un hueso (anhidrosis). Sus pupilas son dos platos negros (midriasis midriática). Intenta coger objetos invisibles del aire.\n\nTe habla con personas que no están: 'Pásame el té, conejo'. Su discurso es totalmente incoherente. Al tocarlo, notas que tiene fiebre alta. Cuando intentas sentarlo, forcejea con fuerza, empujándote y gritando cosas sin sentido.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Síndrome Anticolinérgico (Burundanga/Escopolamina, Atropina, Datura). La mnemotecnia inglesa es: 'Mad as a hatter' (Delirio), 'Blind as a bat' (Midriasis), 'Red as a beet' (Rubor), 'Hot as a hare' (Hipertermia), 'Dry as a bone' (Sequedad). El paciente está delirante y alucinado, pero defiende su espacio.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(4): Confusa. El paciente habla fluido, pero el contenido es alucinatorio y descontextualizado (Delirio).\nMotora(5): Localiza. Te empuja activamente para quitarte de encima (localiza la fuente de la restricción)."
+  },
+  {
+    "id": "case-41",
+    "title": "La Sonrisa de Acero",
+    "category": "Infeccioso/Tétanos",
+    "narrative": "Chabola en un vertedero. Un hombre de 50 años yace en un colchón sucio. Está consciente y te mira con terror puro. Tiene una expresión facial grotesca, como una sonrisa forzada y permanente (Risa Sardónica), y la mandíbula cerrada a cal y canto (Trismus).\n\nSuda a mares. Cada vez que hay un ruido fuerte, su espalda se arquea violentamente despegándose del colchón (Opistótonos). Le pides que abra la boca, y hace fuerza pero no puede. Le pides que te apriete la mano, y te la tritura con una fuerza espasmódica, sin soltarte aunque quieras.",
+    "correctGCS": { "ocular": 4, "verbal": 1, "motor": 6 },
+    "conclusion": "Tétanos. La toxina tetánica bloquea la inhibición motora. El paciente está TOTALMENTE CONSCIENTE (GCS 15 funcional), pero atrapado en un cuerpo rígido. El trismus impide hablar (V1 técnico, V5 potencial) y la rigidez simula agresividad o descerebración, pero obedece órdenes (M6). Es una muerte horrible por asfixia si no se relaja/intuba.",
+    "gcsJustification": "Ocular(4): Espontánea. Ojos abiertos y alerta.\nVerbal(1): Nula (Física). Quiere hablar pero el trismus severo impide articular palabra. (Neurológicamente está orientado).\nMotora(6): Obedece órdenes. Intenta cumplir la orden de apretar/abrir, aunque la rigidez interfiera."
+  },
+  {
+    "id": "case-42",
+    "title": "Nueve Lunas",
+    "category": "Obstétrico",
+    "narrative": "Baño de una discoteca, 4 AM. Una chica joven está tirada en el suelo, con espuma en la boca. Al examinarla, notas un abdomen distendido y duro: está embarazada de término y nadie lo sabía (o lo ocultaba).\n\nAcaba de dejar de convulsionar. Está en coma post-ictal. Respira ruidosamente (estertores). Tiene edemas brutales en las piernas. Al aplicar dolor, solo gime y flexiona los brazos acercándolos al cuerpo de forma inespecífica. Su tensión arterial es 210/120.",
+    "correctGCS": { "ocular": 1, "verbal": 2, "motor": 4 },
+    "conclusion": "Eclampsia. Convulsiones en gestante con preeclampsia (Hipertensión + Edemas/Proteinuria). Es una emergencia vital para madre y feto. El estado post-crítico explica el bajo nivel de consciencia. Requiere Sulfato de Magnesio y cesárea urgente.",
+    "gcsJustification": "Ocular(1): Nula. No abre ojos al dolor.\nVerbal(2): Sonidos. Gemidos post-ictales.\nMotora(4): Retirada. Flexión inespecífica al dolor, típica de la recuperación de consciencia tras crisis."
+  },
+  {
+    "id": "case-43",
+    "title": "Almendras Amargas",
+    "category": "Tóxico/Industrial",
+    "narrative": "Laboratorio de joyería clandestino. Un orfebre se ha desplomado mientras limpiaba oro. Huele intensamente a algún químico punzante y, extrañamente, a almendras amargas. El paciente está rojo, con la piel de un color rosado brillante (no cianótico).\n\nEstá en parada respiratoria (apnea), pero el corazón late taquicárdico. No responde a nada. Pupilas dilatadas y arreactivas. Al dolor profundo, extiende los brazos y prona las muñecas. A su lado hay un bote roto de cianuro potásico.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 2 },
+    "conclusion": "Intoxicación por Cianuro. Bloquea la respiración celular (mitocondrias). La sangre está llena de oxígeno que no se puede usar, de ahí el color rojo brillante. Provoca histotoxicidad cerebral inmediata, coma y postura de descerebración. Antídoto: Hidroxicobalamina.",
+    "gcsJustification": "Ocular(1): Nula.\nVerbal(1): Nula. Apnea.\nMotora(2): Extensión anormal (Descerebración). Signo de sufrimiento troncoencefálico masivo por anoxia histotóxica."
+  },
+  {
+    "id": "case-44",
+    "title": "El Beso del Perro",
+    "category": "Infeccioso/Viral",
+    "narrative": "Habitación de aislamiento. Un paciente ingresado por 'psicosis' se ha vuelto incontrolable. Está atado a la cama, salivando espuma espesa. Cuando la enfermera intenta acercarle un vaso de agua, el paciente grita de terror y sufre un espasmo violento en la garganta ('Hidrofobia').\n\nTe mira con ojos desorbitados, hipervigilante. Alterna momentos de lucidez donde pide ayuda con furia animal. Al soltarle una mano para probar fuerza, te agarra e intenta morderte. Su historia clínica menciona un viaje a Bali hace 3 meses.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Rabia Humana (Encefalitis Rábica). La hidrofobia (espasmo laríngeo al ver/intentar beber agua) es patognomónica. Aunque el comportamiento es psicótico/agresivo, el nivel de consciencia se mantiene hasta el final (GCS 15 fluctuante). Es virtualmente mortal (99.9%).",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado (en los momentos de calma). Sabe que va a morir y tiene miedo.\nMotora(6): Obedece órdenes (o espontánea intencional agresiva). El intento de morder es un acto motor complejo dirigido."
+  },
+  {
+    "id": "case-45",
+    "title": "Párpados de Plomo",
+    "category": "Neurológico/Autoinmune",
+    "narrative": "Consulta de oftalmología. Una mujer de 25 años dice que 'se le cae el mundo encima' por las tardes. Ahora mismo está sentada, con la cabeza caída hacia adelante. Sus párpados están cerrados. Parece dormida.\n\nLe hablas y te contesta con voz gangosa y débil: 'No puedo... abrirlos... pesan mucho...'. Le pides que levante los brazos y apenas los despega de las piernas antes de dejarlos caer agotada. Le levantas tú los párpados manualmente y ves que te mira fija y atentamente. Si le pides que mire arriba, los ojos se le caen a los 10 segundos.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Crisis Miasténica (Miastenia Gravis). La debilidad muscular fatigable (peor con el uso/tarde) es la clave. Es una trampa de GCS: - Ojos cerrados por Ptosis (debilidad), no por coma -> Se puntúa O4 si los abre pasivamente o intenta. - Brazos débiles -> Se puntúa M6 si intenta obedecer pero falla por fuerza. Es un problema de 'fuerza', no de 'orden'. Riesgo de fallo respiratorio.",
+    "gcsJustification": "Ocular(4): Espontánea (Funcional). Aunque físicamente estén cerrados por ptosis, el paciente está alerta y 'quiere' tenerlos abiertos. Se ayuda manualmente.\nVerbal(5): Orientada (aunque disártrica/gangosa).\nMotora(6): Obedece órdenes. La incapacidad de mantener los brazos levantados es por debilidad muscular periférica, no por fallo central."
+  },
+  {
+    "id": "case-46",
+    "title": "La Conserva Casera",
+    "category": "Tóxico/Alimentario",
+    "narrative": "Cena familiar en el pueblo. El abuelo, que trajo sus pimientos en conserva caseros, se ha 'mareado'. Lo encuentras sentado, despierto pero 'borracho'. Ve doble (diplopía) y habla arrastrando la lengua. Lo más inquietante es que no puede tragar su propia saliva y se le cae la cabeza hacia delante.\n\nSus pupilas están dilatadas y fijas. Le pides que te apriete las manos y lo hace muy débilmente. Le pides que levante las piernas y no puede. La debilidad parece ir bajando desde la cara hacia el cuerpo (Parálisis descendente).",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Botulismo. La toxina botulínica causa parálisis flácida descendente (empieza en pares craneales: visión, habla, tragar -> cuello -> respiración -> piernas). GCS 15 'atrapado'. Es lo contrario al Guillain-Barré (que es ascendente). Alerta: Parada respiratoria inminente por parálisis diafragmática.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Disártrico pero coherente.\nMotora(6): Obedece órdenes. La debilidad es periférica. La intención motora está preservada."
+  },
+  {
+    "id": "case-47",
+    "title": "La Escalera",
+    "category": "Neurológico/Inmune",
+    "narrative": "Domicilio. Un chico de 20 años llama porque 'no siente las piernas'. Hace 2 semanas tuvo gastroenteritis. Esta mañana le costaba subir escaleras, y ahora no puede levantarse del sofá. Dice que siente un hormigueo (parestesias) que le sube por los muslos.\n\nEstá ansioso pero respira bien (de momento). Le pides que levante las piernas: nada (plejia). Le pides que te apriete las manos: lo hace, pero con menos fuerza de la normal. Tiene los reflejos rotulianos abolidos (arreflexia).",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Síndrome de Guillain-Barré. Parálisis flácida ascendente y arreflexica post-infecciosa. Es la otra cara del Botulismo. El peligro es que la parálisis siga subiendo hasta el diafragma (parada respiratoria) o afecte al sistema autonómico. El GCS es 15, pero requiere vigilancia de la capacidad vital.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado.\nMotora(6): Obedece órdenes. Aunque las piernas no respondan (M0), obedece con los brazos (M6 débil). La regla es puntuar la mejor respuesta motora."
+  },
+  {
+    "id": "case-48",
+    "title": "La Bella Durmiente",
+    "category": "Tóxicos/Drogas de Diseño",
+    "narrative": "Discoteca. Los porteros han sacado a una chica que 'se ha caído redonda'. Sus amigas dicen que tomó un 'chupito salado' hace 20 minutos. Está tirada en la acera, en coma profundo. Ronca ruidosamente.\n\nNo responde a gritos. Al aplicar dolor intenso (nudillos en esternón/trapecio), no hay ninguna respuesta: ni abre ojos, ni gime, ni se mueve. Está totalmente flácida. Bradicárdica (45 lpm) y bradipneica (8 rpm). A los 10 minutos, mientras preparas la intubación, vomita repentinamente y empieza a abrir los ojos.",
+    "correctGCS": { "ocular": 1, "verbal": 1, "motor": 1 },
+    "conclusion": "Intoxicación por GHB (Éxtasis Líquido). El perfil clásico es 'coma súbito + recuperación súbita' (efecto on/off). Deprime el SNC brutalmente (GCS 3), simulando muerte cerebral o parada, pero metaboliza rápido. El riesgo principal es la broncoaspiración durante el coma o al despertar vomitando.",
+    "gcsJustification": "Ocular(1): Nula.\nVerbal(1): Nula.\nMotora(1): Nula. Flacidez total por depresión profunda del SNC. (Nota: En la fase del coma). Si despierta cambia, pero la valoración inicial es 3."
+  },
+  {
+    "id": "case-49",
+    "title": "El Gran Imitador",
+    "category": "Vascular",
+    "narrative": "Oficina. Un ejecutivo de 50 años se ha llevado la mano al pecho gritando de dolor ('como una puñalada en la espalda') y luego se ha desplomado. Al llegar, está consciente, pálido y sudoroso.\n\nDice: 'Me duele el pecho y... no siento el brazo derecho'. Al explorarlo, ves que tiene una hemiparesia derecha (brazo y pierna débiles). Pero también notas que el pulso radial izquierdo es fuerte y el derecho es casi imperceptible. Su tensión arterial es 190/100 en el brazo izquierdo y 100/50 en el derecho.",
+    "correctGCS": { "ocular": 4, "verbal": 5, "motor": 6 },
+    "conclusion": "Disección de Aorta (Tipo A) con afectación de Carótida/Subclavia. ¡Trampa mortal! Parece un Ictus (hemiparesia), pero el dolor torácico lancinante y la asimetría de pulsos/tensión gritan DISECCIÓN. Si le das trombolisis por el 'ictus', lo matas desangrado. GCS 15 (o levemente confuso), pero patología vascular crítica.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(5): Orientado. Describe dolor y síntomas.\nMotora(6): Obedece órdenes. (Calculado en el lado sano izquierdo). El déficit motor derecho es por isquemia, no altera el GCS global si el otro lado obedece."
+  },
+  {
+    "id": "case-50",
+    "title": "Mal de Profundidad",
+    "category": "Ambiental/Subacuático",
+    "narrative": "Puerto deportivo. Un buceador acaba de salir del agua tras una inmersión profunda. Se queja de dolor insoportable en las articulaciones (codos y rodillas). Está pálido y sudoroso.\n\nLe preguntas qué tal está y te mira con cara de no entender nada. 'El azul... las burbujas pesan...', murmura. Intenta ponerse de pie pero se tambalea (ataxia) y cae. Al pellizcarle, localiza el dolor, pero sus movimientos son descoordinados. Tose sangre (hemoptisis leve).",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Enfermedad Descompresiva (The Bends). Las burbujas de nitrógeno están bloqueando capilares cerebrales y articulares. La 'borrachera de las profundidades' o embolia gaseosa cerebral causa confusión y ataxia. Requiere Cámara Hiperbárica inmediata.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(4): Confusa. Desorientado y discurso incoherente por afectación neurológica difusa.\nMotora(5): Localiza (o M6 atáxico). Intenta obedecer o localizar, pero la afectación vestibular/cerebelosa lo hace torpe."
+  },
+  {
+    "id": "case-51",
+    "title": "Aceleración Máxima",
+    "category": "Endocrino",
+    "narrative": "Domicilio. Una mujer de 30 años con hipertiroidismo no tratado. La encuentras sentada en el sofá, temblando como una hoja. Tiene los ojos que parecen salirse de las órbitas (Exoftalmos). Su corazón va a 180 lpm.\n\nEstá agitadísima, hablando a una velocidad ininteligible sobre mil temas a la vez. Suda profusamente. Cuando intentas tomarle la tensión, te empuja gritando '¡Hace calor, quita, quita!'. Tiene fiebre de 40ºC. No para quieta ni un segundo.",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Tormenta Tiroidea (Crisis Tirotóxica). Emergencia endocrina mortal. El metabolismo está 'pasado de vueltas'. La agitación psicomotriz extrema, fiebre alta y taquicardia severa son claves. Puede entrar en coma o parada cardiaca por agotamiento en minutos.",
+    "gcsJustification": "Ocular(4): Espontánea (y Exoftalmos).\nVerbal(4): Confusa. Aunque habla mucho, el discurso es verborreico y desorganizado (delirio agudo).\nMotora(5): Localiza. Rechaza el contacto físico de forma dirigida."
+  },
+  {
+    "id": "case-52",
+    "title": "La Fuente Abombada",
+    "category": "Pediátrico/Infeccioso",
+    "narrative": "Urgencias de Pediatría. Un lactante de 6 meses llora con un gemido agudo, continuo y monótono ('Maullido'). La madre dice que tiene fiebre y vomita 'a chorro'. Al tocarle la cabeza, notas que la fontanela anterior está tensa y abombada, como un tambor.\n\nEl bebé está muy irritable. No le gusta que lo cojan en brazos (paradoja de la irritabilidad). Tiene los ojos abiertos pero no fija la mirada. Al intentar flexionarle el cuello, llora más fuerte y encoge las piernas (Rigidez de nuca / Signo de Brudzinski).",
+    "correctGCS": { "ocular": 4, "verbal": 4, "motor": 5 },
+    "conclusion": "Meningitis Bacteriana Lactante. La fontanela abombada es signo de Hipertensión Intracraneal. El llanto agudo inconsolable equivale a V4 (Confuso/Irritable) o V3 (Inapropiado) según escala, pero indica sufrimiento cerebral. El rechazo al contacto es típico.",
+    "gcsJustification": "Ocular(4): Espontánea.\nVerbal(4): Irritable/Llanto inconsolable (Equivalente pediátrico a Confuso). No se calma con la madre.\nMotora(5): Retira al tacto/Localiza dolor. Se encoge y rechaza la manipulación."
   }
 ]
